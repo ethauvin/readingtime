@@ -1,0 +1,46 @@
+Eons ago, a couple of Medium engineers got fed up. They were sick of having to scroll all the way down the page to see how long a story was. It was wearing out their trackpad, it was making their fingers sore, and they figured there must be a better way. So they sat down and devised a simple formula, and the Medium read time was born.</p>
+<figure class="ij ik il im in io da db paragraph-image">
+    <div class="ip iq ir is ai">
+        <div class="da db ii">
+            <div class="iy r ir iz">
+                <div class="ja jb r">
+                    <div class="it iu s t u iv ai br iw ix"><img alt="Image for post" class="s t u iv ai jc jd je"
+                                                                 src="https://miro.medium.com/max/60/1*wju0JzgNZVpPzZDgfchajg.png?q=20"
+                                                                 width="180" height="58"/></div>
+                    <img alt="Image for post" class="it iu s t u iv ai jf" width="180" height="58"/>
+                    <noscript><img alt="Image for post" class="s t u iv ai"
+                                   src="https://miro.medium.com/max/360/1*wju0JzgNZVpPzZDgfchajg.png" width="180"
+                                   height="58"/></noscript>
+                </div>
+            </div>
+        </div>
+    </div>
+</figure>
+<p id="8a5b" class="ht hu as hv b fa hw hx fd hy hz ia ib fi ic id fl ie if fo ig di ih">With the widespread
+    adoption of this feature across the internet, we decided to shed some light on exactly what goes in to our read time
+    calculation.</p>
+<blockquote class="jg"><p id="13d1" class="jh ji as eh b jj jk jl jm jn jo ig aw">Read time is based on the average
+    reading speed of an adult (roughly 275 WPM). We take the total word count of a post and translate it into minutes.
+    Then, we add 12 seconds for each inline image. <strong class="be">Boom, read time.</strong></p></blockquote>
+<p id="17fc" class="ht hu as hv b fa jp hx fd jq hz ia jr fi ic js fl ie jt fo ig di ih">Lately, we have seen more and
+    more long form stories containing a ton of images. With our release of <a
+            href="https://medium.com/the-story/introducing-image-grids-c592e5bc16d8" class="co he ju jv jw jx"
+            target="_blank" rel="noopener">image grids</a>, we expect even more of these types of essays.</p>
+<p id="c072" class="ht hu as hv b fa hw hx fd hy hz ia ib fi ic id fl ie if fo ig di ih">Our original read time
+    calculation was geared toward “slow” images, like comics, where you would really want to sit down and invest in the
+    image. This resulted in articles with crazy big read times. For instance, this <a
+            href="https://medium.com/@dahul/inside-medium-94931f66eebd" class="co he ju jv jw jx" target="_blank"
+            rel="noopener">article</a> containing 140 images was clocking in at a whopping 87 minute read. So we amended
+    our read time calculation to count 12 seconds for the first image, 11 for the second, and minus an additional second
+    for each subsequent image. Any images after the tenth image are counted at three seconds.</p>
+<p id="fbc9" class="ht hu as hv b fa hw hx fd hy hz ia ib fi ic id fl ie if fo ig di ih">You might see this change
+    reflected across the site. Keep in mind that our estimated read time is just that: <em class="jy">an estimation</em>.
+    You might finish a story faster or slower depending on various factors such as how many children or cats you have,
+    your caffeine/alcohol intake, or if you’re a time-traveler from the future and already read that story. We just want
+    to give you a ballpark figure so you can decide whether you have time to read one more story before the bus comes,
+    or if you should bookmark it for later.</p>
+<p id="369b" class="ht hu as hv b fa hw hx fd hy hz ia ib fi ic id fl ie if fo ig di ih">We aren’t done with read time
+    yet. In the future, we’d like to tailor it to your reading speed, account for the <a
+            href="https://medium.com/@fchimero/this-should-only-take-a-minute-or-four-probably-e38bb7bf2adf"
+            class="co he ju jv jw jx" target="_blank" rel="noopener">complexity of an article</a>, and add support for
+    other languages. We’ll be sure to let you know about these changes as they happen.</p>
