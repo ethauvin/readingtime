@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MagicNumber:ReadingTime.kt$ReadingTime$10</ID>
+    <ID>MagicNumber:ReadingTime.kt$ReadingTime$12</ID>
+    <ID>MagicNumber:ReadingTime.kt$ReadingTime$3</ID>
+    <ID>MagicNumber:ReadingTime.kt$ReadingTime$60</ID>
+    <ID>MagicNumber:ReadingTime.kt$ReadingTime$60.0</ID>
+  </CurrentIssues>
+</SmellBaseline>
