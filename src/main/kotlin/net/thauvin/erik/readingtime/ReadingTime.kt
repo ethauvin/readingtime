@@ -7,7 +7,13 @@ import java.math.RoundingMode
 /**
  * Calculates the reading time of the given [text].
  *
- * Calculation based on this [Medium's Post](https://blog.medium.com/read-time-and-you-bc2048ab620c)
+ * Based on [Medium's calculation](https://blog.medium.com/read-time-and-you-bc2048ab620c).
+ *
+ * @param text The text to be evaluated.
+ * @param wpm The words per minute reading average.
+ * @param postfix The value to be appended to the reading time.
+ * @param plural The value to be appended if the reading time is more than 1 minute.
+ * @param excludeImages Images are excluded from the reading time when set.
  */
 class ReadingTime(
     var text: String,
@@ -17,18 +23,29 @@ class ReadingTime(
     var excludeImages: Boolean = false
 ) {
     companion object {
+        /**
+         * Counts words.
+         *
+         * HTML tags are stripped.
+         */
         @JvmStatic
         fun wordCount(words: String): Int {
             val s = Jsoup.parse(words).text().trim()
             return if (s.isEmpty()) 0 else s.split("\\s+".toRegex()).size
         }
 
+        /**
+         * Counts HTML img tags.
+         */
         @JvmStatic
         fun imgCount(html: String): Int {
             return "<img ".toRegex(RegexOption.IGNORE_CASE).findAll(html).count()
         }
     }
 
+    /**
+     * Calculates and returns the reading time in seconds.
+     */
     fun calcReadingTimeInSec(): Double {
         var readingTime = 0.0
 
@@ -40,6 +57,9 @@ class ReadingTime(
         return readingTime
     }
 
+    /**
+     * Calculates and returns the reading time. (eg. 1 min read)
+     */
     fun calcReadingTime(): String {
         val readingTime = BigDecimal((calcReadingTimeInSec() / 60)).setScale(0, RoundingMode.CEILING)
         return if (readingTime.compareTo(BigDecimal.ONE) == 1) {
