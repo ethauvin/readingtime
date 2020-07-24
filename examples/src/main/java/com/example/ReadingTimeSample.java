@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public class ReadingTimeSample {
     public static void main(String[] args) {
-        if (args.length == 1) {
+        if (args.length >= 1) {
             final Path text = Path.of(args[0]);
             try {
                 final ReadingTime rt = new ReadingTime(Files.readString(text));

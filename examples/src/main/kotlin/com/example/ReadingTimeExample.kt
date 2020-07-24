@@ -6,7 +6,7 @@ import net.thauvin.erik.readingtime.ReadingTime.Companion.imgCount
 import net.thauvin.erik.readingtime.ReadingTime.Companion.wordCount
 
 fun main(args: Array<String>) {
-    if (args.size == 1) {
+    if (args.isNotEmpty()) {
         val text = File(args[0])
         if (text.exists() && text.canRead()) {
             val rt = ReadingTime(text.readText())
