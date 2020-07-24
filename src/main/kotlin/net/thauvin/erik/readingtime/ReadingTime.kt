@@ -47,7 +47,7 @@ import java.math.RoundingMode
  * @param plural The value to be appended if the reading time is more than 1 minute.
  * @param excludeImages Images are excluded from the reading time when set.
  */
-class ReadingTime(
+class ReadingTime @JvmOverloads constructor(
     var text: String,
     var wpm: Int = 275,
     var postfix: String = "min read",
@@ -93,7 +93,7 @@ class ReadingTime(
      * Calculates and returns the reading time. (eg. 1 min read)
      */
     fun calcReadingTime(): String {
-        val readingTime = BigDecimal((calcReadingTimeInSec() / 60)).setScale(0, RoundingMode.CEILING)
+        val readingTime = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, RoundingMode.CEILING)
         return if (readingTime.compareTo(BigDecimal.ONE) == 1) {
             "$readingTime $plural".trim()
         } else {
