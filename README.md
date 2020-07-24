@@ -1,55 +1,64 @@
-[![License (3-Clause BSD)](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg?style=flat-square)](http://opensource.org/licenses/BSD-3-Clause) [![release](https://img.shields.io/github/release/ethauvin/isgd-shorten.svg)](https://github.com/ethauvin/isgd-shorten/releases/latest) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.thauvin.erik/isgd-shorten/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.thauvin.erik/isgd-shorten) [![Download](https://api.bintray.com/packages/ethauvin/maven/isgd-shorten/images/download.svg)](https://bintray.com/ethauvin/maven/isgd-shorten/_latestVersion)
+[![License (3-Clause BSD)](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg?style=flat-square)](http://opensource.org/licenses/BSD-3-Clause) [![release](https://img.shields.io/github/release/ethauvin/readingtime.svg)](https://github.com/ethauvin/readingtime/releases/latest) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.thauvin.erik/readingtime/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.thauvin.erik/readingtime) [![Download](https://api.bintray.com/packages/ethauvin/maven/readingtime/images/download.svg)](https://bintray.com/ethauvin/maven/readingtime/_latestVersion)
 
-[![Known Vulnerabilities](https://snyk.io/test/github/ethauvin/isgd-shorten/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/ethauvin/isgd-shorten?targetFile=pom.xml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ethauvin_isgd-shorten&metric=alert_status)](https://sonarcloud.io/dashboard?id=ethauvin_isgd-shorten) [![Build Status](https://travis-ci.com/ethauvin/isgd-shorten.svg?branch=master)](https://travis-ci.com/ethauvin/isgd-shorten) [![CircleCI](https://circleci.com/gh/ethauvin/isgd-shorten/tree/master.svg?style=shield)](https://circleci.com/gh/ethauvin/isgd-shorten/tree/master)
+[![Known Vulnerabilities](https://snyk.io/test/github/ethauvin/readingtime/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/ethauvin/readingtime?targetFile=pom.xml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ethauvin_readingtime&metric=alert_status)](https://sonarcloud.io/dashboard?id=ethauvin_readingtime) [![Build Status](https://travis-ci.com/ethauvin/readingtime.svg?branch=master)](https://travis-ci.com/ethauvin/readingtime) [![CircleCI](https://circleci.com/gh/ethauvin/readingtime/tree/master.svg?style=shield)](https://circleci.com/gh/ethauvin/readingtime/tree/master)
 
-# [is.gd](https://is.gd/developers.php) Shortener for Kotlin/Java
+# Estimated Reading Time for Blog Posts, Articles, etc.
 
-A simple implementation of the [is.gd API](https://is.gd/developers.php).
+A simple Kotlin/Java implementation of [Medium's Read Time calculation](https://blog.medium.com/read-time-and-you-bc2048ab620c).
 
 ## Examples (TL;DR)
 
 ```kotlin
-import net.thauvin.erik.isgd.Isgd
+import net.thauvin.erik.readingtime.ReadingTime
 
 ...
 
-Isgd.shorten("https://www.example.com/") // returns https://is.gd/Pt2sET
-Isgd.lookup("https://is.gd/Pt2sET") // returns https://www.example.com
+val rt = ReadingTime(htmlText);
+println(rt.calcEstimatedReadTime()) // Outputs: X min read
 
 ```
 
- - View [Kotlin](https://github.com/ethauvin/isgd-shorten/blob/master/examples/src/main/kotlin/com/example/IsgdExample.kt) or [Java](https://github.com/ethauvin/isgd-shorten/blob/master/examples/src/main/java/com/example/IsgdSample.java) Examples.
+where X is the estimated reading time for the given text.
+
+ - View [Kotlin](https://github.com/ethauvin/readingtime/blob/master/examples/src/main/kotlin/com/example/ReadingTimeExample.kt) or [Java](https://github.com/ethauvin/readingtime/blob/master/examples/src/main/java/com/example/ReadingTimeSample.java) Examples.
 
 
-### JSON or XML
 
-The [is.gd API](https://is.gd/developers.php) can return data in plain text (default), JSON or XML.
+### Properties
+
+The following properties are available:
 
 ```kotlin
-Isgd.shorten("https://www.example.com/", format = Format.JSON)
+ReadingTime(
+    text = "sometext",
+    wpm = 275,
+    postfix = "min read",
+    plural = "min read",
+    excludeImages = false
+)
+
 ```
 
-returns:
+Property                    | Description                 
+:-------------------------- |:-------------------------------------------------------------------
+`text`                      | The text to be evaluated.
+`wpm`                       | The words per minute reading average.
+`postfix`                   | The value to be appended to the reading time.
+`plural`                    | The value to be appended if the reading time is more than 1 minute.
+`excludeImages`             | Images are excluded from the reading time when set.
 
-```json
-{ "shorturl": "https://is.gd/Pt2sET" }
-```
+### Functions
 
-### Parameters
-
-All of the [is.gd API](https://is.gd/developers.php) parameters are supported:
+A couple of useful functions are also available:
 
 ```kotlin
-Isgd.shorten(url = url, shorturl="foobar", callback = "test", logstats = true, format = Format.JSON)
+ReadingTime.wordCount(htmlText) // Returns the count of words. (HTML stripped)
+ReadingTime.imgCount(htmlText) // Returns the count of images. (img HTML tags)
 ```
-returns:
 
-```json
-test({ "shorturl": "https://is.gd/foobar" });
-```
 ### Gradle
 
-To use with [Gradle](https://gradle.org/), include the following dependency in your [build](https://github.com/ethauvin/isgd-shorten/blob/master/examples/build.gradle.kts) file:
+To use with [Gradle](https://gradle.org/), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/build.gradle.kts) file:
 
 ```gradle
 repositories {
@@ -57,14 +66,6 @@ repositories {
 }
 
 dependencies {
-    implementation("net.thauvin.erik:isgd-shorten:0.9.1")
+    implementation("net.thauvin.erik:readingtime:0.9.0")
 }
-```
-
-### v.gd
-
-Additionally, link can be shortened using [v.gd](https://v.gd/) by setting the `isVgd` flag:
-
-```kotlin
-Isgd.shorten("https://www.example.com/", isVgd = true) // returns https://v.gd/2z2ncj
 ```
