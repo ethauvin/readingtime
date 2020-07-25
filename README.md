@@ -13,12 +13,12 @@ import net.thauvin.erik.readingtime.ReadingTime
 
 ...
 
-val rt = ReadingTime(htmlText);
-println(rt.calcEstimatedReadTime()) // Outputs: X min read
+val rt = ReadingTime(htmlText)
+println(rt.calcEstimatedReadTime()) // eg: 2 min read
 
 ```
 
-where X is the estimated reading time for the given text.
+To get the estimated reading time in seconds use the `calcReadingTimeInSec()` function.
 
  - View [Kotlin](https://github.com/ethauvin/readingtime/blob/master/examples/src/main/kotlin/com/example/ReadingTimeExample.kt) or [Java](https://github.com/ethauvin/readingtime/blob/master/examples/src/main/java/com/example/ReadingTimeSample.java) Examples.
 
