@@ -11,7 +11,7 @@ A simple Kotlin/Java implementation of [Medium's Read Time calculation](https://
 ```kotlin
 import net.thauvin.erik.readingtime.ReadingTime
 
-...
+// ...
 
 val rt = ReadingTime(htmlText)
 println(rt.calcEstimatedReadTime()) // eg: 2 min read
@@ -55,6 +55,19 @@ A couple of useful functions are also available:
 ReadingTime.wordCount(htmlText) // Returns the count of words. (HTML stripped)
 ReadingTime.imgCount(htmlText) // Returns the count of images. (HTML img tags)
 ```
+
+### JSP
+
+A JSP tag is also available for easy incorporation into web applications:
+
+```jsp
+<%@taglib uri="https://erik.thauvin.net/taglibs/readingtime" prefix="t"%>
+<t:readingtime postfix="min read" plural="min read" excludeImages="false" wpm="275">some_text</t:readingtime>
+```
+
+None of the attributes are required.
+
+Just drop the jar into your `WEB-INF/lib` directory.
 
 ### Gradle
 
