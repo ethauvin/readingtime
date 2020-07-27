@@ -48,13 +48,15 @@ import java.math.RoundingMode
  * @param excludeImages Images are excluded from the reading time when set.
  */
 class ReadingTime @JvmOverloads constructor(
-    var text: String,
-    var wpm: Int = 275,
+    text: String,
+    wpm: Int = 275,
     var postfix: String = "min read",
     var plural: String = "min read",
-    var excludeImages: Boolean = false
-) {
+    excludeImages: Boolean = false
+) {    
     companion object {
+        private const val INVALID: Double = -1.0
+
         /**
          * Counts words.
          *
@@ -75,46 +77,68 @@ class ReadingTime @JvmOverloads constructor(
         }
     }
 
+    private var readTime: Double = INVALID
+
+    var text: String = text
+        set(value) {
+            initialize()
+            field = value
+        }
+
+    var wpm: Int = wpm
+        set(value) {
+            initialize()
+            field = value
+        }
+
+    var excludeImages: Boolean = excludeImages
+        set(value) {
+            initialize()
+            field = value
+        }
+
     /**
      * Calculates and returns the reading time in seconds.
      */
     fun calcReadingTimeInSec(): Double {
-        var readingTime = 0.0
+        if (readTime == INVALID) {
+            readTime = if (!excludeImages) calcImgReadingTime().toDouble() else 0.0
+            readTime += wordCount(text) / (wpm / 60.0)
+        }
 
-        if (!excludeImages)
-            readingTime += calcImgReadingTime()
-
-        readingTime += wordCount(text) / (wpm / 60.0)
-
-        return readingTime
+        return readTime
     }
 
     /**
      * Calculates and returns the reading time. (eg. 1 min read)
      */
     fun calcReadingTime(): String {
-        val readingTime = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, RoundingMode.CEILING)
-        return if (readingTime.compareTo(BigDecimal.ONE) == 1) {
-            "$readingTime $plural".trim()
+        val time = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, RoundingMode.CEILING)
+        return if (time.compareTo(BigDecimal.ONE) == 1) {
+            "$time $plural".trim()
         } else {
-            "$readingTime $postfix".trim()
+            "$time $postfix".trim()
         }
     }
 
     private fun calcImgReadingTime(): Int {
-        var imgTime = 0
+        var time = 0
         val imgCount = imgCount(text)
 
         var offset = 12
         for (i in 1..imgCount) {
             if (i > 10) {
-                imgTime += 3
+                time += 3
             } else {
-                imgTime += offset
+                time += offset
                 offset--
             }
         }
 
-        return imgTime
+        return time
+    }
+
+    private fun initialize() {
+        readTime = INVALID
     }
 }
