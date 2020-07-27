@@ -49,6 +49,6 @@ jobs:
 workflows:
   version: 2
   gradle:
-        jobs:
-        - build_gradle_jdk8
-        - build_gradle_jdk14
+    jobs:
+      - build_gradle_jdk8
+      - build_gradle_jdk14

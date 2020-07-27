@@ -53,7 +53,7 @@ A couple of useful functions are also available:
 
 ```kotlin
 ReadingTime.wordCount(htmlText) // Returns the count of words. (HTML stripped)
-ReadingTime.imgCount(htmlText) // Returns the count of images. (img HTML tags)
+ReadingTime.imgCount(htmlText) // Returns the count of images. (HTML img tags)
 ```
 
 ### Gradle
