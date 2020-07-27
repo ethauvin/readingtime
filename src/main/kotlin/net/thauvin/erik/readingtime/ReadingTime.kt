@@ -81,19 +81,19 @@ class ReadingTime @JvmOverloads constructor(
 
     var text: String = text
         set(value) {
-            initialize()
+            reset(value != text)
             field = value
         }
 
     var wpm: Int = wpm
         set(value) {
-            initialize()
+            reset(value != wpm)
             field = value
         }
 
     var excludeImages: Boolean = excludeImages
         set(value) {
-            initialize()
+            reset(value != excludeImages)
             field = value
         }
 
@@ -138,7 +138,7 @@ class ReadingTime @JvmOverloads constructor(
         return time
     }
 
-    private fun initialize() {
-        readTime = INVALID
+    private fun reset(isChanged: Boolean) {
+        if (isChanged) readTime = INVALID
     }
 }

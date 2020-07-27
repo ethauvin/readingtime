@@ -98,5 +98,9 @@ class ReadingTimeTest {
         rt.text = "This is a test."
         rt.postfix = ""
         assertEquals("1", rt.calcReadingTime())
+
+        rt.text = ""
+        assertEquals("0", rt.calcReadingTime())
+        assertEquals( 0.0, rt.calcReadingTimeInSec())
     }
 }
