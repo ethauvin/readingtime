@@ -2,7 +2,7 @@
     Copyright (c) 2020, Erik C. Thauvin (erik@thauvin.net)
     All rights reserved.
 
-    See https://opensource.org/licenses/BSD-3-Clause
+    See: https://erik.thauvin.net/bsd.shtml
 --%>
 <%@tag body-content="scriptless" import="net.thauvin.erik.readingtime.ReadingTime" trimDirectiveWhitespaces="true"%>
 <%@attribute name="debug" type="java.lang.Boolean"%>
