@@ -30,7 +30,7 @@ The following properties are available:
 
 ```kotlin
 ReadingTime(
-    text = "sometext",
+    text = "some_text",
     wpm = 275,
     postfix = "min read",
     plural = "min read",
@@ -66,12 +66,10 @@ A JSP tag is also available for easy incorporation into web applications:
     postfix="min read"
     plural="min read"
     excludeImages="false"
-    wpm="275">some_text_or_html</t:readingtime>
+    wpm="275">some_text</t:readingtime>
 ```
 
 None of the attributes are required.
-
-Just drop the jar into your `WEB-INF/lib` directory.
 
 ### Gradle
 
