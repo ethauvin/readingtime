@@ -31,7 +31,7 @@
             out.write("wpm: " + wpm + " (" + rt.getWpm() + ")\n");
             out.write("postfix: " + postfix + " (" + rt.getPostfix() + ")\n");
             out.write("plural: " + plural + " (" + rt.getPlural() + ")\n");
-            out.write("excludeImages: " + excludeImages + " (" + rt.getExcludeImages() + ") -->");
+            out.write("excludeImages: " + excludeImages + " (" + rt.getExcludeImages() + ")\n-->");
         }
     }
 %>

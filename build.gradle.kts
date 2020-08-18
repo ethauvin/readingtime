@@ -6,9 +6,9 @@ import java.util.*
 plugins {
     id("com.github.ben-manes.versions") version "0.29.0"
     id("com.jfrog.bintray") version "1.8.5"
-    id("io.gitlab.arturbosch.detekt") version "1.10.0"
-    id("org.jetbrains.dokka") version "0.10.1"
-    id("org.jetbrains.kotlin.jvm") version "1.3.72"
+    id("io.gitlab.arturbosch.detekt") version "1.11.0"
+    id("org.jetbrains.dokka") version "1.4.0-rc"
+    id("org.jetbrains.kotlin.jvm") version "1.4.0"
     id("org.sonarqube") version "3.0"
     `java-library`
     `maven-publish`
@@ -43,9 +43,6 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
     implementation("org.jsoup:jsoup:1.13.1")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
@@ -72,14 +69,15 @@ sonarqube {
     }
 }
 
+
 val sourcesJar by tasks.creating(Jar::class) {
     archiveClassifier.set("sources")
     from(sourceSets.getByName("main").allSource)
 }
 
 val javadocJar by tasks.creating(Jar::class) {
-    dependsOn(tasks.dokka)
-    from(tasks.dokka)
+    dependsOn(tasks.dokkaJavadoc)
+    from(tasks.dokkaJavadoc)
     archiveClassifier.set("javadoc")
     description = "Assembles a JAR of the generated Javadoc."
     group = JavaBasePlugin.DOCUMENTATION_GROUP
@@ -108,6 +106,15 @@ tasks {
     clean {
         doLast {
             project.delete(fileTree(deployDir))
+        }
+    }
+
+    dokkaJavadoc {
+        dokkaSourceSets {
+            configureEach {
+                moduleDisplayName = "ReadingTime"
+                apiVersion = "${project.version}"
+            }
         }
     }
 
