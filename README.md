@@ -71,7 +71,7 @@ A JSP tag is also available for easy incorporation into web applications:
 
 None of the attributes are required.
 
-### Gradle
+### Gradle, Maven, etc.
 
 To use with [Gradle](https://gradle.org/), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/build.gradle.kts) file:
 
@@ -84,3 +84,5 @@ dependencies {
     implementation("net.thauvin.erik:readingtime:0.9.0")
 }
 ```
+
+Instructions for using with Maven, Ivy, etc. can be found on [Maven Central](https://search.maven.org/artifact/net.thauvin.erik/readingtime/0.9.0/jar).
