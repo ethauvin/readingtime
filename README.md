@@ -63,10 +63,10 @@ A JSP tag is also available for easy incorporation into web applications:
 ```jsp
 <%@taglib uri="https://erik.thauvin.net/taglibs/readingtime" prefix="t"%>
 <t:readingtime
+    wpm="275"
     postfix="min read"
     plural="min read"
-    excludeImages="false"
-    wpm="275">some_text</t:readingtime>
+    excludeImages="false">some_text</t:readingtime>
 ```
 
 None of the attributes are required.
