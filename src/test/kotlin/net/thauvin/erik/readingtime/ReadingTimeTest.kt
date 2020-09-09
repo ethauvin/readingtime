@@ -32,8 +32,6 @@
 
 package net.thauvin.erik.readingtime
 
-import net.thauvin.erik.readingtime.ReadingTime.Companion.imgCount
-import net.thauvin.erik.readingtime.ReadingTime.Companion.wordCount
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -43,43 +41,62 @@ class ReadingTimeTest {
     private val blogPost = File("src/test/resources/post.html").readText()
     private val mediumPost = File("src/test/resources/medium.html").readText()
 
+    private fun calcImgTime(imgCount: Int): Double {
+        var time = 0.0
+        var offset = 12
+
+        for (i in 1..imgCount) {
+            time += offset
+            if (offset != 3) {
+                offset--
+            }
+        }
+        return time
+    }
+
+    private fun calcReadingTime(text: String, wpm: Int): Double {
+        return ReadingTime.wordCount(text) / (wpm / 60.0)
+    }
+
     @Test
     fun testWordCount() {
-        assertEquals(0, wordCount(" "))
-        assertEquals(3, wordCount("one two three"))
-        assertEquals(2, wordCount("    one    two    "))
-        assertEquals(7, wordCount(rt.text))
-        assertEquals(505, wordCount(blogPost))
-        assertEquals(391, wordCount(mediumPost))
+        assertEquals(0, ReadingTime.wordCount(" "))
+        assertEquals(3, ReadingTime.wordCount("one two three"))
+        assertEquals(2, ReadingTime.wordCount("    one    two    "))
+        assertEquals(7, ReadingTime.wordCount(rt.text))
+        assertEquals(505, ReadingTime.wordCount(blogPost))
+        assertEquals(391, ReadingTime.wordCount(mediumPost))
     }
 
     @Test
     fun testImgCount() {
-        assertEquals(1, imgCount(rt.text))
-        assertEquals(11, imgCount(blogPost))
-        assertEquals(3, imgCount(mediumPost))
+        assertEquals(1, ReadingTime.imgCount(rt.text))
+        assertEquals(11, ReadingTime.imgCount(blogPost))
+        assertEquals(3, ReadingTime.imgCount(mediumPost))
     }
 
     @Test
     fun testReadingTimeInSec() {
-        assertEquals((wordCount(rt.text) / (rt.wpm / 60.0)) + 12.0, rt.calcReadingTimeInSec())
+        assertEquals(calcReadingTime(rt.text, rt.wpm) + calcImgTime(1), rt.calcReadingTimeInSec())
 
         rt.text = "<img src=\"#\"> <IMG src=\"#\">"
-        assertEquals(12.0 + 11.0, rt.calcReadingTimeInSec())
+        assertEquals(calcImgTime(2), rt.calcReadingTimeInSec())
+        rt.excludeImages = true
+        assertEquals(0.0, rt.calcReadingTimeInSec())
+        rt.excludeImages = false
 
         rt.text = blogPost
         assertEquals(
-            (wordCount(rt.text) / (rt.wpm / 60.0)) + 12.0 + 11.0 + 10.0 + 9.0 + 8.0 + 7.0 + 6.0 + 5.0 + 4.0 + 3.0 + 3.0,
-            rt.calcReadingTimeInSec()
+            calcReadingTime(rt.text, rt.wpm) + calcImgTime(11), rt.calcReadingTimeInSec()
         )
 
         rt.excludeImages = true
-        assertEquals((wordCount(rt.text) / (rt.wpm / 60.0)), rt.calcReadingTimeInSec())
+        assertEquals(calcReadingTime(rt.text, rt.wpm), rt.calcReadingTimeInSec())
         rt.excludeImages = false
 
         rt.text = mediumPost
         rt.wpm = 300
-        assertEquals(wordCount(rt.text) / (300.0 / 60.0) + 12.0 + 11.0 + 10.0, rt.calcReadingTimeInSec())
+        assertEquals(calcReadingTime(rt.text, 300) + calcImgTime(3), rt.calcReadingTimeInSec())
         rt.wpm = 275
     }
 
@@ -101,6 +118,6 @@ class ReadingTimeTest {
 
         rt.text = ""
         assertEquals("0", rt.calcReadingTime())
-        assertEquals( 0.0, rt.calcReadingTimeInSec())
+        assertEquals(0.0, rt.calcReadingTimeInSec())
     }
 }
