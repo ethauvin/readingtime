@@ -16,7 +16,8 @@ public class ReadingTimeSample {
                 rt.setPlural("minutes to read");
 
                 System.out.println("It will take " + rt.calcReadingTime() + ' ' + ReadingTime.wordCount(rt.getText())
-                                   + " words and " + ReadingTime.imgCount(rt.getText()) + " images.");
+                                   + " words and " + ReadingTime.imgCount(rt.getText()) + " images at " + rt.getWpm()
+                                   + " words per minute.");
             } catch (IOException e) {
                 System.err.println("The file could not be read or found.");
             }

@@ -1,8 +1,6 @@
 package com.example
 
 import net.thauvin.erik.readingtime.ReadingTime
-import net.thauvin.erik.readingtime.ReadingTime.Companion.imgCount
-import net.thauvin.erik.readingtime.ReadingTime.Companion.wordCount
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -14,7 +12,8 @@ fun main(args: Array<String>) {
                 rt.plural = "minutes to read"
 
                 println(
-                    "It will take ${rt.calcReadingTime()} ${wordCount(rt.text)} words and ${imgCount(rt.text)} images."
+                    "It will take ${rt.calcReadingTime()} ${ReadingTime.wordCount(rt.text)} words and " +
+                        "${ReadingTime.imgCount(rt.text)} images at ${rt.wpm} words per minute."
                 )
             } else {
                 System.err.println("The file could not be read or found.")
