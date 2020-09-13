@@ -92,6 +92,9 @@ class ReadingTimeTest {
 
         rt.excludeImages = true
         assertEquals(calcReadingTime(rt.text, rt.wpm), rt.calcReadingTimeInSec())
+        rt.extra = 60
+        assertEquals(calcReadingTime(rt.text, rt.wpm) + 60L, rt.calcReadingTimeInSec())
+        rt.extra = 0
         rt.excludeImages = false
 
         rt.text = mediumPost

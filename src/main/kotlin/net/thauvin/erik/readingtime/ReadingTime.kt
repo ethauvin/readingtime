@@ -46,13 +46,15 @@ import java.math.RoundingMode
  * @param postfix The value to be appended to the reading time.
  * @param plural The value to be appended if the reading time is more than 1 minute.
  * @param excludeImages Images are excluded from the reading time when set.
+ * @param extra Additional seconds to be added to the total reading time.
  */
 class ReadingTime @JvmOverloads constructor(
     text: String,
     wpm: Int = 275,
     var postfix: String = "min read",
     var plural: String = "min read",
-    excludeImages: Boolean = false
+    excludeImages: Boolean = false,
+    extra: Int = 0
 ) {    
     companion object {
         private const val INVALID: Double = -1.0
@@ -97,6 +99,12 @@ class ReadingTime @JvmOverloads constructor(
             field = value
         }
 
+    var extra: Int = extra
+        set(value) {
+            reset(value != extra)
+            field = value
+        }
+
     /**
      * Calculates and returns the reading time in seconds.
      */
@@ -106,7 +114,7 @@ class ReadingTime @JvmOverloads constructor(
             readTime += wordCount(text) / (wpm / 60.0)
         }
 
-        return readTime
+        return readTime + extra
     }
 
     /**

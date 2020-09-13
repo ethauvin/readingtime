@@ -34,7 +34,8 @@ ReadingTime(
     wpm = 275,
     postfix = "min read",
     plural = "min read",
-    excludeImages = false
+    excludeImages = false, 
+    extra = 0
 )
 
 ```
@@ -46,6 +47,7 @@ Property                    | Description
 `postfix`                   | The value to be appended to the reading time.
 `plural`                    | The value to be appended if the reading time is more than 1 minute.
 `excludeImages`             | Images are excluded from the reading time when set.
+`extra`                     | Additional seconds to be added to the total reading time.
 
 ### Functions
 
@@ -66,7 +68,8 @@ A JSP tag is also available for easy incorporation into web applications:
     wpm="275"
     postfix="min read"
     plural="min read"
-    excludeImages="false">some_text</t:readingtime>
+    excludeImages="false"
+    extra="0">some_text</t:readingtime>
 ```
 
 None of the attributes are required.
