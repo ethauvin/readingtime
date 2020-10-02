@@ -40,6 +40,21 @@ class ReadingTimeTest {
     private val rt = ReadingTime("This is a <b>test</b>.\nWith an image: <img src=\"#\">")
     private val blogPost = File("src/test/resources/post.html").readText()
     private val mediumPost = File("src/test/resources/medium.html").readText()
+    private val twoSeventyFive = "one two three four five six seven eight nine ten one two three four five six seven " +
+        "eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine " +
+        "ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two " +
+        "three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four " +
+        "five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six " +
+        "seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight " +
+        "nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten " +
+        "one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two " +
+        "three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four " +
+        "five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six " +
+        "seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight " +
+        "nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten " +
+        "one two three four five six seven eight nine ten one two three four five"
+    private val tenImages = "<img src=\"#\"> <img src=\"#\"> <img src=\"#\"> <img src=\"#\"> <img src=\"#\"> " +
+        "<img src=\"#\"> <img src=\"#\"> <img src=\"#\"> <img src=\"#\"> <img src=\"#\">"
 
     private fun calcImgTime(imgCount: Int): Double {
         var time = 0.0
@@ -55,7 +70,7 @@ class ReadingTimeTest {
     }
 
     private fun calcReadingTime(text: String, wpm: Int): Double {
-        return ReadingTime.wordCount(text) / (wpm / 60.0)
+        return (ReadingTime.wordCount(text) / wpm) * 60.0
     }
 
     @Test
@@ -66,6 +81,8 @@ class ReadingTimeTest {
         assertEquals(7, ReadingTime.wordCount(rt.text))
         assertEquals(505, ReadingTime.wordCount(blogPost))
         assertEquals(391, ReadingTime.wordCount(mediumPost))
+        assertEquals(275, ReadingTime.wordCount(twoSeventyFive))
+        assertEquals(275, ReadingTime.wordCount("$twoSeventyFive <img src=\"#\""))
     }
 
     @Test
@@ -73,6 +90,8 @@ class ReadingTimeTest {
         assertEquals(1, ReadingTime.imgCount(rt.text))
         assertEquals(11, ReadingTime.imgCount(blogPost))
         assertEquals(3, ReadingTime.imgCount(mediumPost))
+        assertEquals(1, ReadingTime.imgCount("$twoSeventyFive <img src=\"#\""))
+        assertEquals(2, ReadingTime.imgCount("$twoSeventyFive <img src=\"#\"> <img src=\"#\">"))
     }
 
     @Test
@@ -101,15 +120,39 @@ class ReadingTimeTest {
         rt.wpm = 300
         assertEquals(calcReadingTime(rt.text, 300) + calcImgTime(3), rt.calcReadingTimeInSec())
         rt.wpm = 275
+
+        rt.text = "This is a test"
+        assertEquals(0.0, rt.calcReadingTimeInSec())
+
+        rt.text = twoSeventyFive
+        assertEquals(60.0, rt.calcReadingTimeInSec())
+
+        rt.text = "$twoSeventyFive <img src=\"#\">"
+        assertEquals(72.0, rt.calcReadingTimeInSec())
+
+        rt.text = "$twoSeventyFive <img src=\"#\"> <img src=\"#\">"
+        assertEquals(83.0, rt.calcReadingTimeInSec())
+
+        rt.text = "$twoSeventyFive $tenImages"
+        assertEquals(60.0 + 12 + 11 + 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3, rt.calcReadingTimeInSec())
+
+        rt.text = "$twoSeventyFive $tenImages <img src=\"#\">"
+        assertEquals(135.0 + 3, rt.calcReadingTimeInSec())
+
+        rt.text = "$twoSeventyFive $twoSeventyFive"
+        assertEquals(120.0, rt.calcReadingTimeInSec())
+
+        rt.text = ""
+        assertEquals(0.0, rt.calcReadingTimeInSec())
     }
 
     @Test
     fun testReadingTime() {
         rt.text = blogPost
-        assertEquals("4 min read", rt.calcReadingTime())
+        assertEquals("3 min read", rt.calcReadingTime())
 
         rt.plural = "mins read"
-        assertEquals("4 mins read", rt.calcReadingTime())
+        assertEquals("3 mins read", rt.calcReadingTime())
 
         rt.text = mediumPost
         rt.plural = ""
@@ -117,10 +160,15 @@ class ReadingTimeTest {
 
         rt.text = "This is a test."
         rt.postfix = ""
-        assertEquals("1", rt.calcReadingTime())
+        assertEquals("0", rt.calcReadingTime())
 
         rt.text = ""
         assertEquals("0", rt.calcReadingTime())
-        assertEquals(0.0, rt.calcReadingTimeInSec())
+
+        rt.text = twoSeventyFive
+        assertEquals("1", rt.calcReadingTime())
+
+        rt.text = "$twoSeventyFive $twoSeventyFive"
+        assertEquals("2", rt.calcReadingTime())
     }
 }

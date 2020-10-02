@@ -67,7 +67,7 @@ class ReadingTime @JvmOverloads constructor(
         @JvmStatic
         fun wordCount(words: String): Int {
             val s = Jsoup.parse(words).text().trim()
-            return if (s.isEmpty()) 0 else s.split("\\s+".toRegex()).size
+            return if (s.isBlank()) 0 else s.split("\\s+".toRegex()).size
         }
 
         /**
@@ -111,7 +111,7 @@ class ReadingTime @JvmOverloads constructor(
     fun calcReadingTimeInSec(): Double {
         if (readTime == INVALID) {
             readTime = if (!excludeImages) calcImgReadingTime().toDouble() else 0.0
-            readTime += wordCount(text) / (wpm / 60.0)
+            readTime += (wordCount(text) / wpm) * 60.0
         }
 
         return readTime + extra
