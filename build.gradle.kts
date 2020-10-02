@@ -1,13 +1,14 @@
 import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
 import java.util.*
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.32.0"
+    id("com.github.ben-manes.versions") version "0.33.0"
     id("com.jfrog.bintray") version "1.8.5"
-    id("io.gitlab.arturbosch.detekt") version "1.13.1"
-    id("org.jetbrains.dokka") version "1.4.0"
+    id("io.gitlab.arturbosch.detekt") version "1.14.1"
+    id("org.jetbrains.dokka") version "1.4.10"
     id("org.jetbrains.kotlin.jvm") version "1.4.10"
     id("org.sonarqube") version "3.0"
     `java-library`
@@ -109,10 +110,10 @@ tasks {
         }
     }
 
-    dokkaJavadoc {
+    withType<DokkaTask>().configureEach {
         dokkaSourceSets {
-            configureEach {
-                moduleDisplayName.set("ReadingTime")
+            named("main") {
+                moduleName.set("ReadingTime")
                 apiVersion.set("${project.version}")
             }
         }
