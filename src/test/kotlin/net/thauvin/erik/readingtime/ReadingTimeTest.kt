@@ -149,10 +149,10 @@ class ReadingTimeTest {
     @Test
     fun testReadingTime() {
         rt.text = blogPost
-        assertEquals("3 min read", rt.calcReadingTime())
+        assertEquals("2 min read", rt.calcReadingTime())
 
         rt.plural = "mins read"
-        assertEquals("3 mins read", rt.calcReadingTime())
+        assertEquals("2 mins read", rt.calcReadingTime())
 
         rt.text = mediumPost
         rt.plural = ""

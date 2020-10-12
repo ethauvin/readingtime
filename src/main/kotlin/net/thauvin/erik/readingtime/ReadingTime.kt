@@ -121,7 +121,7 @@ class ReadingTime @JvmOverloads constructor(
      * Calculates and returns the reading time. (eg. 1 min read)
      */
     fun calcReadingTime(): String {
-        val time = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, RoundingMode.CEILING)
+        val time = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, RoundingMode.HALF_DOWN)
         return if (time.compareTo(BigDecimal.ONE) == 1) {
             "$time $plural".trim()
         } else {
