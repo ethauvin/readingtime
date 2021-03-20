@@ -128,7 +128,7 @@ tasks {
     }
 
     register("release") {
-        description = "Publishes version ${project.version} to Maven Central."
+        description = "Publishes version ${project.version} to local repository."
         group = PublishingPlugin.PUBLISH_TASK_GROUP
         dependsOn("wrapper", "deploy", "gitTag", "publishToMavenLocal")
     }

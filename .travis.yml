@@ -14,13 +14,13 @@ addons:
 
 jdk:
   - oraclejdk8
-  - openjdk14
+  - openjdk15
 
 before_install:
   - chmod +x gradlew
 
 after_success:
   - |
-    if [ "${TRAVIS_TEST_RESULT}" == 0 ] && [ "$TRAVIS_JDK_VERSION" == "openjdk14" ]; then
+    if [ "${TRAVIS_TEST_RESULT}" == 0 ] && [ "$TRAVIS_JDK_VERSION" == "openjdk15" ]; then
       ./gradlew sonarqube
     fi
