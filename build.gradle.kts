@@ -1,19 +1,18 @@
-import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
 import java.util.*
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.33.0"
-    id("com.jfrog.bintray") version "1.8.5"
-    id("io.gitlab.arturbosch.detekt") version "1.14.1"
-    id("org.jetbrains.dokka") version "1.4.10"
-    id("org.jetbrains.kotlin.jvm") version "1.4.10"
-    id("org.sonarqube") version "3.0"
+    id("com.github.ben-manes.versions") version "0.38.0"
+    id("io.gitlab.arturbosch.detekt") version "1.16.0"
+    id("org.jetbrains.dokka") version "1.4.30"
+    id("org.jetbrains.kotlin.jvm") version "1.4.30"
+    id("org.sonarqube") version "3.1.1"
     `java-library`
     `maven-publish`
     jacoco
+    signing
 }
 
 description = "Estimated Reading Time for Blog Posts, Articles, etc."
@@ -26,20 +25,8 @@ val mavenUrl = "https://github.com/$gitHub"
 val publicationName = "mavenJava"
 var isRelease = "release" in gradle.startParameter.taskNames
 
-// Load local.properties
-File("local.properties").apply {
-    if (exists()) {
-        FileInputStream(this).use { fis ->
-            Properties().apply {
-                load(fis)
-                forEach { (k, v) ->
-                    extra[k as String] = v
-                }
-            }
-        }
-    }
-}
 repositories {
+    mavenCentral()
     jcenter()
 }
 
@@ -53,14 +40,11 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
 }
 
 detekt {
     baseline = project.rootDir.resolve("config/detekt/baseline.xml")
-}
-
-jacoco {
-    toolVersion = "0.8.6"
 }
 
 sonarqube {
@@ -70,18 +54,10 @@ sonarqube {
     }
 }
 
-
-val sourcesJar by tasks.creating(Jar::class) {
-    archiveClassifier.set("sources")
-    from(sourceSets.getByName("main").allSource)
-}
-
 val javadocJar by tasks.creating(Jar::class) {
     dependsOn(tasks.dokkaJavadoc)
     from(tasks.dokkaJavadoc)
     archiveClassifier.set("javadoc")
-    description = "Assembles a JAR of the generated Javadoc."
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
 }
 
 tasks {
@@ -101,7 +77,7 @@ tasks {
     }
 
     assemble {
-        dependsOn(sourcesJar, javadocJar)
+        dependsOn(javadocJar)
     }
 
     clean {
@@ -142,16 +118,6 @@ tasks {
         }
     }
 
-    val bintrayUpload by existing(BintrayUploadTask::class) {
-        dependsOn(publishToMavenLocal, gitTag)
-        doFirst {
-            versionName = "${project.version}"
-            versionDesc = "${project.name} ${project.version}"
-            versionVcsTag = "${project.version}"
-            versionReleased = Date().toString()
-        }
-    }
-
     register("deploy") {
         description = "Copies all needed files to the $deployDir directory."
         group = PublishingPlugin.PUBLISH_TASK_GROUP
@@ -162,9 +128,9 @@ tasks {
     }
 
     register("release") {
-        description = "Publishes version ${project.version} to Bintray."
+        description = "Publishes version ${project.version} to Maven Central."
         group = PublishingPlugin.PUBLISH_TASK_GROUP
-        dependsOn("wrapper", bintrayUpload)
+        dependsOn("wrapper", "deploy", "gitTag", "publishToMavenLocal")
     }
 
     "sonarqube" {
@@ -172,82 +138,51 @@ tasks {
     }
 }
 
-fun findProperty(s: String) = project.findProperty(s) as String?
-bintray {
-    user = findProperty("bintray.user")
-    key = findProperty("bintray.apikey")
-    publish = isRelease
-    setPublications(publicationName)
-    pkg.apply {
-        repo = "maven"
-        name = project.name
-        desc = description
-        websiteUrl = mavenUrl
-        issueTrackerUrl = "$mavenUrl/issues"
-        githubRepo = gitHub
-        githubReleaseNotesFile = "README.md"
-        vcsUrl = "$mavenUrl.git"
-        setLabels(
-            "articles",
-            "blog",
-            "java",
-            "kotlin",
-            "medium",
-            "min",
-            "posts",
-            "read",
-            "readingtime",
-            "readtime",
-            "weblog"
-        )
-        setLicenses("BSD 3-Clause")
-        publicDownloadNumbers = true
-        version.apply {
-            name = project.version as String
-            desc = description
-            vcsTag = project.version as String
-            gpg.apply {
-                sign = true
-            }
-        }
-    }
-}
-
 publishing {
     publications {
         create<MavenPublication>(publicationName) {
             from(components["java"])
-            artifact(sourcesJar)
             artifact(javadocJar)
-            pom.withXml {
-                asNode().apply {
-                    appendNode("name", project.name)
-                    appendNode("description", project.description)
-                    appendNode("url", mavenUrl)
-
-                    appendNode("licenses").appendNode("license").apply {
-                        appendNode("name", "BSD 3-Clause")
-                        appendNode("url", "https://opensource.org/licenses/BSD-3-Clause")
+            pom {
+                name.set(project.name)
+                description.set(project.description)
+                url.set(mavenUrl)
+                licenses {
+                    license {
+                        name.set("BSD 3-Clause")
+                        url.set("https://opensource.org/licenses/BSD-3-Clause")
                     }
-
-                    appendNode("developers").appendNode("developer").apply {
-                        appendNode("id", "ethauvin")
-                        appendNode("name", "Erik C. Thauvin")
-                        appendNode("email", "erik@thauvin.net")
+                }
+                developers {
+                    developer {
+                        id.set("ethauvin")
+                        name.set("Erik C. Thauvin")
+                        email.set("erik@thauvin.net")
+                        url.set("https://erik.thauvin.net/")
                     }
-
-                    appendNode("scm").apply {
-                        appendNode("connection", "scm:git:$mavenUrl.git")
-                        appendNode("developerConnection", "scm:git:git@github.com:$gitHub.git")
-                        appendNode("url", mavenUrl)
-                    }
-
-                    appendNode("issueManagement").apply {
-                        appendNode("system", "GitHub")
-                        appendNode("url", "$mavenUrl/issues")
-                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/$gitHub.git")
+                    developerConnection.set("scm:git:git@github.com:$gitHub.git")
+                    url.set("$mavenUrl")
+                }
+                issueManagement {
+                    system.set("GitHub")
+                    url.set("$mavenUrl/issues")
                 }
             }
         }
+    }
+    repositories {
+        maven {
+            name = "ossrh"
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials(PasswordCredentials::class)
+        }
+    }
+
+    signing {
+        useGpgCmd()
+        sign(publishing.publications[publicationName])
     }
 }
