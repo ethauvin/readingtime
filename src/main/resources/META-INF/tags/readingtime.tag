@@ -1,5 +1,5 @@
 <%--
-    Copyright (c) 2020, Erik C. Thauvin (erik@thauvin.net)
+    Copyright (c) 2020-2021, Erik C. Thauvin (erik@thauvin.net)
     All rights reserved.
 
     See: https://erik.thauvin.net/licenses/bsd.shtml
