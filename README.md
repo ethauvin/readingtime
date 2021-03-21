@@ -79,10 +79,6 @@ None of the attributes are required.
 To use with [Gradle](https://gradle.org/), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/build.gradle.kts) file:
 
 ```gradle
-repositories {
-    jcenter()
-}
-
 dependencies {
     implementation("net.thauvin.erik:readingtime:0.9.0")
 }
