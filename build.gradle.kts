@@ -6,8 +6,8 @@ import java.util.*
 plugins {
     id("com.github.ben-manes.versions") version "0.38.0"
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
-    id("org.jetbrains.dokka") version "1.4.30"
-    id("org.jetbrains.kotlin.jvm") version "1.4.30"
+    id("org.jetbrains.dokka") version "1.4.32"
+    id("org.jetbrains.kotlin.jvm") version "1.5.0"
     id("org.sonarqube") version "3.1.1"
     `java-library`
     `maven-publish`
@@ -17,7 +17,7 @@ plugins {
 
 description = "Estimated Reading Time for Blog Posts, Articles, etc."
 group = "net.thauvin.erik"
-version = "0.9.0"
+version = "0.9.1"
 
 val deployDir = "deploy"
 val gitHub = "ethauvin/$name"
@@ -27,7 +27,7 @@ var isRelease = "release" in gradle.startParameter.taskNames
 
 repositories {
     mavenCentral()
-    jcenter()
+    jcenter() // needed by detekt 1.16.0
 }
 
 dependencies {

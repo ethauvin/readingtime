@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.4.31"
+    id("org.jetbrains.kotlin.jvm") version "1.5.0"
     id("com.github.ben-manes.versions") version "0.38.0"
     application
 }
@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.thauvin.erik:readingtime:0.9.0")
+    implementation("net.thauvin.erik:readingtime:0.9.1")
 }
 
 application {
