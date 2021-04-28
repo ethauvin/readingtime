@@ -180,9 +180,9 @@ publishing {
             credentials(PasswordCredentials::class)
         }
     }
+}
 
-    signing {
-        useGpgCmd()
-        sign(publishing.publications[publicationName])
-    }
+signing {
+    useGpgCmd()
+    sign(publishing.publications[publicationName])
 }
