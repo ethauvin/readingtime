@@ -8,7 +8,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
     id("org.jetbrains.dokka") version "1.4.32"
     id("org.jetbrains.kotlin.jvm") version "1.5.0"
-    id("org.sonarqube") version "3.1.1"
+    id("org.sonarqube") version "3.2.0"
     `java-library`
     `maven-publish`
     jacoco
@@ -17,7 +17,7 @@ plugins {
 
 description = "Estimated Reading Time for Blog Posts, Articles, etc."
 group = "net.thauvin.erik"
-version = "0.9.1"
+version = "0.9.1-SNAPSHOT"
 
 val deployDir = "deploy"
 val gitHub = "ethauvin/$name"
@@ -27,7 +27,6 @@ var isRelease = "release" in gradle.startParameter.taskNames
 
 repositories {
     mavenCentral()
-    jcenter() // needed by detekt 1.16.0
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
@@ -45,6 +44,7 @@ java {
 }
 
 detekt {
+    toolVersion = "main-SNAPSHOT"
     baseline = project.rootDir.resolve("config/detekt/baseline.xml")
 }
 
@@ -182,7 +182,9 @@ publishing {
     repositories {
         maven {
             name = "ossrh"
-            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+            url = if (project.version.toString().contains("SNAPSHOT"))
+                uri("https://oss.sonatype.org/content/repositories/snapshots/") else
+                uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials(PasswordCredentials::class)
         }
     }
