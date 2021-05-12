@@ -4,8 +4,8 @@ plugins {
     application
 }
 
-// ./gradlew run --args="example.html"
-// ./gradlew runJava --args="example.html"
+// ./gradlew run
+// ./gradlew runJava
 
 repositories {
     mavenLocal()
@@ -17,7 +17,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "com.example.ReadingTimeExampleKt"
+    mainClass.set("com.example.ReadingTimeExampleKt")
 }
 
 tasks {
@@ -28,7 +28,7 @@ tasks {
     register<JavaExec>("runJava") {
         group = "application"
         main = "com.example.ReadingTimeSample"
-        classpath = sourceSets["main"].runtimeClasspath
+        classpath = sourceSets.main.get().runtimeClasspath
         args = listOf("${project.projectDir}/example.html")
     }
 }
