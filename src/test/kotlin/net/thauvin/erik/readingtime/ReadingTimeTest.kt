@@ -40,19 +40,19 @@ class ReadingTimeTest {
     private val rt = ReadingTime("This is a <b>test</b>.\nWith an image: <img src=\"#\">")
     private val blogPost = File("src/test/resources/post.html").readText()
     private val mediumPost = File("src/test/resources/medium.html").readText()
-    private val twoSeventyFive = "one two three four five six seven eight nine ten one two three four five six seven " +
-        "eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine " +
-        "ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two " +
-        "three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four " +
-        "five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six " +
-        "seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight " +
-        "nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten " +
-        "one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two " +
-        "three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four " +
-        "five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six " +
-        "seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight " +
-        "nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten " +
-        "one two three four five six seven eight nine ten one two three four five"
+    private val twoSeventyFive = """one two three four five six seven eight nine ten one two three four five six seven 
+eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine 
+ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two 
+three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four 
+five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six 
+seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight 
+nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten 
+one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two 
+three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four 
+five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six 
+seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight 
+nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten 
+one two three four five six seven eight nine ten one two three four five"""
     private val tenImages = "<img src=\"#\"> <img src=\"#\"> <img src=\"#\"> <img src=\"#\"> <img src=\"#\"> " +
         "<img src=\"#\"> <img src=\"#\"> <img src=\"#\"> <img src=\"#\"> <img src=\"#\">"
 
@@ -60,7 +60,7 @@ class ReadingTimeTest {
         var time = 0.0
         var offset = 12
 
-        for (i in 1..imgCount) {
+        repeat(imgCount) {
             time += offset
             if (offset != 3) {
                 offset--
