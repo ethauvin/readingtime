@@ -21,7 +21,7 @@ application {
 }
 
 tasks {
-    getByName<JavaExec>("run") {
+    named<JavaExec>("run") {
        args = listOf("${project.projectDir}/example.html")
     }
 
