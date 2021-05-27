@@ -41,6 +41,8 @@ import java.math.RoundingMode
  *
  * Based on [Medium's calculation](https://blog.medium.com/read-time-and-you-bc2048ab620c).
  *
+ * @constructor Constructs a new [ReadingTime] object.
+ *
  * @param text The text to be evaluated.
  * @param wpm The words per minute reading average.
  * @param postfix The value to be appended to the reading time.
