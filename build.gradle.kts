@@ -6,16 +6,16 @@ import java.io.FileInputStream
 import java.util.*
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.38.0"
+    id("com.github.ben-manes.versions") version "0.39.0"
     id("io.gitlab.arturbosch.detekt") version "1.17.1"
+    id("jacoco")
+    id("java")
+    id("java-library")
+    id("maven-publish")
     id("org.jetbrains.dokka") version "1.4.32"
-    id("org.jetbrains.kotlin.jvm") version "1.5.0"
     id("org.sonarqube") version "3.2.0"
-    java
-    `java-library`
-    `maven-publish`
-    jacoco
-    signing
+    id("signing")
+    kotlin("jvm") version "1.5.10"
 }
 
 description = "Estimated Reading Time for Blog Posts, Articles, etc."
@@ -34,12 +34,12 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+    implementation(platform(kotlin("bom")))
 
     implementation("org.jsoup:jsoup:1.13.1")
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-junit"))
 }
 
 java {

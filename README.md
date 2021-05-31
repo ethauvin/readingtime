@@ -22,7 +22,17 @@ To get the estimated reading time in seconds use the `calcReadingTimeInSec()` fu
 
  - View [Kotlin](https://github.com/ethauvin/readingtime/blob/master/examples/src/main/kotlin/com/example/ReadingTimeExample.kt) or [Java](https://github.com/ethauvin/readingtime/blob/master/examples/src/main/java/com/example/ReadingTimeSample.java) Examples.
 
+### Gradle, Maven, etc.
 
+To use with [Gradle](https://gradle.org/), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/build.gradle.kts) file:
+
+```gradle
+dependencies {
+    implementation("net.thauvin.erik:readingtime:0.9.1")
+}
+```
+
+Instructions for using with Maven, Ivy, etc. can be found on [Maven Central](https://search.maven.org/artifact/net.thauvin.erik/readingtime/0.9.0/jar).
 
 ### Properties
 
@@ -30,24 +40,26 @@ The following properties are available:
 
 ```kotlin
 ReadingTime(
-    text = "some_text",
+    text,
     wpm = 275,
     postfix = "min read",
     plural = "min read",
     excludeImages = false, 
-    extra = 0
+    extra = 0,
+    round = RoundingMode.HALF_DOWN
 )
 
 ```
 
-Property                    | Description                 
-:-------------------------- |:-------------------------------------------------------------------
-`text`                      | The text to be evaluated.
+Property                    | Description
+:-------------------------- |:-----------------------------------------------------------------------------------------------------------------------
+`text`                      | The text to be evaluated. (Required)
 `wpm`                       | The words per minute reading average.
 `postfix`                   | The value to be appended to the reading time.
 `plural`                    | The value to be appended if the reading time is more than 1 minute.
 `excludeImages`             | Images are excluded from the reading time when set.
 `extra`                     | Additional seconds to be added to the total reading time.
+`round`                     | The [rounding mode](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/RoundingMode.html) to apply.
 
 ### Functions
 
@@ -73,15 +85,3 @@ A JSP tag is also available for easy incorporation into web applications:
 ```
 
 None of the attributes are required.
-
-### Gradle, Maven, etc.
-
-To use with [Gradle](https://gradle.org/), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/build.gradle.kts) file:
-
-```gradle
-dependencies {
-    implementation("net.thauvin.erik:readingtime:0.9.0")
-}
-```
-
-Instructions for using with Maven, Ivy, etc. can be found on [Maven Central](https://search.maven.org/artifact/net.thauvin.erik/readingtime/0.9.0/jar).

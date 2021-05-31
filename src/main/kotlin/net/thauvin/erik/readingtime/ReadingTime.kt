@@ -49,6 +49,7 @@ import java.math.RoundingMode
  * @param plural The value to be appended if the reading time is more than 1 minute.
  * @param excludeImages Images are excluded from the reading time when set.
  * @param extra Additional seconds to be added to the total reading time.
+ * @param round The [RoundingMode] to apply. Default is [RoundingMode.HALF_DOWN].
  */
 class ReadingTime @JvmOverloads constructor(
     text: String,
@@ -56,7 +57,8 @@ class ReadingTime @JvmOverloads constructor(
     var postfix: String = "min read",
     var plural: String = "min read",
     excludeImages: Boolean = false,
-    extra: Int = 0
+    extra: Int = 0,
+    var round: RoundingMode = RoundingMode.HALF_DOWN
 ) {    
     companion object {
         private const val INVALID: Double = -1.0
@@ -108,7 +110,9 @@ class ReadingTime @JvmOverloads constructor(
         }
 
     /**
-     * Calculates and returns the reading time in seconds.
+     * Calculates and returns the reading time in seconds. 
+     *
+     * `((word count / wpm) * 60) + images + extra`
      */
     fun calcReadingTimeInSec(): Double {
         if (readTime == INVALID) {
@@ -121,9 +125,11 @@ class ReadingTime @JvmOverloads constructor(
 
     /**
      * Calculates and returns the reading time. (eg. 1 min read)
+     *
+     * `(reading time in sec / 60) + postfix`
      */
     fun calcReadingTime(): String {
-        val time = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, RoundingMode.HALF_DOWN)
+        val time = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, round)
         return if (time.compareTo(BigDecimal.ONE) == 1) {
             "$time $plural".trim()
         } else {
@@ -131,6 +137,10 @@ class ReadingTime @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 12 seconds for the first image, 11 for the second, and minus an additional second for each subsequent image.
+     * Any images after the tenth image are counted at 3 seconds.
+     */
     private fun calcImgReadingTime(): Int {
         var time = 0
         val imgCount = imgCount(text)
