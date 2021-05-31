@@ -58,7 +58,7 @@ class ReadingTime @JvmOverloads constructor(
     var plural: String = "min read",
     excludeImages: Boolean = false,
     extra: Int = 0,
-    var roundingMode: RoundingMode = RoundingMode.HALF_DOWN
+    var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
 ) {    
     companion object {
         private const val INVALID: Double = -1.0
