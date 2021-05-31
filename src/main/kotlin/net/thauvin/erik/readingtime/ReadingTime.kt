@@ -58,7 +58,7 @@ class ReadingTime @JvmOverloads constructor(
     var plural: String = "min read",
     excludeImages: Boolean = false,
     extra: Int = 0,
-    var round: RoundingMode = RoundingMode.HALF_DOWN
+    var roundingMode: RoundingMode = RoundingMode.HALF_DOWN
 ) {    
     companion object {
         private const val INVALID: Double = -1.0
@@ -129,7 +129,7 @@ class ReadingTime @JvmOverloads constructor(
      * `(reading time in sec / 60) + postfix`
      */
     fun calcReadingTime(): String {
-        val time = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, round)
+        val time = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, roundingMode)
         return if (time.compareTo(BigDecimal.ONE) == 1) {
             "$time $plural".trim()
         } else {

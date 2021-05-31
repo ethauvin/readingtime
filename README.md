@@ -46,7 +46,7 @@ ReadingTime(
     plural = "min read",
     excludeImages = false, 
     extra = 0,
-    round = RoundingMode.HALF_DOWN
+    roundingMode = RoundingMode.HALF_DOWN
 )
 
 ```
@@ -59,7 +59,7 @@ Property                    | Description
 `plural`                    | The value to be appended if the reading time is more than 1 minute.
 `excludeImages`             | Images are excluded from the reading time when set.
 `extra`                     | Additional seconds to be added to the total reading time.
-`round`                     | The [rounding mode](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/RoundingMode.html) to apply.
+`roundingMode`              | The [rounding mode](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/RoundingMode.html) to apply.
 
 ### Functions
 

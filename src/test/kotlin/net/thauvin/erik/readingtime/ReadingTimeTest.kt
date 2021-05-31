@@ -163,11 +163,11 @@ class ReadingTimeTest {
     @Test
     fun testRoundingMode() {
         rt.text = blogPost
-        rt.round = RoundingMode.UP
+        rt.roundingMode = RoundingMode.UP
         assertEquals("3 min read", rt.calcReadingTime(), "UP")
 
         rt.text = mediumPost
-        rt.round = RoundingMode.DOWN
+        rt.roundingMode = RoundingMode.DOWN
         assertEquals("1 min read", rt.calcReadingTime(), "DOWN")
     }
 }
