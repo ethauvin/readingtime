@@ -46,7 +46,7 @@ ReadingTime(
     plural = "min read",
     excludeImages = false, 
     extra = 0,
-    roundingMode = RoundingMode.HALF_DOWN
+    roundingMode = RoundingMode.HALF_EVEN
 )
 
 ```

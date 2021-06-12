@@ -132,6 +132,8 @@ class ReadingTimeTest {
 
         rt.text = ""
         assertEquals(0.0, rt.calcReadingTimeInSec(), "empty")
+        rt.postfix = ""
+        assertEquals(rt.calcReadingTime(), rt.calcReadingTimeInSec().toInt().toString(), "toInt(0)")
     }
 
     @Test
