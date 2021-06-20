@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
 
                 println(
                     "It will take ${rt.calcReadingTime()} ${ReadingTime.wordCount(rt.text)} words and " +
-                        "${ReadingTime.imgCount(rt.text)} images at ${rt.wpm} words per minute."
+                            "${ReadingTime.imgCount(rt.text)} images at ${rt.wpm} words per minute."
                 )
             } else {
                 System.err.println("The file could not be read or found.")

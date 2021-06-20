@@ -22,12 +22,12 @@ application {
 
 tasks {
     named<JavaExec>("run") {
-       args = listOf("${project.projectDir}/example.html")
+        args = listOf("${project.projectDir}/example.html")
     }
 
     register<JavaExec>("runJava") {
         group = "application"
-        main = "com.example.ReadingTimeSample"
+        mainClass.set("com.example.ReadingTimeSample")
         classpath = sourceSets.main.get().runtimeClasspath
         args = listOf("${project.projectDir}/example.html")
     }

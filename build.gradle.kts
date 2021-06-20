@@ -2,8 +2,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import java.io.FileInputStream
-import java.util.*
+
 
 plugins {
     id("com.github.ben-manes.versions") version "0.39.0"
@@ -91,8 +90,8 @@ tasks {
     jacocoTestReport {
         dependsOn(test)
         reports {
-            xml.isEnabled = true
-            html.isEnabled = true
+            xml.required.set(true)
+            html.required.set(true)
         }
     }
 

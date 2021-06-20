@@ -49,17 +49,17 @@ import java.math.RoundingMode
  * @param plural The value to be appended if the reading time is more than 1 minute.
  * @param excludeImages Images are excluded from the reading time when set.
  * @param extra Additional seconds to be added to the total reading time.
- * @param round The [RoundingMode] to apply. Default is [RoundingMode.HALF_DOWN].
+ * @param roundingMode The [RoundingMode] to apply. Default is [RoundingMode.HALF_DOWN].
  */
 class ReadingTime @JvmOverloads constructor(
-    text: String,
-    wpm: Int = 275,
-    var postfix: String = "min read",
-    var plural: String = "min read",
-    excludeImages: Boolean = false,
-    extra: Int = 0,
-    var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
-) {    
+        text: String,
+        wpm: Int = 275,
+        var postfix: String = "min read",
+        var plural: String = "min read",
+        excludeImages: Boolean = false,
+        extra: Int = 0,
+        var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
+) {
     companion object {
         private const val INVALID: Double = -1.0
 
@@ -110,7 +110,7 @@ class ReadingTime @JvmOverloads constructor(
         }
 
     /**
-     * Calculates and returns the reading time in seconds. 
+     * Calculates and returns the reading time in seconds.
      *
      * `((word count / wpm) * 60) + images + extra`
      */

@@ -94,7 +94,7 @@ class ReadingTimeTest {
 
         rt.text = blogPost
         assertEquals(
-            calcReadingTime(rt.text, rt.wpm) + calcImgTime(11), rt.calcReadingTimeInSec(), "blogPost"
+                calcReadingTime(rt.text, rt.wpm) + calcImgTime(11), rt.calcReadingTimeInSec(), "blogPost"
         )
 
         rt.excludeImages = true
