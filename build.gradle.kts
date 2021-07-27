@@ -6,7 +6,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     id("com.github.ben-manes.versions") version "0.39.0"
-    id("io.gitlab.arturbosch.detekt") version "1.18.0-RC1"
+    id("io.gitlab.arturbosch.detekt") version "1.18.0-RC2"
     id("jacoco")
     id("java")
     id("java-library")
@@ -14,7 +14,7 @@ plugins {
     id("org.jetbrains.dokka") version "1.5.0"
     id("org.sonarqube") version "3.3"
     id("signing")
-    kotlin("jvm") version "1.5.20"
+    kotlin("jvm") version "1.5.21"
 }
 
 description = "Estimated Reading Time for Blog Posts, Articles, etc."
