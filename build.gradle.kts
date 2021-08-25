@@ -3,10 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
-
 plugins {
     id("com.github.ben-manes.versions") version "0.39.0"
-    id("io.gitlab.arturbosch.detekt") version "1.18.0-RC2"
+    id("io.gitlab.arturbosch.detekt") version "1.18.0"
     id("jacoco")
     id("java")
     id("java-library")
@@ -14,7 +13,7 @@ plugins {
     id("org.jetbrains.dokka") version "1.5.0"
     id("org.sonarqube") version "3.3"
     id("signing")
-    kotlin("jvm") version "1.5.21"
+    kotlin("jvm") version "1.5.30"
 }
 
 description = "Estimated Reading Time for Blog Posts, Articles, etc."
@@ -35,7 +34,7 @@ repositories {
 dependencies {
     implementation(platform(kotlin("bom")))
 
-    implementation("org.jsoup:jsoup:1.14.1")
+    implementation("org.jsoup:jsoup:1.14.2")
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))

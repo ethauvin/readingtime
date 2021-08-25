@@ -34,7 +34,7 @@ jobs:
     <<: *defaults
 
     docker:
-      - image: openjdk:16-jdk
+      - image: cimg/openjdk:16.0
 
     <<: *defaults_gradle
 
@@ -42,7 +42,7 @@ jobs:
     <<: *defaults
 
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: cimg/openjdk:8.0
 
     <<: *defaults_gradle
 
