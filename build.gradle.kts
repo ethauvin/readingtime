@@ -34,7 +34,7 @@ repositories {
 dependencies {
     implementation(platform(kotlin("bom")))
 
-    implementation("org.jsoup:jsoup:1.14.2")
+    implementation("org.jsoup:jsoup:1.14.3")
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
