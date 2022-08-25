@@ -5,15 +5,15 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     id("com.github.ben-manes.versions") version "0.42.0"
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    id("io.gitlab.arturbosch.detekt") version "1.21.0"
     id("java-library")
     id("java")
     id("maven-publish")
-    id("org.jetbrains.dokka") version "1.6.21"
-    id("org.jetbrains.kotlinx.kover") version "0.5.0"
-    id("org.sonarqube") version "3.3"
+    id("org.jetbrains.dokka") version "1.7.10"
+    id("org.jetbrains.kotlinx.kover") version "0.6.0"
+    id("org.sonarqube") version "3.4.0.2513"
     id("signing")
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.7.10"
 }
 
 description = "Estimated Reading Time for Blog Posts, Articles, etc."
@@ -34,7 +34,7 @@ repositories {
 dependencies {
     implementation(platform(kotlin("bom")))
 
-    implementation("org.jsoup:jsoup:1.14.3")
+    implementation("org.jsoup:jsoup:1.15.3")
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
