@@ -32,7 +32,7 @@ dependencies {
 }
 ```
 
-Instructions for using with Maven, Ivy, etc. can be found on [Maven Central](https://search.maven.org/artifact/net.thauvin.erik/readingtime/0.9.0/jar).
+Instructions for using with Maven, Ivy, etc. can be found on [Maven Central](https://search.maven.org/search?q=g:%22net.thauvin.erik%22%20AND%20a:%22readingtime%22).
 
 ### Properties
 

@@ -18,7 +18,7 @@ plugins {
 
 description = "Estimated Reading Time for Blog Posts, Articles, etc."
 group = "net.thauvin.erik"
-version = "0.9.1-SNAPSHOT"
+version = "0.9.1"
 
 val deployDir = "deploy"
 val gitHub = "ethauvin/$name"
