@@ -1,7 +1,7 @@
 /*
  * ReadingTime.kt
  *
- * Copyright (c) 2020-2021, Erik C. Thauvin (erik@thauvin.net)
+ * Copyright (c) 2020-2022, Erik C. Thauvin (erik@thauvin.net)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,21 +41,25 @@ import java.math.RoundingMode
  *
  * Based on [Medium's calculation](https://blog.medium.com/read-time-and-you-bc2048ab620c).
  *
+ * @constructor Constructs a new [ReadingTime] object.
+ *
  * @param text The text to be evaluated.
  * @param wpm The words per minute reading average.
  * @param postfix The value to be appended to the reading time.
  * @param plural The value to be appended if the reading time is more than 1 minute.
  * @param excludeImages Images are excluded from the reading time when set.
  * @param extra Additional seconds to be added to the total reading time.
+ * @param roundingMode The [RoundingMode] to apply. Default is [RoundingMode.HALF_DOWN].
  */
 class ReadingTime @JvmOverloads constructor(
-    text: String,
-    wpm: Int = 275,
-    var postfix: String = "min read",
-    var plural: String = "min read",
-    excludeImages: Boolean = false,
-    extra: Int = 0
-) {    
+        text: String,
+        wpm: Int = 275,
+        var postfix: String = "min read",
+        var plural: String = "min read",
+        excludeImages: Boolean = false,
+        extra: Int = 0,
+        var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
+) {
     companion object {
         private const val INVALID: Double = -1.0
 
@@ -107,6 +111,8 @@ class ReadingTime @JvmOverloads constructor(
 
     /**
      * Calculates and returns the reading time in seconds.
+     *
+     * `((word count / wpm) * 60) + images + extra`
      */
     fun calcReadingTimeInSec(): Double {
         if (readTime == INVALID) {
@@ -119,9 +125,11 @@ class ReadingTime @JvmOverloads constructor(
 
     /**
      * Calculates and returns the reading time. (eg. 1 min read)
+     *
+     * `(reading time in sec / 60) + postfix`
      */
     fun calcReadingTime(): String {
-        val time = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, RoundingMode.HALF_DOWN)
+        val time = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, roundingMode)
         return if (time.compareTo(BigDecimal.ONE) == 1) {
             "$time $plural".trim()
         } else {
@@ -129,6 +137,10 @@ class ReadingTime @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 12 seconds for the first image, 11 for the second, and minus an additional second for each subsequent image.
+     * Any images after the tenth image are counted at 3 seconds.
+     */
     private fun calcImgReadingTime(): Int {
         var time = 0
         val imgCount = imgCount(text)

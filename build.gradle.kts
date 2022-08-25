@@ -1,23 +1,24 @@
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.FileInputStream
-import java.util.*
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.38.0"
-    id("io.gitlab.arturbosch.detekt") version "1.16.0"
-    id("org.jetbrains.dokka") version "1.4.30"
-    id("org.jetbrains.kotlin.jvm") version "1.4.30"
-    id("org.sonarqube") version "3.1.1"
-    `java-library`
-    `maven-publish`
-    jacoco
-    signing
+    id("com.github.ben-manes.versions") version "0.42.0"
+    id("io.gitlab.arturbosch.detekt") version "1.21.0"
+    id("java-library")
+    id("java")
+    id("maven-publish")
+    id("org.jetbrains.dokka") version "1.7.10"
+    id("org.jetbrains.kotlinx.kover") version "0.6.0"
+    id("org.sonarqube") version "3.4.0.2513"
+    id("signing")
+    kotlin("jvm") version "1.7.10"
 }
 
 description = "Estimated Reading Time for Blog Posts, Articles, etc."
 group = "net.thauvin.erik"
-version = "0.9.0"
+version = "0.9.1-SNAPSHOT"
 
 val deployDir = "deploy"
 val gitHub = "ethauvin/$name"
@@ -27,14 +28,16 @@ var isRelease = "release" in gradle.startParameter.taskNames
 
 repositories {
     mavenCentral()
-    jcenter()
+    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
 dependencies {
-    implementation("org.jsoup:jsoup:1.13.1")
+    implementation(platform(kotlin("bom")))
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    implementation("org.jsoup:jsoup:1.15.3")
+
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-junit"))
 }
 
 java {
@@ -44,13 +47,17 @@ java {
 }
 
 detekt {
+    //toolVersion = "main-SNAPSHOT"
     baseline = project.rootDir.resolve("config/detekt/baseline.xml")
 }
 
 sonarqube {
     properties {
         property("sonar.projectKey", "ethauvin_$name")
+        property("sonar.organization", "ethauvin-github")
+        property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/kover/report.xml")
     }
 }
 
@@ -61,15 +68,15 @@ val javadocJar by tasks.creating(Jar::class) {
 }
 
 tasks {
-    withType<JacocoReport> {
-        reports {
-            xml.isEnabled = true
-            html.isEnabled = true
-        }
+    withType<KotlinCompile>().configureEach {
+        kotlinOptions.jvmTarget = java.targetCompatibility.toString()
     }
 
-    withType<KotlinCompile>().configureEach {
-        kotlinOptions.jvmTarget = "1.8"
+    withType<Test> {
+        testLogging {
+            exceptionFormat = TestExceptionFormat.FULL
+            events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
+        }
     }
 
     withType<GenerateMavenPom> {
@@ -121,20 +128,20 @@ tasks {
     register("deploy") {
         description = "Copies all needed files to the $deployDir directory."
         group = PublishingPlugin.PUBLISH_TASK_GROUP
-        dependsOn("build", "jar")
+        dependsOn(build, jar)
         outputs.dir(deployDir)
         inputs.files(copyToDeploy)
-        mustRunAfter("clean")
+        mustRunAfter(clean)
     }
 
     register("release") {
         description = "Publishes version ${project.version} to local repository."
         group = PublishingPlugin.PUBLISH_TASK_GROUP
-        dependsOn("wrapper", "deploy", "gitTag", "publishToMavenLocal")
+        dependsOn(wrapper, "deploy", gitTag, publishToMavenLocal)
     }
 
     "sonarqube" {
-        dependsOn("jacocoTestReport")
+        dependsOn(koverReport)
     }
 }
 
@@ -164,7 +171,7 @@ publishing {
                 scm {
                     connection.set("scm:git:git://github.com/$gitHub.git")
                     developerConnection.set("scm:git:git@github.com:$gitHub.git")
-                    url.set("$mavenUrl")
+                    url.set(mavenUrl)
                 }
                 issueManagement {
                     system.set("GitHub")
@@ -176,13 +183,15 @@ publishing {
     repositories {
         maven {
             name = "ossrh"
-            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+            url = if (project.version.toString().contains("SNAPSHOT"))
+                uri("https://oss.sonatype.org/content/repositories/snapshots/") else
+                uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials(PasswordCredentials::class)
         }
     }
+}
 
-    signing {
-        useGpgCmd()
-        sign(publishing.publications[publicationName])
-    }
+signing {
+    useGpgCmd()
+    sign(publishing.publications[publicationName])
 }

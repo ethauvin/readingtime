@@ -1,11 +1,13 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.4.31"
-    id("com.github.ben-manes.versions") version "0.38.0"
-    application
+    id("application")
+    id("com.github.ben-manes.versions") version "0.42.0"
+    kotlin("jvm") version "1.7.10"
 }
 
-// ./gradlew run --args="example.html"
-// ./gradlew runJava --args="example.html"
+// ./gradlew run
+// ./gradlew runJava
 
 repositories {
     mavenLocal()
@@ -13,22 +15,31 @@ repositories {
 }
 
 dependencies {
-    implementation("net.thauvin.erik:readingtime:0.9.0")
+    implementation("net.thauvin.erik:readingtime:0.9.1-SNAPSHOT")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 application {
-    mainClassName = "com.example.ReadingTimeExampleKt"
+    mainClass.set("com.example.ReadingTimeExampleKt")
 }
 
 tasks {
-    getByName<JavaExec>("run") {
-       args = listOf("${project.projectDir}/example.html")
+    withType<KotlinCompile>().configureEach {
+        kotlinOptions.jvmTarget = java.targetCompatibility.toString()
+    }
+
+    named<JavaExec>("run") {
+        args = listOf("${project.projectDir}/example.html")
     }
 
     register<JavaExec>("runJava") {
         group = "application"
-        main = "com.example.ReadingTimeSample"
-        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("com.example.ReadingTimeSample")
+        classpath = sourceSets.main.get().runtimeClasspath
         args = listOf("${project.projectDir}/example.html")
     }
 }
