@@ -1,6 +1,6 @@
 [![License (3-Clause BSD)](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg?style=flat-square)](https://opensource.org/licenses/BSD-3-Clause) [![Release](https://img.shields.io/github/release/ethauvin/readingtime.svg)](https://github.com/ethauvin/readingtime/releases/latest) [![Maven Central](https://img.shields.io/maven-central/v/net.thauvin.erik/readingtime.svg?label=maven%20central)](https://search.maven.org/search?q=g:%22net.thauvin.erik%22%20AND%20a:%22readingtime%22)
 
-[![Known Vulnerabilities](https://snyk.io/test/github/ethauvin/readingtime/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/ethauvin/readingtime?targetFile=pom.xml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ethauvin_readingtime&metric=alert_status)](https://sonarcloud.io/dashboard?id=ethauvin_readingtime) [![GitHub CI](https://github.com/ethauvin/readingtime/actions/workflows/gradle.yml/badge.svg)](https://github.com/ethauvin/readingtime/actions/workflows/gradle.yml) [![CircleCI](https://circleci.com/gh/ethauvin/readingtime/tree/master.svg?style=shield)](https://circleci.com/gh/ethauvin/readingtime/tree/master)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ethauvin_readingtime&metric=alert_status)](https://sonarcloud.io/dashboard?id=ethauvin_readingtime) [![GitHub CI](https://github.com/ethauvin/readingtime/actions/workflows/gradle.yml/badge.svg)](https://github.com/ethauvin/readingtime/actions/workflows/gradle.yml) [![CircleCI](https://circleci.com/gh/ethauvin/readingtime/tree/master.svg?style=shield)](https://circleci.com/gh/ethauvin/readingtime/tree/master)
 
 # Estimated Reading Time for Blog Posts, Articles, etc.
 
@@ -27,6 +27,10 @@ To get the estimated reading time in seconds use the `calcReadingTimeInSec()` fu
 To use with [Gradle](https://gradle.org/), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/build.gradle.kts) file:
 
 ```gradle
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation("net.thauvin.erik:readingtime:0.9.1")
 }

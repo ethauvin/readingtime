@@ -13,7 +13,7 @@ plugins {
     id("org.jetbrains.kotlinx.kover") version "0.6.0"
     id("org.sonarqube") version "3.4.0.2513"
     id("signing")
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.7.20"
 }
 
 description = "Estimated Reading Time for Blog Posts, Articles, etc."
@@ -41,8 +41,8 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
     withSourcesJar()
 }
 
@@ -128,7 +128,7 @@ tasks {
     register("deploy") {
         description = "Copies all needed files to the $deployDir directory."
         group = PublishingPlugin.PUBLISH_TASK_GROUP
-        dependsOn(build, jar)
+        dependsOn(clean, wrapper, build, jar)
         outputs.dir(deployDir)
         inputs.files(copyToDeploy)
         mustRunAfter(clean)
