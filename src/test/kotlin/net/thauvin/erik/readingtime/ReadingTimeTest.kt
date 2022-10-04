@@ -63,113 +63,139 @@ class ReadingTimeTest {
 
     @Test
     fun testWordCount() {
-        assertEquals(0, ReadingTime.wordCount(" "), "empty")
-        assertEquals(3, ReadingTime.wordCount("one two three"), "one two three")
-        assertEquals(2, ReadingTime.wordCount("    one    two    "), "one two")
-        assertEquals(7, ReadingTime.wordCount(rt.text), "text")
-        assertEquals(505, ReadingTime.wordCount(blogPost), "blogPost")
-        assertEquals(391, ReadingTime.wordCount(mediumPost), "mediumPost")
-        assertEquals(275, ReadingTime.wordCount(twoSeventyFive), "275")
-        assertEquals(275, ReadingTime.wordCount("$twoSeventyFive $img"), "275 + image")
+        assertEquals(0, ReadingTime.wordCount(" "), "wordCount(empty)")
+        assertEquals(3, ReadingTime.wordCount("one two three"), "wordCount(one two three)")
+        assertEquals(2, ReadingTime.wordCount("    one    two    "), "wordCount(one two)")
+        assertEquals(7, ReadingTime.wordCount(rt.text), "wordCount(text)")
+        assertEquals(505, ReadingTime.wordCount(blogPost), "wordCount(blogPost)")
+        assertEquals(391, ReadingTime.wordCount(mediumPost), "wordCount(mediumPost)")
+        assertEquals(275, ReadingTime.wordCount(twoSeventyFive), "wordCount(275)")
+        assertEquals(275, ReadingTime.wordCount("$twoSeventyFive $img"), "wordCount(275 + image)")
     }
 
     @Test
     fun testImgCount() {
-        assertEquals(1, ReadingTime.imgCount(rt.text), "text")
-        assertEquals(11, ReadingTime.imgCount(blogPost), "blogPost")
-        assertEquals(3, ReadingTime.imgCount(mediumPost), "mediumPost")
-        assertEquals(1, ReadingTime.imgCount("$twoSeventyFive $img"), "275 + image")
-        assertEquals(2, ReadingTime.imgCount("$twoSeventyFive $img $img"), "275 + 2 images")
+        assertEquals(1, ReadingTime.imgCount(rt.text), "imgCount(text)")
+        assertEquals(11, ReadingTime.imgCount(blogPost), "imgCount(blogPost)")
+        assertEquals(3, ReadingTime.imgCount(mediumPost), "imgCount(mediumPost)")
+        assertEquals(1, ReadingTime.imgCount("$twoSeventyFive $img"), "imgCount(275 + image)")
+        assertEquals(2, ReadingTime.imgCount("$twoSeventyFive $img $img"), "imgCount(275 + 2 images)")
     }
 
     @Test
     fun testReadingTimeInSec() {
-        assertEquals(calcReadingTime(rt.text, rt.wpm) + calcImgTime(1), rt.calcReadingTimeInSec(), "text + image")
+        assertEquals(
+            calcReadingTime(rt.text, rt.wpm) + calcImgTime(1),
+            rt.calcReadingTimeInSec(),
+            "calcReadingTimeInSec(text + image)"
+        )
 
         rt.text = "$img ${img.uppercase()}"
-        assertEquals(calcImgTime(2), rt.calcReadingTimeInSec(), "2 images")
+        assertEquals(calcImgTime(2), rt.calcReadingTimeInSec(), "calcReadingTimeInSec(2 images)")
         rt.excludeImages = true
-        assertEquals(0.0, rt.calcReadingTimeInSec(), "image uppercase")
+        assertEquals(0.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(image uppercase)")
         rt.excludeImages = false
 
         rt.text = blogPost
         assertEquals(
-                calcReadingTime(rt.text, rt.wpm) + calcImgTime(11), rt.calcReadingTimeInSec(), "blogPost"
+            calcReadingTime(rt.text, rt.wpm) + calcImgTime(11),
+            rt.calcReadingTimeInSec(),
+            "calcReadingTimeInSec(blogPost)"
         )
 
         rt.excludeImages = true
-        assertEquals(calcReadingTime(rt.text, rt.wpm), rt.calcReadingTimeInSec(), "exclude images")
+        assertEquals(
+            calcReadingTime(rt.text, rt.wpm),
+            rt.calcReadingTimeInSec(),
+            "calcReadingTimeInSec(exclude images)"
+        )
         rt.extra = 60
-        assertEquals(calcReadingTime(rt.text, rt.wpm) + 60L, rt.calcReadingTimeInSec(), "extra 60")
+        assertEquals(
+            calcReadingTime(rt.text, rt.wpm) + 60L,
+            rt.calcReadingTimeInSec(),
+            "calcReadingTimeInSec(extra 60)"
+        )
         rt.extra = 0
         rt.excludeImages = false
 
         rt.text = mediumPost
         rt.wpm = 300
-        assertEquals(calcReadingTime(rt.text, 300) + calcImgTime(3), rt.calcReadingTimeInSec(), "mediumPost 300 wpm")
+        assertEquals(
+            calcReadingTime(rt.text, 300) + calcImgTime(3),
+            rt.calcReadingTimeInSec(),
+            "calcReadingTimeInSec(mediumPost 300 wpm)"
+        )
         rt.wpm = 275
 
         rt.text = "This is a test"
-        assertEquals(0.0, rt.calcReadingTimeInSec(), "test")
+        assertEquals(0.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(test)")
 
         rt.text = twoSeventyFive
-        assertEquals(60.0, rt.calcReadingTimeInSec(), "275")
+        assertEquals(60.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(275)")
 
         rt.text = "$twoSeventyFive $img"
-        assertEquals(72.0, rt.calcReadingTimeInSec(), "275 + image")
+        assertEquals(72.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(275 + image)")
 
         rt.text = "$twoSeventyFive $img $img"
-        assertEquals(83.0, rt.calcReadingTimeInSec(), "275 + 2 images")
+        assertEquals(83.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(275 + 2 images)")
 
         rt.text = "$twoSeventyFive ${img.repeat(10)}"
-        assertEquals(60.0 + 12 + 11 + 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3, rt.calcReadingTimeInSec(), "10 images")
+        assertEquals(
+            60.0 + 12 + 11 + 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3,
+            rt.calcReadingTimeInSec(),
+            "calcReadingTimeInSec(10 images)"
+        )
 
         rt.text = "$twoSeventyFive ${img.repeat(10)} $img"
-        assertEquals(135.0 + 3, rt.calcReadingTimeInSec(), "11 images")
+        assertEquals(135.0 + 3, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(11 images)")
 
         rt.text = "$twoSeventyFive $twoSeventyFive"
-        assertEquals(120.0, rt.calcReadingTimeInSec(), "275*2")
+        assertEquals(120.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(275*2)")
 
         rt.text = ""
-        assertEquals(0.0, rt.calcReadingTimeInSec(), "empty")
+        assertEquals(0.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(text=empty)")
         rt.postfix = ""
-        assertEquals(rt.calcReadingTime(), rt.calcReadingTimeInSec().toInt().toString(), "toInt(0)")
+        assertEquals(
+            rt.calcReadingTime(),
+            rt.calcReadingTimeInSec().toInt().toString(),
+            "calcReadingTimeInSec(postfix=empty)"
+        )
     }
 
     @Test
     fun testReadingTime() {
         rt.text = blogPost
-        assertEquals("2 min read", rt.calcReadingTime(), "blogPost")
+        assertEquals("2 min read", rt.calcReadingTime(), "calcReadingTime(blogPost)")
 
         rt.plural = "mins read"
-        assertEquals("2 mins read", rt.calcReadingTime(), "plural")
+        assertEquals("2 mins read", rt.calcReadingTime(), "calcReadingTime(plural)")
 
         rt.text = mediumPost
         rt.plural = ""
-        assertEquals("2", rt.calcReadingTime(), "mediumPost")
+        assertEquals("2", rt.calcReadingTime(), "calcReadingTime(mediumPost)")
 
         rt.text = "This is a test."
         rt.postfix = ""
-        assertEquals("0", rt.calcReadingTime(), "test")
+        assertEquals("0", rt.calcReadingTime(), "calcReadingTime(test)")
 
         rt.text = ""
-        assertEquals("0", rt.calcReadingTime(), "empty")
+        assertEquals("0", rt.calcReadingTime(), "calcReadingTime(empty)")
 
         rt.text = twoSeventyFive
-        assertEquals("1", rt.calcReadingTime(), "275")
+        assertEquals("1", rt.calcReadingTime(), "calcReadingTime(275)")
 
         rt.text = "$twoSeventyFive $twoSeventyFive"
-        assertEquals("2", rt.calcReadingTime(), "275 * 2")
+        assertEquals("2", rt.calcReadingTime(), "calcReadingTime(275 * 2)")
     }
 
     @Test
     fun testRoundingMode() {
         rt.text = blogPost
         rt.roundingMode = RoundingMode.UP
-        assertEquals("3 min read", rt.calcReadingTime(), "UP")
+        assertEquals("3 min read", rt.calcReadingTime(), "RoundingMode.UP")
 
         rt.text = mediumPost
         rt.roundingMode = RoundingMode.DOWN
-        assertEquals("1 min read", rt.calcReadingTime(), "DOWN")
+        assertEquals("1 min read", rt.calcReadingTime(), "RoundingMode.DOWN")
     }
 }

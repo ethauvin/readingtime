@@ -2,6 +2,7 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
+    <ID>LongMethod:ReadingTimeTest.kt$ReadingTimeTest$@Test fun testReadingTimeInSec()</ID>
     <ID>LongParameterList:ReadingTime.kt$ReadingTime$( text: String, wpm: Int = 275, var postfix: String = "min read", var plural: String = "min read", excludeImages: Boolean = false, extra: Int = 0, var roundingMode: RoundingMode = RoundingMode.HALF_EVEN )</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$10</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$12</ID>
