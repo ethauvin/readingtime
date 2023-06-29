@@ -51,6 +51,17 @@ detekt {
     baseline = project.rootDir.resolve("config/detekt/baseline.xml")
 }
 
+koverReport {
+    defaults {
+        xml {
+            onCheck = true
+        }
+        html {
+            onCheck = true
+        }
+    }
+}
+
 sonarqube {
     properties {
         property("sonar.projectKey", "ethauvin_$name")
@@ -140,9 +151,6 @@ tasks {
         dependsOn(wrapper, "deploy", gitTag, publishToMavenLocal)
     }
 
-    "sonar" {
-        dependsOn(koverReport)
-    }
 }
 
 publishing {
