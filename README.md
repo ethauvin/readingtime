@@ -4,7 +4,7 @@
 
 # Estimated Reading Time for Blog Posts, Articles, etc.
 
-A simple Kotlin/Java implementation of [Medium's Read Time calculation](https://blog.medium.com/read-time-and-you-bc2048ab620c).
+A simple implementation of [Medium's Read Time calculation](https://blog.medium.com/read-time-and-you-bc2048ab620c).
 
 ## Examples (TL;DR)
 
