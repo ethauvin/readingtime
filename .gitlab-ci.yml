@@ -7,14 +7,9 @@ cache:
 stages:
   - test
 
-download:
-  stage: test
-  script: ./bld download
-
-compile:
-  stage: test
-  script: ./bld compile
-
 test:
   stage: test
-  script: ./bld test
+  script:
+      - ./bld download
+      - ./bld compile
+      - ./bld test

@@ -3,6 +3,7 @@ image: openjdk:17
 pipelines:
   default:
     - step:
+        name: Test with bld
         script:
           - ./bld download
           - ./bld compile
