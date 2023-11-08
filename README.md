@@ -18,13 +18,24 @@ println(rt.calcEstimatedReadTime()) // eg: 2 min read
 
 ```
 
+- View [bld](https://github.com/ethauvin/readingtime/blob/master/examples/bld) or [Gradle](https://github.com/ethauvin/readingtime/blob/master/examples/gradle) Examples
+
 To get the estimated reading time in seconds use the `calcReadingTimeInSec()` function.
 
- - View [Kotlin](https://github.com/ethauvin/readingtime/blob/master/examples/src/main/kotlin/com/example/ReadingTimeExample.kt) or [Java](https://github.com/ethauvin/readingtime/blob/master/examples/src/main/java/com/example/ReadingTimeSample.java) Examples.
+### bld
+
+To use with [bld](https://rife2.com/bld), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/bld/java/net/thauvin/erik/ReadingTimeBuild.java) file:
+
+```java
+repositories = List.of(MAVEN_CENTRAL);
+
+scope(compile)
+    .include(dependency("net.thauvin.erik:readingtime:0.9.1"));
+```
+Be sure to use the [bld Kotlin extension](https://github.com/rife2/bld-kotlin) in your project.
 
 ### Gradle, Maven, etc.
-
-To use with [Gradle](https://gradle.org/), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/build.gradle.kts) file:
+To use with [Gradle](https://gradle.org/), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/gradle/build.gradle.kts) file:
 
 ```gradle
 repositories {
@@ -35,7 +46,6 @@ dependencies {
     implementation("net.thauvin.erik:readingtime:0.9.1")
 }
 ```
-
 Instructions for using with Maven, Ivy, etc. can be found on [Maven Central](https://search.maven.org/search?q=g:%22net.thauvin.erik%22%20AND%20a:%22readingtime%22).
 
 ### Properties

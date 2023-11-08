@@ -1,9 +1,17 @@
-image: maven:3-openjdk-18
+image: java:17:latest
 
 pipelines:
   default:
     - step:
-        caches:
-          - gradle
+        name: "Download dependencies"
         script:
-          - bash ./gradlew check
+          - bash ./bld download
+    - step:
+        name: "Compile project"
+        script:
+          - bash ./bld compile
+    - step:
+        name: "Run tests"
+        script:
+          - bash ./bld test
+
