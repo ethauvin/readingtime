@@ -3,15 +3,8 @@ image: openjdk:17
 pipelines:
   default:
     - step:
-        name: "Download dependencies"
         script:
-          - bash ./bld download
-    - step:
-        name: "Compile project"
-        script:
-          - bash ./bld compile
-    - step:
-        name: "Run tests"
-        script:
-          - bash ./bld test
+          - ./bld download
+          - ./bld compile
+          - ./bld test
 

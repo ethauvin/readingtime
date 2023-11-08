@@ -5,15 +5,14 @@ cache:
     - .m2/repository/
 
 stages:
-  - build
   - test
 
 download:
-  stage: build
+  stage: test
   script: ./bld download
 
 compile:
-  stage: build
+  stage: test
   script: ./bld compile
 
 test:
