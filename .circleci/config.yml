@@ -20,14 +20,6 @@ defaults_gradle: &defaults_bld
         command: ./bld test
 
 jobs:
-  bld_jdk11:
-    <<: *defaults
-
-    docker:
-      - image: cimg/openjdk:11.0
-
-    <<: *defaults_bld
-
   bld_jdk17:
     <<: *defaults
 
@@ -48,6 +40,5 @@ workflows:
   version: 2
   bld:
     jobs:
-      - bld_jdk11
       - bld_jdk17
       - bld_jdk20

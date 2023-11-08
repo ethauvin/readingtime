@@ -1,4 +1,4 @@
-image: java:11:latest
+image: java:17:latest
 
 cache:
   paths:
