@@ -1,9 +1,5 @@
 image: openjdk:17
 
-cache:
-  paths:
-    - .m2/repository/
-
 stages:
   - test
 

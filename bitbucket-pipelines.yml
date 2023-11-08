@@ -4,8 +4,6 @@ pipelines:
   default:
     - step:
         name: Test with bld
-        caches:
-          - maven
         script:
           - ./bld download
           - ./bld compile
