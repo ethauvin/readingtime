@@ -1,4 +1,4 @@
-image: java:17:latest
+image: openjdk:17
 
 pipelines:
   default:
