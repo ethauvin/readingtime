@@ -24,7 +24,7 @@ To get the estimated reading time in seconds use the `calcReadingTimeInSec()` fu
 
 ### bld
 
-To use with [bld](https://rife2.com/bld), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/bld/java/net/thauvin/erik/ReadingTimeBuild.java) file:
+To use with [bld](https://rife2.com/bld), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/bld/src/bld/java/com/example/ReadingTimeExampleBuild.java) file:
 
 ```java
 repositories = List.of(MAVEN_CENTRAL);
