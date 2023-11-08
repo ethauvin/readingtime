@@ -125,6 +125,8 @@ public class ReadingTimeBuild extends Project {
         new DokkaOperation()
                 .fromProject(this)
                 .loggingLevel(LoggingLevel.INFO)
+                .moduleName("ReadingTime")
+                .moduleVersion(version.toString())
                 .outputDir(new File(buildDirectory(), "javadoc"))
                 .outputFormat(OutputFormat.JAVADOC)
                 .execute();
