@@ -2,18 +2,11 @@ image: openjdk:17
 
 pipelines:
   default:
-    - stage:
-        name: Download, compile and test
-        steps:
-          - step:
-              name: Download
-              script:
-                - ./bld download
-          - step:
-              name: Compile
-              script:
-                - ./bld compile
-          - step:
-              name: Test
-              script:
-                - ./bld test
+    - step:
+        name: Test with bld
+        caches:
+          - maven
+        script:
+          - ./bld download
+          - ./bld compile
+          - ./bld test
