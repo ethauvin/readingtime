@@ -43,6 +43,7 @@ import rife.bld.publish.PomBuilder;
 import rife.bld.publish.PublishDeveloper;
 import rife.bld.publish.PublishLicense;
 import rife.bld.publish.PublishScm;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class ReadingTimeBuild extends Project {
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", version(1, 9, 20)))
                 .include(dependency("org.jsoup", "jsoup", version(1, 16, 2)));
         scope(test)
-                .include(dependency("org.jetbrains.kotlin:kotlin-test-junit5:1.9.20"))
+                .include(dependency("org.jetbrains.kotlin", "kotlin-test-junit5", version(1, 9, 20)))
                 .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 10, 1)))
                 .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 10, 1)));
 
@@ -135,7 +136,12 @@ public class ReadingTimeBuild extends Project {
     @Override
     public void publish() throws Exception {
         super.publish();
-        PomBuilder.generateInto(publishOperation().info(), publishOperation().dependencies(),
+        pomRoot();
+    }
+
+    @BuildCommand(value = "pom-root", summary = "Generates the POM file in the root directory")
+    public void pomRoot() throws FileUtilsErrorException {
+        PomBuilder.generateInto(publishOperation().fromProject(this).info(), dependencies(),
                 new File(workDirectory, "pom.xml"));
     }
 }
