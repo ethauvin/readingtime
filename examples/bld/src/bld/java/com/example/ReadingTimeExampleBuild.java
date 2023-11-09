@@ -26,7 +26,7 @@ public class ReadingTimeExampleBuild extends BaseProject {
 
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", version(1, 9, 20)))
-                .include(dependency("net.thauvin.erik", "readingtime", version(0, 9, 1)));
+                .include(dependency("net.thauvin.erik", "readingtime", version(0, 9, 2, "SNAPSHOT")));
     }
 
     public static void main(String[] args) {
