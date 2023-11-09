@@ -2,7 +2,7 @@
 [![Kotlin](https://img.shields.io/badge/kotlin-1.9.20-7f52ff)](https://kotlinlang.org/)
 [![Release](https://img.shields.io/github/release/ethauvin/readingtime.svg)](https://github.com/ethauvin/readingtime/releases/latest)
 [![Maven Central](https://img.shields.io/maven-central/v/net.thauvin.erik/readingtime.svg?label=maven%20central)](https://search.maven.org/search?q=g:%22net.thauvin.erik%22%20AND%20a:%22readingtime%22)
-[![Nexus Snapshot](https://img.shields.io/nexus/s/net.thauvin.erik/cryptoprice?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)](https://oss.sonatype.org/content/repositories/snapshots/net/thauvin/erik/readingtime/)
+[![Nexus Snapshot](https://img.shields.io/nexus/s/net.thauvin.erik/readingtime?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)](https://oss.sonatype.org/content/repositories/snapshots/net/thauvin/erik/readingtime/)
 
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ethauvin_readingtime&metric=alert_status)](https://sonarcloud.io/dashboard?id=ethauvin_readingtime)
