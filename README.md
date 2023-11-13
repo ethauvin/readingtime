@@ -6,7 +6,7 @@
 
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ethauvin_readingtime&metric=alert_status)](https://sonarcloud.io/dashboard?id=ethauvin_readingtime)
-[![GitHub CI](https://github.com/ethauvin/readingtime/actions/workflows/gradle.yml/badge.svg)](https://github.com/ethauvin/readingtime/actions/workflows/gradle.yml)
+[![GitHub CI](https://github.com/ethauvin/readingtime/actions/workflows/bld.yml/badge.svg)](https://github.com/ethauvin/readingtime/actions/workflows/bld.yml)
 [![CircleCI](https://circleci.com/gh/ethauvin/readingtime/tree/master.svg?style=shield)](https://circleci.com/gh/ethauvin/readingtime/tree/master)
 
 # Estimated Reading Time for Blog Posts, Articles, etc.

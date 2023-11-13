@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("application")
-    id("com.github.ben-manes.versions") version "0.47.0"
-    kotlin("jvm") version "1.8.20"
+    id("com.github.ben-manes.versions") version "0.49.0"
+    kotlin("jvm") version "1.9.20"
 }
 
 repositories {
@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.thauvin.erik:readingtime:0.9.1")
+    implementation("net.thauvin.erik:readingtime:0.9.2-SNAPSHOT")
 }
 
 java {

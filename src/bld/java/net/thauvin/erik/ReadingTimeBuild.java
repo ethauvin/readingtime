@@ -104,7 +104,7 @@ public class ReadingTimeBuild extends Project {
         new ReadingTimeBuild().start(args);
     }
 
-    @BuildCommand(summary = "Compilez the Kotlin project")
+    @BuildCommand(summary = "Compiles the Kotlin project")
     @Override
     public void compile() throws IOException {
         new CompileKotlinOperation()
