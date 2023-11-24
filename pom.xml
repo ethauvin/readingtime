@@ -37,7 +37,7 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:https://github.com/ethauvin/readingtime</connection>
+    <connection>scm:git:https://github.com/ethauvin/readingtime.git</connection>
     <developerConnection>scm:git:git@github.com:ethauvin/readingtime.git</developerConnection>
     <url>https://github.com/ethauvin/readingtime</url>
   </scm>

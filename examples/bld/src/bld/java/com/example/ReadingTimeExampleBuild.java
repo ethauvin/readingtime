@@ -1,12 +1,12 @@
 package com.example;
 
-import rife.bld.BaseProject;
 import rife.bld.BuildCommand;
 import rife.bld.extension.CompileKotlinOperation;
-import rife.bld.extension.CompileKotlinOptions;
 import rife.bld.operations.RunOperation;
+import rife.bld.BaseProject;
 
 import java.util.List;
+
 
 import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.compile;
@@ -25,7 +25,6 @@ public class ReadingTimeExampleBuild extends BaseProject {
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL, SONATYPE_SNAPSHOTS_LEGACY);
 
         scope(compile)
-                .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", version(1, 9, 20)))
                 .include(dependency("net.thauvin.erik", "readingtime", version(0, 9, 2, "SNAPSHOT")));
     }
 
@@ -37,11 +36,6 @@ public class ReadingTimeExampleBuild extends BaseProject {
     public void compile() throws Exception {
         new CompileKotlinOperation()
                 .fromProject(this)
-                .compileOptions(
-                        new CompileKotlinOptions()
-                                .jdkRelease(javaRelease)
-                                .verbose(true)
-                )
                 .execute();
 
         // Also compile the Java source code

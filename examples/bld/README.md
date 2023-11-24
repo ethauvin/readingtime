@@ -1,7 +1,7 @@
 ## Kotlin Example
 To compile & run the Kotlin example:
 
-```text
+```console
 ./bld compile run --args="example.html"
 ```
 
@@ -9,6 +9,6 @@ To compile & run the Kotlin example:
 
 To compile & run the Java example:
 
-```text
+```console
 ./bld compile run-java --args="example.html"
 ```

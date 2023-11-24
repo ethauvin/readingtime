@@ -33,7 +33,6 @@ package net.thauvin.erik;
 import rife.bld.BuildCommand;
 import rife.bld.Project;
 import rife.bld.extension.CompileKotlinOperation;
-import rife.bld.extension.CompileKotlinOptions;
 import rife.bld.extension.JacocoReportOperation;
 import rife.bld.extension.dokka.DokkaOperation;
 import rife.bld.extension.dokka.LoggingLevel;
@@ -82,18 +81,24 @@ public class ReadingTimeBuild extends Project {
                 .artifactId(name)
                 .description("Estimated Reading Time for Blog Posts, Articles, etc.")
                 .url("https://github.com/ethauvin/" + name)
-                .developer(new PublishDeveloper()
-                        .id("ethauvin")
-                        .name("Erik C. Thauvin")
-                        .email("erik@thauvin.net")
-                        .url("https://erik.thauvin.net/"))
-                .license(new PublishLicense()
-                        .name("BSD 3-Clause")
-                        .url("https://opensource.org/licenses/BSD-3-Clause"))
-                .scm(new PublishScm()
-                        .connection("scm:git:https://github.com/ethauvin/" + name)
-                        .developerConnection("scm:git:git@github.com:ethauvin/" + name + ".git")
-                        .url("https://github.com/ethauvin/" + name))
+                .developer(
+                        new PublishDeveloper()
+                                .id("ethauvin")
+                                .name("Erik C. Thauvin")
+                                .email("erik@thauvin.net")
+                                .url("https://erik.thauvin.net/")
+                )
+                .license(
+                        new PublishLicense()
+                                .name("BSD 3-Clause")
+                                .url("https://opensource.org/licenses/BSD-3-Clause")
+                )
+                .scm(
+                        new PublishScm()
+                                .connection("scm:git:https://github.com/ethauvin/" + name + ".git")
+                                .developerConnection("scm:git:git@github.com:ethauvin/" + name + ".git")
+                                .url("https://github.com/ethauvin/" + name)
+                )
                 .signKey(property("sign.key"))
                 .signPassphrase(property("sign.passphrase"));
 
@@ -109,11 +114,6 @@ public class ReadingTimeBuild extends Project {
     public void compile() throws IOException {
         new CompileKotlinOperation()
                 .fromProject(this)
-                .compileOptions(
-                        new CompileKotlinOptions()
-                                .jdkRelease(javaRelease)
-                                .verbose(true)
-                )
                 .execute();
     }
 
