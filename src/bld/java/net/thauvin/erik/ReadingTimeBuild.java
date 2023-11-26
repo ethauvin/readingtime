@@ -57,7 +57,7 @@ public class ReadingTimeBuild extends Project {
     public ReadingTimeBuild() {
         pkg = "net.thauvin.erik";
         name = "readingtime";
-        version = version(0, 9, 2);
+        version = version(0, 9, 3, "SNAPSHOT");
 
         javaRelease = 11;
         downloadSources = true;
