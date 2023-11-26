@@ -57,7 +57,7 @@ public class ReadingTimeBuild extends Project {
     public ReadingTimeBuild() {
         pkg = "net.thauvin.erik";
         name = "readingtime";
-        version = version(0, 9, 2, "SNAPSHOT");
+        version = version(0, 9, 2);
 
         javaRelease = 11;
         downloadSources = true;
@@ -67,7 +67,6 @@ public class ReadingTimeBuild extends Project {
         final var kotlin = version(1, 9, 21);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
-                .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib-common", kotlin))
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib-jdk7", kotlin))
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", kotlin))
                 .include(dependency("org.jsoup", "jsoup", version(1, 16, 2)));

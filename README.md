@@ -37,7 +37,7 @@ To use with [bld](https://rife2.com/bld), include the following dependency in yo
 repositories = List.of(MAVEN_CENTRAL);
 
 scope(compile)
-    .include(dependency("net.thauvin.erik:readingtime:0.9.1"));
+    .include(dependency("net.thauvin.erik:readingtime:0.9.2"));
 ```
 Be sure to use the [bld Kotlin extension](https://github.com/rife2/bld-kotlin) in your project.
 
@@ -50,7 +50,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.thauvin.erik:readingtime:0.9.1")
+    implementation("net.thauvin.erik:readingtime:0.9.2")
 }
 ```
 Instructions for using with Maven, Ivy, etc. can be found on [Maven Central](https://search.maven.org/search?q=g:%22net.thauvin.erik%22%20AND%20a:%22readingtime%22).

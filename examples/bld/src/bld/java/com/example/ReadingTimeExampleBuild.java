@@ -25,7 +25,7 @@ public class ReadingTimeExampleBuild extends BaseProject {
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL, SONATYPE_SNAPSHOTS_LEGACY);
 
         scope(compile)
-                .include(dependency("net.thauvin.erik", "readingtime", version(0, 9, 2, "SNAPSHOT")));
+                .include(dependency("net.thauvin.erik", "readingtime", version(0, 9, 2)));
     }
 
     public static void main(String[] args) {
