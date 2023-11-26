@@ -3,6 +3,8 @@
   <component name="EntryPointsManager">
     <pattern value="net.thauvin.erik.ReadingTimeBuild" method="jacoco" />
     <pattern value="net.thauvin.erik.ReadingTimeBuild" />
+    <pattern value="net.thauvin.erik.ReadingTimeBuild" method="detekt" />
+    <pattern value="net.thauvin.erik.ReadingTimeBuild" method="detektBaseline" />
   </component>
   <component name="PDMPlugin">
     <option name="customRuleSets">
