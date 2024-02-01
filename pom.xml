@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.thauvin.erik</groupId>
   <artifactId>readingtime</artifactId>
-  <version>0.9.2</version>
+  <version>0.9.3-SNAPSHOT</version>
   <name>readingtime</name>
   <description>Estimated Reading Time for Blog Posts, Articles, etc.</description>
   <url>https://github.com/ethauvin/readingtime</url>
@@ -18,25 +18,13 @@
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-stdlib</artifactId>
-      <version>1.9.21</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib-jdk7</artifactId>
-      <version>1.9.21</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib-jdk8</artifactId>
-      <version>1.9.21</version>
+      <version>1.9.22</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.16.2</version>
+      <version>1.17.2</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

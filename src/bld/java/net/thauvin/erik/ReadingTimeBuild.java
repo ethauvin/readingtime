@@ -64,14 +64,12 @@ public class ReadingTimeBuild extends Project {
         autoDownloadPurge = true;
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL);
 
-        final var kotlin = version(1, 9, 21);
+        final var kotlin = version(1, 9, 22);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
-                .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib-jdk7", kotlin))
-                .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", kotlin))
-                .include(dependency("org.jsoup", "jsoup", version(1, 16, 2)));
+                .include(dependency("org.jsoup", "jsoup", version(1, 17, 2)));
         scope(test)
-                .include(dependency("org.jetbrains.kotlin", "kotlin-test-junit5", version(1, 9, 20)))
+                .include(dependency("org.jetbrains.kotlin", "kotlin-test-junit5", kotlin))
                 .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 10, 1)))
                 .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 10, 1)));
 
