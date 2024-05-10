@@ -64,7 +64,7 @@ public class ReadingTimeBuild extends Project {
         autoDownloadPurge = true;
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL);
 
-        final var kotlin = version(1, 9, 22);
+        final var kotlin = version(1, 9, 24);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
                 .include(dependency("org.jsoup", "jsoup", version(1, 17, 2)));
@@ -140,6 +140,7 @@ public class ReadingTimeBuild extends Project {
     public void jacoco() throws IOException {
         new JacocoReportOperation()
                 .fromProject(this)
+                .sourceFiles(new File(srcMainDirectory(), "kotlin"))
                 .execute();
     }
 
