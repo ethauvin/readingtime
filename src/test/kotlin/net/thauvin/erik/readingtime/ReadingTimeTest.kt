@@ -187,6 +187,49 @@ class ReadingTimeTest {
     }
 
     @Test
+    fun testReadingTimeConfig() {
+        var config = Config.Builder().text(blogPost)
+
+        assertEquals("2 min read", ReadingTime(config.build()).calcReadingTime(),
+            "calcReadingTime(blogPost)")
+
+        config = config.plural("mins read")
+        assertEquals("2 mins read", ReadingTime(config.build()).calcReadingTime(),
+            "calcReadingTime(plural)")
+
+        config = config.text(mediumPost).plural("")
+        assertEquals("2", ReadingTime(config.build()).calcReadingTime(), "calcReadingTime(mediumPost)")
+
+        config = config.text("This is a test.").postfix("")
+        assertEquals("0", ReadingTime(config.build()).calcReadingTime(), "calcReadingTime(test)")
+
+        config = config.text("")
+        assertEquals("0", ReadingTime(config.build()).calcReadingTime(), "calcReadingTime(empty)")
+
+        config = config.text(twoSeventyFive)
+        assertEquals("1", ReadingTime(config.build()).calcReadingTime(), "calcReadingTime(275)")
+
+        config = config.text("$twoSeventyFive $twoSeventyFive")
+        assertEquals("2", ReadingTime(config.build()).calcReadingTime(), "calcReadingTime(275 * 2)")
+
+        config = config.extra(60)
+        assertEquals("3", ReadingTime(config.build()).calcReadingTime(), "extra(60)")
+
+        config = config.text(blogPost).roundingMode(RoundingMode.UP)
+        assertEquals("4", ReadingTime(config.build()).calcReadingTime(), "RoundingMode.UP")
+
+        config = config.text(mediumPost).wpm(300).extra(0)
+        assertEquals(
+            calcReadingTime(mediumPost, 300) + calcImgTime(3),
+            ReadingTime(config.build()).calcReadingTimeInSec(),
+            "calcReadingTimeInSec(mediumPost 300 wpm)"
+        )
+
+        config = config.excludeImages(true)
+        assertEquals("1", ReadingTime(config.build()).calcReadingTime(), "excludeImages")
+    }
+
+    @Test
     fun testRoundingMode() {
         rt.text = blogPost
         rt.roundingMode = RoundingMode.UP

@@ -40,9 +40,11 @@ repositories = List.of(MAVEN_CENTRAL);
 scope(compile)
     .include(dependency("net.thauvin.erik:readingtime:0.9.2"));
 ```
+
 Be sure to use the [bld Kotlin extension](https://github.com/rife2/bld-kotlin) in your project.
 
 ### Gradle, Maven, etc.
+
 To use with [Gradle](https://gradle.org/), include the following dependency in your [build](https://github.com/ethauvin/readingtime/blob/master/examples/gradle/build.gradle.kts) file:
 
 ```gradle
@@ -54,6 +56,7 @@ dependencies {
     implementation("net.thauvin.erik:readingtime:0.9.2")
 }
 ```
+
 Instructions for using with Maven, Ivy, etc. can be found on [Maven Central](https://search.maven.org/search?q=g:%22net.thauvin.erik%22%20AND%20a:%22readingtime%22).
 
 ## Properties
@@ -107,6 +110,28 @@ A JSP tag is also available for easy incorporation into web applications:
 ```
 
 None of the attributes are required.
+
+## Java
+
+In addition to setters, a configuration builder is also available:
+
+```java
+final ReadingTime rt = new ReadingTime(Files.readString(text));
+rt.setPostfix("minute to read");
+rt.setPlural("minutes to read");
+```
+
+or
+
+```java
+final Config config =
+        new Config.Builder()
+                .text(Files.readString(text))
+                .postfix("minute to read")
+                .plural("minutes to read")
+                .build();
+final ReadingTime rt = new ReadingTime(config);
+```
 
 ## Contributing
 

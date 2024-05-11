@@ -15,6 +15,14 @@ public class ReadingTimeSample {
                 rt.setPostfix("minute to read");
                 rt.setPlural("minutes to read");
 
+//                final Config config =
+//                        new Config.Builder()
+//                                .text(Files.readString(text))
+//                                .postfix("minute to read")
+//                                .plural("minutes to read")
+//                                .build();
+//                final ReadingTime rt = new ReadingTime(config);
+
                 System.out.println("It will take " + rt.calcReadingTime() + ' ' + ReadingTime.wordCount(rt.getText())
                         + " words and " + ReadingTime.imgCount(rt.getText()) + " images at " + rt.getWpm()
                         + " words per minute.");

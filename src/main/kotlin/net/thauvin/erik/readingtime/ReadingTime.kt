@@ -50,14 +50,24 @@ import java.math.RoundingMode
  * @param roundingMode The [RoundingMode] to apply. Default is [RoundingMode.HALF_DOWN].
  */
 class ReadingTime @JvmOverloads constructor(
-        text: String,
-        wpm: Int = 275,
-        var postfix: String = "min read",
-        var plural: String = "min read",
-        excludeImages: Boolean = false,
-        extra: Int = 0,
-        var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
+    text: String,
+    wpm: Int = 275,
+    var postfix: String = "min read",
+    var plural: String = "min read",
+    excludeImages: Boolean = false,
+    extra: Int = 0,
+    var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
 ) {
+    constructor(config: Config) : this(
+        config.text,
+        config.wpm,
+        config.postfix,
+        config.plural,
+        config.excludeImages,
+        config.extra,
+        config.roundingMode
+    )
+
     companion object {
         private const val INVALID: Double = -1.0
 
