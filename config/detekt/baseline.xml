@@ -3,8 +3,8 @@
   <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
     <ID>LongMethod:ReadingTimeTest.kt$ReadingTimeTest$@Test fun testReadingTimeInSec()</ID>
-    <ID>LongParameterList:Config.kt$Config$( val text: String, val wpm: Int, val postfix: String, val plural: String, val excludeImages: Boolean, val extra: Int, val roundingMode: RoundingMode )</ID>
     <ID>LongParameterList:ReadingTime.kt$ReadingTime$( text: String, wpm: Int = 275, var postfix: String = "min read", var plural: String = "min read", excludeImages: Boolean = false, extra: Int = 0, var roundingMode: RoundingMode = RoundingMode.HALF_EVEN )</ID>
+    <ID>MagicNumber:Config.kt$Config.Builder$275</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$10</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$12</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$3</ID>

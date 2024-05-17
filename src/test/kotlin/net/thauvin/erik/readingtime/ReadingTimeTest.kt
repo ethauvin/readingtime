@@ -188,7 +188,7 @@ class ReadingTimeTest {
 
     @Test
     fun testReadingTimeConfig() {
-        var config = Config.Builder().text(blogPost)
+        var config = Config.Builder(blogPost)
 
         assertEquals("2 min read", ReadingTime(config.build()).calcReadingTime(),
             "calcReadingTime(blogPost)")

@@ -35,35 +35,76 @@ import java.math.RoundingMode
 /**
  * Provides a configuration builder.
  */
-class Config private constructor(
-    val text: String,
-    val wpm: Int,
-    val postfix: String,
-    val plural: String,
-    val excludeImages: Boolean,
-    val extra: Int,
+class Config private constructor(builder: Builder) {
+    val text: String
+    val wpm: Int
+    val postfix: String
+    val plural: String
+    val excludeImages: Boolean
+    val extra: Int
     val roundingMode: RoundingMode
-) {
+
+    init {
+        text = builder.text
+        wpm = builder.wpm
+        postfix = builder.postfix
+        plural = builder.plural
+        excludeImages = builder.excludeImages
+        extra = builder.extra
+        roundingMode = builder.roundingMode
+    }
+
     /**
      * Configures the parameters.
+     *
+     * @param text The text to be evaluated.
      */
-    data class Builder(
-        private var text: String = "",
-        private var wpm: Int = 275,
-        private var postfix: String = "min read",
-        private var plural: String = "min read",
-        private var excludeImages: Boolean = false,
-        private var extra: Int = 0,
-        private var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
-    ) {
+    data class Builder(var text: String) {
+        var wpm: Int = 275
+        var postfix: String = "min read"
+        var plural: String = "min read"
+        var excludeImages: Boolean = false
+        var extra: Int = 0
+        var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
+
+        /**
+         * The text to be evaluated.
+         */
         fun text(text: String) = apply { this.text = text }
+
+        /**
+         * The words per minute reading average.
+         */
         fun wpm(wpm: Int) = apply { this.wpm = wpm }
+
+        /**
+         * The value to be appended to the reading time.
+         */
         fun postfix(postfix: String) = apply { this.postfix = postfix }
+
+        /**
+         * The value to be appended if the reading time is more than 1 minute.
+         */
         fun plural(plural: String) = apply { this.plural = plural }
+
+        /**
+         * Images are excluded from the reading time when set.
+         */
         fun excludeImages(excludeImages: Boolean) = apply { this.excludeImages = excludeImages }
+
+        /**
+         * Additional seconds to be added to the total reading time.
+         */
         fun extra(extra: Int) = apply { this.extra = extra }
+
+        /**
+         * The [RoundingMode] to apply. Default is [RoundingMode.HALF_DOWN].
+         */
         fun roundingMode(roundingMode: RoundingMode) = apply { this.roundingMode = roundingMode }
 
-        fun build() = Config(text, wpm, postfix, plural, excludeImages, extra, roundingMode)
+        /**
+         * Builds the configuration.
+         */
+        fun build() = Config(this)
     }
 }

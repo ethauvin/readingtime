@@ -116,7 +116,7 @@ None of the attributes are required.
 In addition to setters, a configuration builder is also available:
 
 ```java
-final ReadingTime rt = new ReadingTime(Files.readString(text));
+final ReadingTime rt = new ReadingTime(text);
 rt.setPostfix("minute to read");
 rt.setPlural("minutes to read");
 ```
@@ -125,8 +125,7 @@ or
 
 ```java
 final Config config =
-        new Config.Builder()
-                .text(Files.readString(text))
+        new Config.Builder(text)
                 .postfix("minute to read")
                 .plural("minutes to read")
                 .build();

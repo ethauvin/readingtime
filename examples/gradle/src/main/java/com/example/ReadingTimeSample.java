@@ -16,8 +16,7 @@ public class ReadingTimeSample {
                 rt.setPlural("minutes to read");
 
 //                final Config config =
-//                        new Config.Builder()
-//                                .text(Files.readString(text))
+//                        new Config.Builder(Files.readString(text))
 //                                .postfix("minute to read")
 //                                .plural("minutes to read")
 //                                .build();
