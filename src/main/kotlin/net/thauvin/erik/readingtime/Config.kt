@@ -70,37 +70,37 @@ class Config private constructor(builder: Builder) {
         /**
          * The text to be evaluated.
          */
-        fun text(text: String) = apply { this.text = text }
+        fun text(text: String): Builder = apply { this.text = text }
 
         /**
          * The words per minute reading average.
          */
-        fun wpm(wpm: Int) = apply { this.wpm = wpm }
+        fun wpm(wpm: Int): Builder = apply { this.wpm = wpm }
 
         /**
          * The value to be appended to the reading time.
          */
-        fun postfix(postfix: String) = apply { this.postfix = postfix }
+        fun postfix(postfix: String): Builder = apply { this.postfix = postfix }
 
         /**
          * The value to be appended if the reading time is more than 1 minute.
          */
-        fun plural(plural: String) = apply { this.plural = plural }
+        fun plural(plural: String): Builder = apply { this.plural = plural }
 
         /**
          * Images are excluded from the reading time when set.
          */
-        fun excludeImages(excludeImages: Boolean) = apply { this.excludeImages = excludeImages }
+        fun excludeImages(excludeImages: Boolean): Builder = apply { this.excludeImages = excludeImages }
 
         /**
          * Additional seconds to be added to the total reading time.
          */
-        fun extra(extra: Int) = apply { this.extra = extra }
+        fun extra(extra: Int): Builder = apply { this.extra = extra }
 
         /**
          * The [RoundingMode] to apply. Default is [RoundingMode.HALF_DOWN].
          */
-        fun roundingMode(roundingMode: RoundingMode) = apply { this.roundingMode = roundingMode }
+        fun roundingMode(roundingMode: RoundingMode): Builder = apply { this.roundingMode = roundingMode }
 
         /**
          * Builds the configuration.
