@@ -35,17 +35,16 @@ import java.math.RoundingMode
 /**
  * Provides a configuration builder.
  */
-class Config private constructor(builder: Builder) {
-    val text: String
-    val wpm: Int
-    val postfix: String
-    val plural: String
-    val excludeImages: Boolean
-    val extra: Int
-    val roundingMode: RoundingMode
-
-    init {
-        text = builder.text
+class Config @JvmOverloads constructor(
+    val text: String,
+    var wpm: Int = 275,
+    var postfix: String = "min read",
+    var plural: String = "min read",
+    var excludeImages: Boolean = false,
+    var extra: Int = 0,
+    var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
+) {
+    constructor(builder: Builder) : this(builder.text) {
         wpm = builder.wpm
         postfix = builder.postfix
         plural = builder.plural
@@ -105,6 +104,6 @@ class Config private constructor(builder: Builder) {
         /**
          * Builds the configuration.
          */
-        fun build() = Config(this)
+        fun build(): Config = Config(this)
     }
 }

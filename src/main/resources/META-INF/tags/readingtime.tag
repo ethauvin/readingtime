@@ -4,20 +4,20 @@
 
     See: https://erik.thauvin.net/licenses/bsd.shtml
 --%>
-<%@tag body-content="scriptless" import="net.thauvin.erik.readingtime.ReadingTime" trimDirectiveWhitespaces="true"%>
-<%@attribute name="debug" type="java.lang.Boolean"%>
-<%@attribute name="excludeImages" type="java.lang.Boolean"%>
-<%@attribute name="extra" type="java.lang.Integer"%>
-<%@attribute name="plural"%>
-<%@attribute name="postfix"%>
-<%@attribute name="wpm" type="java.lang.Integer"%>
+<%@tag body-content="scriptless" import="net.thauvin.erik.readingtime.ReadingTime" trimDirectiveWhitespaces="true" %>
+<%@attribute name="debug" type="java.lang.Boolean" %>
+<%@attribute name="excludeImages" type="java.lang.Boolean" %>
+<%@attribute name="extra" type="java.lang.Integer" %>
+<%@attribute name="plural" %>
+<%@attribute name="postfix" %>
+<%@attribute name="wpm" type="java.lang.Integer" %>
 <jsp:doBody var="body" scope="page"/>
 <%
     final Boolean debug = (Boolean) getJspContext().getAttribute("debug");
     final Boolean excludeImages = (Boolean) getJspContext().getAttribute("excludeImages");
     final Integer extra = (Integer) getJspContext().getAttribute("extra");
     final Integer wpm = (Integer) getJspContext().getAttribute("wpm");
-    final String body = (String) getJspContext().getAttribute("body");;
+    final String body = (String) getJspContext().getAttribute("body");
     final String plural = (String) getJspContext().getAttribute("plural");
     final String postfix = (String) getJspContext().getAttribute("postfix");
 
