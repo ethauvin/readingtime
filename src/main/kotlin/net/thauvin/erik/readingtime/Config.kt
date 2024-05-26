@@ -35,23 +35,14 @@ import java.math.RoundingMode
 /**
  * Provides a configuration builder.
  */
-class Config @JvmOverloads constructor(
-    val text: String,
-    var wpm: Int = 275,
-    var postfix: String = "min read",
-    var plural: String = "min read",
-    var excludeImages: Boolean = false,
-    var extra: Int = 0,
-    var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
-) {
-    constructor(builder: Builder) : this(builder.text) {
-        wpm = builder.wpm
-        postfix = builder.postfix
-        plural = builder.plural
-        excludeImages = builder.excludeImages
-        extra = builder.extra
-        roundingMode = builder.roundingMode
-    }
+class Config private constructor(builder: Builder) {
+    val text = builder.text
+    val wpm = builder.wpm
+    val postfix = builder.postfix
+    val plural = builder.plural
+    val excludeImages = builder.excludeImages
+    val extra = builder.extra
+    val roundingMode = builder.roundingMode
 
     /**
      * Configures the parameters.
