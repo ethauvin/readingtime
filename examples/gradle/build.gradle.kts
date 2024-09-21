@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("application")
     id("com.github.ben-manes.versions") version "0.51.0"
-    kotlin("jvm") version "2.0.0"
+    kotlin("jvm") version "2.0.20"
 }
 
 repositories {
@@ -24,11 +24,11 @@ application {
     mainClass.set("com.example.ReadingTimeExampleKt")
 }
 
-tasks {
-    withType<KotlinCompile>().configureEach {
-        kotlinOptions.jvmTarget = java.targetCompatibility.toString()
-    }
+kotlin {
+    compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+}
 
+tasks {
     register<JavaExec>("runJava") {
         group = "application"
         mainClass.set("com.example.ReadingTimeSample")
