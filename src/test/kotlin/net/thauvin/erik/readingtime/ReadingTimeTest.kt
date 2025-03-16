@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Erik C. Thauvin (erik@thauvin.net)
+ * Copyright (c) 2020-2025, Erik C. Thauvin (erik@thauvin.net)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
