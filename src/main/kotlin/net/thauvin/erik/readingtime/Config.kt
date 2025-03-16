@@ -33,7 +33,15 @@ package net.thauvin.erik.readingtime
 import java.math.RoundingMode
 
 /**
- * Provides a configuration builder.
+ * Configuration class for reading time calculations.
+ *
+ * @property text The text to be evaluated.
+ * @property wpm The words per minute reading average.
+ * @property postfix The text to append after the reading time.
+ * @property plural The text to append after the reading time if plural.
+ * @property excludeImages Whether to exclude images in the word count.
+ * @property extra Additional time to add to the reading time.
+ * @property roundingMode The rounding mode to apply to the reading time.
  */
 class Config private constructor(builder: Builder) {
     val text = builder.text
