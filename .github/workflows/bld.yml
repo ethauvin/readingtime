@@ -15,6 +15,7 @@ jobs:
       matrix:
         java-version: [17, 21, 22]
         kotlin-version: [1.19.24, 2.0.20]
+        kotlin-version: [1.9.25, 2.1.10]
 
     steps:
       - name: Checkout source repository
