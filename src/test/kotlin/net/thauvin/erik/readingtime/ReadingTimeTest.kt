@@ -30,17 +30,19 @@
 
 package net.thauvin.erik.readingtime
 
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import java.io.File
 import java.math.RoundingMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ReadingTimeTest {
-    private val img = """<img src="#">"""
-    private val rt = ReadingTime("This is a <b>test</b>.\nWith an image: $img")
-    private val blogPost = File("src/test/resources/post.html").readText()
-    private val mediumPost = File("src/test/resources/medium.html").readText()
-    private val twoSeventyFive = "word ".repeat(275)
+    private val sampleImgTag = """<img src="#">"""
+    private val sampleReadingTime = ReadingTime("This is a <b>test</b>.\nWith an image: $sampleImgTag")
+    private val blogPost by lazy { File("src/test/resources/post.html").readText() }
+    private val mediumPost by lazy { File("src/test/resources/medium.html").readText() }
+    private val textWith275Words = "word ".repeat(275)
 
     private fun calcImgTime(imgCount: Int): Double {
         var time = 0.0
@@ -59,184 +61,356 @@ class ReadingTimeTest {
         return (ReadingTime.wordCount(text) / wpm) * 60.0
     }
 
-    @Test
-    fun testWordCount() {
-        assertEquals(0, ReadingTime.wordCount(" "), "wordCount(empty)")
-        assertEquals(3, ReadingTime.wordCount("one two three"), "wordCount(one two three)")
-        assertEquals(2, ReadingTime.wordCount("    one    two    "), "wordCount(one two)")
-        assertEquals(7, ReadingTime.wordCount(rt.text), "wordCount(text)")
-        assertEquals(505, ReadingTime.wordCount(blogPost), "wordCount(blogPost)")
-        assertEquals(391, ReadingTime.wordCount(mediumPost), "wordCount(mediumPost)")
-        assertEquals(275, ReadingTime.wordCount(twoSeventyFive), "wordCount(275)")
-        assertEquals(275, ReadingTime.wordCount("$twoSeventyFive $img"), "wordCount(275 + image)")
+    @Nested
+    @DisplayName("Config Tests")
+    inner class ConfigTests {
+        private var config = Config.Builder(blogPost).plural("mins read")
+
+        @Test
+        fun blogPost() {
+            assertEquals(
+                "2 mins read", ReadingTime(config.build()).calcReadingTime()
+            )
+        }
+
+        @Test
+        fun emptyPlural() {
+            config.text(mediumPost).plural("")
+            assertEquals("2", ReadingTime(config.build()).calcReadingTime())
+        }
+
+        @Test
+        fun emptyPostfix() {
+            config.text("This is a test.").postfix("")
+            assertEquals("0", ReadingTime(config.build()).calcReadingTime())
+        }
+
+        @Test
+        fun emptyText() {
+            config.text("")
+            assertEquals("0 min read", ReadingTime(config.build()).calcReadingTime())
+        }
+
+        @Test
+        fun excludeImages() {
+            config.excludeImages(true)
+            assertEquals("1 min read", ReadingTime(config.build()).calcReadingTime())
+        }
+
+        @Test
+        fun extra() {
+            config.extra(60)
+            assertEquals("3 mins read", ReadingTime(config.build()).calcReadingTime())
+        }
+
+        @Test
+        fun plural() {
+            config.plural("minutes read")
+            assertEquals("2 minutes read", ReadingTime(config.build()).calcReadingTime())
+        }
+
+        @Test
+        fun postfix() {
+            config.text("This is a test.").postfix("minute read")
+            assertEquals("0 minute read", ReadingTime(config.build()).calcReadingTime())
+        }
+
+        @Test
+        fun roundingMode() {
+            config.text(blogPost).roundingMode(RoundingMode.UP)
+            assertEquals("3 mins read", ReadingTime(config.build()).calcReadingTime())
+        }
+
+        @Test
+        fun with275Words() {
+            config.text(textWith275Words)
+            assertEquals("1 min read", ReadingTime(config.build()).calcReadingTime())
+        }
+
+        @Test
+        fun with550Words() {
+            config.text("$textWith275Words $textWith275Words")
+            assertEquals("2 mins read", ReadingTime(config.build()).calcReadingTime())
+        }
+
+        @Test
+        fun wpm() {
+            config.text(mediumPost).wpm(300).extra(0)
+            assertEquals(
+                calcReadingTime(mediumPost, 300) + calcImgTime(3),
+                ReadingTime(config.build()).calcReadingTimeInSec()
+            )
+        }
     }
 
-    @Test
-    fun testImgCount() {
-        assertEquals(1, ReadingTime.imgCount(rt.text), "imgCount(text)")
-        assertEquals(11, ReadingTime.imgCount(blogPost), "imgCount(blogPost)")
-        assertEquals(3, ReadingTime.imgCount(mediumPost), "imgCount(mediumPost)")
-        assertEquals(1, ReadingTime.imgCount("$twoSeventyFive $img"), "imgCount(275 + image)")
-        assertEquals(2, ReadingTime.imgCount("$twoSeventyFive $img $img"), "imgCount(275 + 2 images)")
+    @Nested
+    @DisplayName("Image Count Tests")
+    inner class ImageCountTests {
+        @Test
+        fun blogPost() {
+            assertEquals(11, ReadingTime.imgCount(blogPost))
+        }
+
+        @Test
+        fun imgCount() {
+            assertEquals(1, ReadingTime.imgCount(sampleReadingTime.text))
+        }
+
+        @Test
+        fun mediumPost() {
+            assertEquals(3, ReadingTime.imgCount(mediumPost))
+        }
+
+        @Test
+        fun with275WordsAndImage() {
+            assertEquals(1, ReadingTime.imgCount("$textWith275Words $sampleImgTag"))
+        }
+
+        @Test
+        fun with275WordsAnd2Images() {
+            assertEquals(
+                2,
+                ReadingTime.imgCount("$textWith275Words $sampleImgTag $sampleImgTag"),
+                "imgCount(275 + 2 images)"
+            )
+        }
     }
 
-    @Test
-    fun testReadingTimeInSec() {
-        assertEquals(
-            calcReadingTime(rt.text, rt.wpm) + calcImgTime(1),
-            rt.calcReadingTimeInSec(),
-            "calcReadingTimeInSec(text + image)"
-        )
+    @Nested
+    @DisplayName("Reading Time In Sec Tests")
+    inner class ReadingTimeInSecTests {
+        @Test
+        fun blogPost() {
+            sampleReadingTime.text = blogPost
+            assertEquals(
+                calcReadingTime(sampleReadingTime.text, sampleReadingTime.wpm) + calcImgTime(11),
+                sampleReadingTime.calcReadingTimeInSec()
+            )
+        }
 
-        rt.text = "$img ${img.uppercase()}"
-        assertEquals(calcImgTime(2), rt.calcReadingTimeInSec(), "calcReadingTimeInSec(2 images)")
-        rt.excludeImages = true
-        assertEquals(0.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(image uppercase)")
-        rt.excludeImages = false
+        @Test
+        fun blogPostExcludingImages() {
+            sampleReadingTime.text = blogPost
+            sampleReadingTime.excludeImages = true
+            assertEquals(
+                calcReadingTime(sampleReadingTime.text, sampleReadingTime.wpm),
+                sampleReadingTime.calcReadingTimeInSec()
+            )
+        }
 
-        rt.text = blogPost
-        assertEquals(
-            calcReadingTime(rt.text, rt.wpm) + calcImgTime(11),
-            rt.calcReadingTimeInSec(),
-            "calcReadingTimeInSec(blogPost)"
-        )
+        @Test
+        fun equalsReadingTimeInSec() {
+            sampleReadingTime.text = "$textWith275Words $textWith275Words"
+            sampleReadingTime.plural = ""
+            assertEquals(
+                sampleReadingTime.calcReadingTime().toInt() * 60,
+                sampleReadingTime.calcReadingTimeInSec().toInt()
+            )
+        }
 
-        rt.excludeImages = true
-        assertEquals(
-            calcReadingTime(rt.text, rt.wpm),
-            rt.calcReadingTimeInSec(),
-            "calcReadingTimeInSec(exclude images)"
-        )
-        rt.extra = 60
-        assertEquals(
-            calcReadingTime(rt.text, rt.wpm) + 60L,
-            rt.calcReadingTimeInSec(),
-            "calcReadingTimeInSec(extra 60)"
-        )
-        rt.extra = 0
-        rt.excludeImages = false
+        @Test
+        fun excludingImages() {
+            sampleReadingTime.text = "$sampleImgTag $sampleImgTag"
+            sampleReadingTime.excludeImages = true
+            assertEquals(0.0, sampleReadingTime.calcReadingTimeInSec())
+        }
 
-        rt.text = mediumPost
-        rt.wpm = 300
-        assertEquals(
-            calcReadingTime(rt.text, 300) + calcImgTime(3),
-            rt.calcReadingTimeInSec(),
-            "calcReadingTimeInSec(mediumPost 300 wpm)"
-        )
-        rt.wpm = 275
+        @Test
+        fun shortText() {
+            sampleReadingTime.text = "This is a test"
+            assertEquals(0.0, sampleReadingTime.calcReadingTimeInSec())
+        }
 
-        rt.text = "This is a test"
-        assertEquals(0.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(test)")
+        @Test
+        fun with1Image() {
+            assertEquals(
+                calcReadingTime(sampleReadingTime.text, sampleReadingTime.wpm) + calcImgTime(1),
+                sampleReadingTime.calcReadingTimeInSec()
+            )
+        }
 
-        rt.text = twoSeventyFive
-        assertEquals(60.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(275)")
+        @Test
+        fun with2Images() {
+            sampleReadingTime.text = "$sampleImgTag ${sampleImgTag.uppercase()}"
+            assertEquals(calcImgTime(2), sampleReadingTime.calcReadingTimeInSec())
+        }
 
-        rt.text = "$twoSeventyFive $img"
-        assertEquals(72.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(275 + image)")
+        @Test
+        fun with10Images() {
+            sampleReadingTime.text = "$textWith275Words ${sampleImgTag.repeat(10)}"
+            assertEquals(
+                60.0 + 12 + 11 + 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3,
+                sampleReadingTime.calcReadingTimeInSec()
+            )
+        }
 
-        rt.text = "$twoSeventyFive $img $img"
-        assertEquals(83.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(275 + 2 images)")
+        @Test
+        fun with11Images() {
+            sampleReadingTime.text = "$textWith275Words ${sampleImgTag.repeat(10)} $sampleImgTag"
+            assertEquals(135.0 + 3, sampleReadingTime.calcReadingTimeInSec())
+        }
 
-        rt.text = "$twoSeventyFive ${img.repeat(10)}"
-        assertEquals(
-            60.0 + 12 + 11 + 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3,
-            rt.calcReadingTimeInSec(),
-            "calcReadingTimeInSec(10 images)"
-        )
+        @Test
+        fun with275Words() {
+            sampleReadingTime.text = textWith275Words
+            assertEquals(60.0, sampleReadingTime.calcReadingTimeInSec())
+        }
 
-        rt.text = "$twoSeventyFive ${img.repeat(10)} $img"
-        assertEquals(135.0 + 3, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(11 images)")
+        @Test
+        fun with275WordsAndImage() {
+            sampleReadingTime.text = "$textWith275Words $sampleImgTag"
+            assertEquals(72.0, sampleReadingTime.calcReadingTimeInSec())
+        }
 
-        rt.text = "$twoSeventyFive $twoSeventyFive"
-        assertEquals(120.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(275*2)")
+        @Test
+        fun with275WordsAnd2Images() {
+            sampleReadingTime.text = "$textWith275Words $sampleImgTag $sampleImgTag"
+            assertEquals(83.0, sampleReadingTime.calcReadingTimeInSec())
+        }
 
-        rt.text = ""
-        assertEquals(0.0, rt.calcReadingTimeInSec(), "calcReadingTimeInSec(text=empty)")
-        rt.postfix = ""
-        assertEquals(
-            rt.calcReadingTime(),
-            rt.calcReadingTimeInSec().toInt().toString(),
-            "calcReadingTimeInSec(postfix=empty)"
-        )
+        @Test
+        fun with300Wpm() {
+            sampleReadingTime.text = mediumPost
+            sampleReadingTime.wpm = 300
+            assertEquals(
+                calcReadingTime(sampleReadingTime.text, 300) + calcImgTime(3),
+                sampleReadingTime.calcReadingTimeInSec()
+            )
+        }
+
+        @Test
+        fun with550Words() {
+            sampleReadingTime.text = "$textWith275Words $textWith275Words"
+            assertEquals(120.0, sampleReadingTime.calcReadingTimeInSec())
+        }
+
+        @Test
+        fun withEmptyText() {
+            sampleReadingTime.text = ""
+            assertEquals(0.0, sampleReadingTime.calcReadingTimeInSec())
+        }
+
+        @Test
+        fun withExtra() {
+            sampleReadingTime.text = textWith275Words
+            sampleReadingTime.extra = 60
+            assertEquals(
+                calcReadingTime(sampleReadingTime.text, sampleReadingTime.wpm) + 60L,
+                sampleReadingTime.calcReadingTimeInSec()
+            )
+        }
     }
 
-    @Test
-    fun testReadingTime() {
-        rt.text = blogPost
-        assertEquals("2 min read", rt.calcReadingTime(), "calcReadingTime(blogPost)")
+    @Nested
+    @DisplayName("Reading Time Tests")
+    inner class ReadingTimeTests {
+        @Test
+        fun blogPost() {
+            sampleReadingTime.text = blogPost
+            assertEquals("2 min read", sampleReadingTime.calcReadingTime())
+        }
 
-        rt.plural = "mins read"
-        assertEquals("2 mins read", rt.calcReadingTime(), "calcReadingTime(plural)")
+        @Test
+        fun emptyPlural() {
+            sampleReadingTime.text = mediumPost
+            sampleReadingTime.plural = ""
+            assertEquals("2", sampleReadingTime.calcReadingTime())
+        }
 
-        rt.text = mediumPost
-        rt.plural = ""
-        assertEquals("2", rt.calcReadingTime(), "calcReadingTime(mediumPost)")
+        @Test
+        fun emptyPostfix() {
+            sampleReadingTime.text = "This is a test."
+            sampleReadingTime.postfix = ""
+            assertEquals("0", sampleReadingTime.calcReadingTime())
+        }
 
-        rt.text = "This is a test."
-        rt.postfix = ""
-        assertEquals("0", rt.calcReadingTime(), "calcReadingTime(test)")
+        @Test
+        fun emptyText() {
+            sampleReadingTime.text = ""
+            sampleReadingTime.postfix = ""
+            assertEquals("0", sampleReadingTime.calcReadingTime())
+        }
 
-        rt.text = ""
-        assertEquals("0", rt.calcReadingTime(), "calcReadingTime(empty)")
+        @Test
+        fun plural() {
+            sampleReadingTime.text = blogPost
+            sampleReadingTime.plural = "mins read"
+            assertEquals("2 mins read", sampleReadingTime.calcReadingTime())
+        }
 
-        rt.text = twoSeventyFive
-        assertEquals("1", rt.calcReadingTime(), "calcReadingTime(275)")
+        @Test
+        fun with275Words() {
+            sampleReadingTime.text = textWith275Words
+            assertEquals("1 min read", sampleReadingTime.calcReadingTime())
+        }
 
-        rt.text = "$twoSeventyFive $twoSeventyFive"
-        assertEquals("2", rt.calcReadingTime(), "calcReadingTime(275 * 2)")
+        @Test
+        fun with550Words() {
+            sampleReadingTime.text = "$textWith275Words $textWith275Words"
+            sampleReadingTime.plural = "mins read"
+            assertEquals("2 mins read", sampleReadingTime.calcReadingTime())
+        }
     }
 
-    @Test
-    fun testReadingTimeConfig() {
-        var config = Config.Builder(blogPost)
+    @Nested
+    @DisplayName("Rounding Mode Tests")
+    inner class RoundingModeTests {
+        @Test
+        fun roundingModeDown() {
+            sampleReadingTime.text = mediumPost
+            sampleReadingTime.roundingMode = RoundingMode.DOWN
+            assertEquals("1 min read", sampleReadingTime.calcReadingTime(), "RoundingMode.DOWN")
+        }
 
-        assertEquals("2 min read", ReadingTime(config.build()).calcReadingTime(),
-            "calcReadingTime(blogPost)")
-
-        config = config.plural("mins read")
-        assertEquals("2 mins read", ReadingTime(config.build()).calcReadingTime(),
-            "calcReadingTime(plural)")
-
-        config = config.text(mediumPost).plural("")
-        assertEquals("2", ReadingTime(config.build()).calcReadingTime(), "calcReadingTime(mediumPost)")
-
-        config = config.text("This is a test.").postfix("")
-        assertEquals("0", ReadingTime(config.build()).calcReadingTime(), "calcReadingTime(test)")
-
-        config = config.text("")
-        assertEquals("0", ReadingTime(config.build()).calcReadingTime(), "calcReadingTime(empty)")
-
-        config = config.text(twoSeventyFive)
-        assertEquals("1", ReadingTime(config.build()).calcReadingTime(), "calcReadingTime(275)")
-
-        config = config.text("$twoSeventyFive $twoSeventyFive")
-        assertEquals("2", ReadingTime(config.build()).calcReadingTime(), "calcReadingTime(275 * 2)")
-
-        config = config.extra(60)
-        assertEquals("3", ReadingTime(config.build()).calcReadingTime(), "extra(60)")
-
-        config = config.text(blogPost).roundingMode(RoundingMode.UP)
-        assertEquals("4", ReadingTime(config.build()).calcReadingTime(), "RoundingMode.UP")
-
-        config = config.text(mediumPost).wpm(300).extra(0)
-        assertEquals(
-            calcReadingTime(mediumPost, 300) + calcImgTime(3),
-            ReadingTime(config.build()).calcReadingTimeInSec(),
-            "calcReadingTimeInSec(mediumPost 300 wpm)"
-        )
-
-        config = config.excludeImages(true)
-        assertEquals("1", ReadingTime(config.build()).calcReadingTime(), "excludeImages")
+        @Test
+        fun roundingModeUp() {
+            sampleReadingTime.text = blogPost
+            sampleReadingTime.roundingMode = RoundingMode.UP
+            assertEquals("3 min read", sampleReadingTime.calcReadingTime(), "RoundingMode.UP")
+        }
     }
 
-    @Test
-    fun testRoundingMode() {
-        rt.text = blogPost
-        rt.roundingMode = RoundingMode.UP
-        assertEquals("3 min read", rt.calcReadingTime(), "RoundingMode.UP")
+    @Nested
+    @DisplayName("Word Count Tests")
+    inner class WordCountTests {
+        @Test
+        fun blogPost() {
+            assertEquals(505, ReadingTime.wordCount(blogPost))
+        }
 
-        rt.text = mediumPost
-        rt.roundingMode = RoundingMode.DOWN
-        assertEquals("1 min read", rt.calcReadingTime(), "RoundingMode.DOWN")
+        @Test
+        fun empty() {
+            assertEquals(0, ReadingTime.wordCount(" "))
+        }
+
+        @Test
+        fun mediumPost() {
+            assertEquals(391, ReadingTime.wordCount(mediumPost))
+        }
+
+        @Test
+        fun with275Words() {
+            assertEquals(275, ReadingTime.wordCount(textWith275Words))
+        }
+
+        @Test
+        fun with275WordsAndImage() {
+            assertEquals(275, ReadingTime.wordCount("$textWith275Words $sampleImgTag"))
+        }
+
+        @Test
+        fun withSampleText() {
+            assertEquals(7, ReadingTime.wordCount(sampleReadingTime.text))
+        }
+
+        @Test
+        fun withSpaces() {
+            assertEquals(2, ReadingTime.wordCount("    one    two    "))
+        }
+
+        @Test
+        fun wordCount() {
+            assertEquals(3, ReadingTime.wordCount("one two three"))
+        }
     }
 }
