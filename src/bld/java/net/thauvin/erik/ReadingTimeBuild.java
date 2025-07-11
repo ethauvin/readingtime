@@ -32,13 +32,9 @@ package net.thauvin.erik;
 
 import rife.bld.BuildCommand;
 import rife.bld.Project;
-import rife.bld.extension.CompileKotlinOperation;
-import rife.bld.extension.DetektOperation;
-import rife.bld.extension.DokkaOperation;
-import rife.bld.extension.JacocoReportOperation;
+import rife.bld.extension.*;
 import rife.bld.extension.dokka.LoggingLevel;
 import rife.bld.extension.dokka.OutputFormat;
-import rife.bld.extension.kotlin.CompileOptions;
 import rife.bld.operations.exceptions.ExitStatusException;
 import rife.bld.publish.PomBuilder;
 import rife.bld.publish.PublishDeveloper;
@@ -48,6 +44,8 @@ import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -58,6 +56,7 @@ import static rife.bld.dependencies.Scope.compile;
 import static rife.bld.dependencies.Scope.test;
 
 public class ReadingTimeBuild extends Project {
+    static final String TEST_RESULTS_DIR = "build/test-results/test/";
     private static final String DETEKT_BASELINE = "config/detekt/baseline.xml";
     private final File srcMainKotlin = new File(srcMainDirectory(), "kotlin");
 
@@ -66,26 +65,27 @@ public class ReadingTimeBuild extends Project {
         name = "readingtime";
         version = version(0, 9, 3, "SNAPSHOT");
 
-        javaRelease = 11;
-        downloadSources = true;
+        javaRelease = 17;
+
         autoDownloadPurge = true;
+        downloadSources = true;
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL);
 
         final var kotlin = version(2, 2, 0);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
-                .include(dependency("org.jsoup", "jsoup", version(1, 20, 1)));
+                .include(dependency("org.jsoup", "jsoup", version(1, 21, 1)));
         scope(test)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-test-junit5", kotlin))
-                .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 13, 2)))
-                .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 13, 2)))
-                .include(dependency("org.junit.platform", "junit-platform-launcher", version(1, 13, 2)));
+                .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 13, 3)))
+                .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 13, 3)))
+                .include(dependency("org.junit.platform", "junit-platform-launcher", version(1, 13, 3)));
 
         publishOperation()
-                .repository(version.isSnapshot() ? repository(SONATYPE_SNAPSHOTS_LEGACY.location())
-                        .withCredentials(property("sonatype.user"), property("sonatype.password"))
-                        : repository(SONATYPE_RELEASES_LEGACY.location())
-                        .withCredentials(property("sonatype.user"), property("sonatype.password")))
+                .repository(version.isSnapshot() ? repository(CENTRAL_SNAPSHOTS.location())
+                        .withCredentials(property("central.user"), property("central.password"))
+                        : repository(CENTRAL_RELEASES.location())
+                        .withCredentials(property("central.user"), property("central.password")))
                 .repository(repository("github"))
                 .info()
                 .groupId(pkg)
@@ -154,10 +154,60 @@ public class ReadingTimeBuild extends Project {
 
     @BuildCommand(summary = "Generates JaCoCo Reports")
     public void jacoco() throws Exception {
-        new JacocoReportOperation()
-                .fromProject(this)
-                .sourceFiles(srcMainKotlin)
-                .execute();
+        var op = new JacocoReportOperation().fromProject(this);
+        op.testToolOptions("--reports-dir=" + TEST_RESULTS_DIR);
+
+        Exception ex = null;
+        try {
+            op.execute();
+        } catch (Exception e) {
+            ex = e;
+        }
+
+        renderWithXunitViewer();
+
+        if (ex != null) {
+            throw ex;
+        }
+    }
+
+    @BuildCommand(value = "pom-root", summary = "Generates the POM file in the root directory")
+    public void pomRoot() throws FileUtilsErrorException {
+        PomBuilder.generateInto(publishOperation().fromProject(this).info(), dependencies(),
+                new File(workDirectory, "pom.xml"));
+    }
+
+    private void renderWithXunitViewer() throws Exception {
+        var xunitViewer = new File("/usr/bin/xunit-viewer");
+        if (xunitViewer.exists() && xunitViewer.canExecute()) {
+            var reportsDir = "build/reports/tests/test/";
+
+            Files.createDirectories(Path.of(reportsDir));
+
+            new ExecOperation()
+                    .fromProject(this)
+                    .command(xunitViewer.getPath(), "-r", TEST_RESULTS_DIR, "-o", reportsDir + "index.html")
+                    .execute();
+        }
+    }
+
+    @Override
+    public void test() throws Exception {
+        var op = testOperation().fromProject(this);
+        op.testToolOptions().reportsDir(new File(TEST_RESULTS_DIR));
+
+        Exception ex = null;
+        try {
+            op.execute();
+        } catch (Exception e) {
+            ex = e;
+        }
+
+        renderWithXunitViewer();
+
+        if (ex != null) {
+            throw ex;
+        }
     }
 
     @Override
@@ -182,11 +232,5 @@ public class ReadingTimeBuild extends Project {
     public void publishLocal() throws Exception {
         super.publishLocal();
         pomRoot();
-    }
-
-    @BuildCommand(value = "pom-root", summary = "Generates the POM file in the root directory")
-    public void pomRoot() throws FileUtilsErrorException {
-        PomBuilder.generateInto(publishOperation().fromProject(this).info(), dependencies(),
-                new File(workDirectory, "pom.xml"));
     }
 }
