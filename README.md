@@ -49,8 +49,11 @@ To use with [Gradle](https://gradle.org/), include the following dependency in y
 
 ```gradle
 repositories {
+    maven {
+        name = 'Central Portal Snapshots'
+        url = 'https://central.sonatype.com/repository/maven-snapshots/'
+    }
     mavenCentral()
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
 dependencies {
