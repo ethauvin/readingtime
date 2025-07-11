@@ -71,7 +71,7 @@ public class ReadingTimeBuild extends Project {
         autoDownloadPurge = true;
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL);
 
-        final var kotlin = version(2, 1, 20);
+        final var kotlin = version(2, 2, 0);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
                 .include(dependency("org.jsoup", "jsoup", version(1, 20, 1)));
@@ -130,10 +130,9 @@ public class ReadingTimeBuild extends Project {
     @BuildCommand(summary = "Compiles the Kotlin project")
     @Override
     public void compile() throws Exception {
-        new CompileKotlinOperation()
-                .fromProject(this)
-                .compileOptions(new CompileOptions().verbose(true))
-                .execute();
+        var op = new CompileKotlinOperation().fromProject(this);
+        op.compileOptions().languageVersion("1.9").verbose(true);
+        op.execute();
     }
 
     @BuildCommand(summary = "Checks source with Detekt")
