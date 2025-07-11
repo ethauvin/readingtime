@@ -22,7 +22,7 @@ public class ReadingTimeExampleBuild extends BaseProject {
         javaRelease = 11;
         downloadSources = true;
         autoDownloadPurge = true;
-        repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL, SONATYPE_SNAPSHOTS_LEGACY);
+        repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL, CENTRAL_SNAPSHOTS);
 
         scope(compile)
                 .include(dependency("net.thauvin.erik", "readingtime", version(0, 9, 3, "SNAPSHOT")));
