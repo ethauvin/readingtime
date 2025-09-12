@@ -32,6 +32,9 @@ package net.thauvin.erik.readingtime
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EmptySource
+import org.junit.jupiter.params.provider.ValueSource
 import java.io.File
 import java.math.RoundingMode
 import kotlin.test.Test
@@ -73,21 +76,27 @@ class ReadingTimeTest {
             )
         }
 
-        @Test
-        fun emptyPlural() {
-            config.text(mediumPost).plural("")
+        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @EmptySource
+        @ValueSource(strings = [" ", "  "])
+        fun emptyPlural(input: String) {
+            config.text(mediumPost).plural(input)
             assertEquals("2", ReadingTime(config.build()).calcReadingTime())
         }
 
-        @Test
-        fun emptyPostfix() {
-            config.text("This is a test.").postfix("")
+        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @EmptySource
+        @ValueSource(strings = [" ", "  "])
+        fun emptyPostfix(input: String) {
+            config.text("This is a test.").postfix(input)
             assertEquals("0", ReadingTime(config.build()).calcReadingTime())
         }
 
-        @Test
-        fun emptyText() {
-            config.text("")
+        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @EmptySource
+        @ValueSource(strings = [" ", "  "])
+        fun emptyText(input: String) {
+            config.text(input)
             assertEquals("0 min read", ReadingTime(config.build()).calcReadingTime())
         }
 
@@ -284,9 +293,11 @@ class ReadingTimeTest {
             assertEquals(120.0, sampleReadingTime.calcReadingTimeInSec())
         }
 
-        @Test
-        fun withEmptyText() {
-            sampleReadingTime.text = ""
+        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @EmptySource
+        @ValueSource(strings = [" ", "  "])
+        fun withEmptyText(input: String) {
+            sampleReadingTime.text = input
             assertEquals(0.0, sampleReadingTime.calcReadingTimeInSec())
         }
 
@@ -310,24 +321,30 @@ class ReadingTimeTest {
             assertEquals("2 min read", sampleReadingTime.calcReadingTime())
         }
 
-        @Test
-        fun emptyPlural() {
+        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @EmptySource
+        @ValueSource(strings = [" ", "  "])
+        fun emptyPlural(input: String) {
             sampleReadingTime.text = mediumPost
-            sampleReadingTime.plural = ""
+            sampleReadingTime.plural = input
             assertEquals("2", sampleReadingTime.calcReadingTime())
         }
 
-        @Test
-        fun emptyPostfix() {
+        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @EmptySource
+        @ValueSource(strings = [" ", "  "])
+        fun emptyPostfix(input: String) {
             sampleReadingTime.text = "This is a test."
-            sampleReadingTime.postfix = ""
+            sampleReadingTime.postfix = input
             assertEquals("0", sampleReadingTime.calcReadingTime())
         }
 
-        @Test
-        fun emptyText() {
-            sampleReadingTime.text = ""
-            sampleReadingTime.postfix = ""
+        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @EmptySource
+        @ValueSource(strings = [" ", "  "])
+        fun emptyText(input: String) {
+            sampleReadingTime.text = input
+            sampleReadingTime.postfix = input
             assertEquals("0", sampleReadingTime.calcReadingTime())
         }
 
@@ -378,9 +395,11 @@ class ReadingTimeTest {
             assertEquals(505, ReadingTime.wordCount(blogPost))
         }
 
-        @Test
-        fun empty() {
-            assertEquals(0, ReadingTime.wordCount(" "))
+        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @EmptySource
+        @ValueSource(strings = [" ", "  "])
+        fun empty(input: String) {
+            assertEquals(0, ReadingTime.wordCount(input))
         }
 
         @Test
