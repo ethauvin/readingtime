@@ -5,6 +5,7 @@
     <pattern value="net.thauvin.erik.ReadingTimeBuild" />
     <pattern value="net.thauvin.erik.ReadingTimeBuild" method="detekt" />
     <pattern value="net.thauvin.erik.ReadingTimeBuild" method="detektBaseline" />
+    <pattern value="net.thauvin.erik.ReadingTimeBuild" method="reporter" />
   </component>
   <component name="PDMPlugin">
     <option name="customRuleSets">

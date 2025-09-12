@@ -58,7 +58,6 @@ import static rife.bld.dependencies.Scope.test;
 public class ReadingTimeBuild extends Project {
     static final String TEST_RESULTS_DIR = "build/test-results/test/";
     private static final String DETEKT_BASELINE = "config/detekt/baseline.xml";
-    private final File srcMainKotlin = new File(srcMainDirectory(), "kotlin");
 
     public ReadingTimeBuild() {
         pkg = "net.thauvin.erik";
@@ -110,7 +109,7 @@ public class ReadingTimeBuild extends Project {
                 .signKey(property("sign.key"))
                 .signPassphrase(property("sign.passphrase"));
 
-        jarSourcesOperation().sourceDirectories(srcMainKotlin);
+        jarSourcesOperation().sourceDirectories(new File(srcMainDirectory(), "kotlin"));
     }
 
     public static void main(String[] args) {
@@ -178,17 +177,28 @@ public class ReadingTimeBuild extends Project {
     }
 
     private void renderWithXunitViewer() throws Exception {
-        var xunitViewer = new File("/usr/bin/xunit-viewer");
-        if (xunitViewer.exists() && xunitViewer.canExecute()) {
-            var reportsDir = "build/reports/tests/test/";
+        var npmPackagesEnv = System.getenv("NPM_PACKAGES");
+        if (npmPackagesEnv != null && !npmPackagesEnv.isEmpty()) {
+            var xunitViewer = Path.of(npmPackagesEnv, "bin", "xunit-viewer").toFile();
+            if (xunitViewer.exists() && xunitViewer.canExecute()) {
+                var reportsDir = "build/reports/tests/test/";
 
-            Files.createDirectories(Path.of(reportsDir));
+                Files.createDirectories(Path.of(reportsDir));
 
-            new ExecOperation()
-                    .fromProject(this)
-                    .command(xunitViewer.getPath(), "-r", TEST_RESULTS_DIR, "-o", reportsDir + "index.html")
-                    .execute();
+                new ExecOperation()
+                        .fromProject(this)
+                        .command(xunitViewer.getPath(), "-r", TEST_RESULTS_DIR, "-o", reportsDir + "index.html")
+                        .execute();
+            }
         }
+    }
+
+    @BuildCommand(summary = "Runs the JUnit reporter")
+    public void reporter() throws Exception {
+        new JUnitReporterOperation()
+                .fromProject(this)
+                .failOnSummary(true)
+                .execute();
     }
 
     @Override
