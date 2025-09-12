@@ -71,7 +71,7 @@ public class ReadingTimeBuild extends Project {
         downloadSources = true;
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL);
 
-        final var kotlin = version(2, 2, 0);
+        final var kotlin = version(2, 2, 20);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
                 .include(dependency("org.jsoup", "jsoup", version(1, 21, 2)));
