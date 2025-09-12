@@ -77,9 +77,9 @@ public class ReadingTimeBuild extends Project {
                 .include(dependency("org.jsoup", "jsoup", version(1, 21, 2)));
         scope(test)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-test-junit5", kotlin))
-                .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 13, 3)))
-                .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 13, 3)))
-                .include(dependency("org.junit.platform", "junit-platform-launcher", version(1, 13, 3)));
+                .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 13, 4)))
+                .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 13, 4)))
+                .include(dependency("org.junit.platform", "junit-platform-launcher", version(1, 13, 4)));
 
         publishOperation()
                 .repository(version.isSnapshot() ? repository(CENTRAL_SNAPSHOTS.location())
