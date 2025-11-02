@@ -61,7 +61,7 @@ class ReadingTimeTest {
     }
 
     private fun calcReadingTime(text: String, wpm: Int): Double {
-        return (ReadingTime.wordCount(text) / wpm) * 60.0
+        return (ReadingTime.wordCount(text).toDouble() / wpm.toDouble()) * 60.0
     }
 
     @Nested
@@ -72,7 +72,7 @@ class ReadingTimeTest {
         @Test
         fun blogPost() {
             assertEquals(
-                "2 mins read", ReadingTime(config.build()).calcReadingTime()
+                "3 mins read", ReadingTime(config.build()).calcReadingTime()
             )
         }
 
@@ -103,19 +103,19 @@ class ReadingTimeTest {
         @Test
         fun excludeImages() {
             config.excludeImages(true)
-            assertEquals("1 min read", ReadingTime(config.build()).calcReadingTime())
+            assertEquals("2 mins read", ReadingTime(config.build()).calcReadingTime())
         }
 
         @Test
         fun extra() {
             config.extra(60)
-            assertEquals("3 mins read", ReadingTime(config.build()).calcReadingTime())
+            assertEquals("4 mins read", ReadingTime(config.build()).calcReadingTime())
         }
 
         @Test
         fun plural() {
             config.plural("minutes read")
-            assertEquals("2 minutes read", ReadingTime(config.build()).calcReadingTime())
+            assertEquals("3 minutes read", ReadingTime(config.build()).calcReadingTime())
         }
 
         @Test
@@ -127,7 +127,7 @@ class ReadingTimeTest {
         @Test
         fun roundingMode() {
             config.text(blogPost).roundingMode(RoundingMode.UP)
-            assertEquals("3 mins read", ReadingTime(config.build()).calcReadingTime())
+            assertEquals("4 mins read", ReadingTime(config.build()).calcReadingTime())
         }
 
         @Test
@@ -227,7 +227,7 @@ class ReadingTimeTest {
         @Test
         fun shortText() {
             sampleReadingTime.text = "This is a test"
-            assertEquals(0.0, sampleReadingTime.calcReadingTimeInSec())
+            assertEquals(0.8727272727272727, sampleReadingTime.calcReadingTimeInSec())
         }
 
         @Test
@@ -318,7 +318,7 @@ class ReadingTimeTest {
         @Test
         fun blogPost() {
             sampleReadingTime.text = blogPost
-            assertEquals("2 min read", sampleReadingTime.calcReadingTime())
+            assertEquals("3 min read", sampleReadingTime.calcReadingTime())
         }
 
         @ParameterizedTest(name = "[{index}] ''{0}''")
@@ -352,7 +352,7 @@ class ReadingTimeTest {
         fun plural() {
             sampleReadingTime.text = blogPost
             sampleReadingTime.plural = "mins read"
-            assertEquals("2 mins read", sampleReadingTime.calcReadingTime())
+            assertEquals("3 mins read", sampleReadingTime.calcReadingTime())
         }
 
         @Test
@@ -383,7 +383,7 @@ class ReadingTimeTest {
         fun roundingModeUp() {
             sampleReadingTime.text = blogPost
             sampleReadingTime.roundingMode = RoundingMode.UP
-            assertEquals("3 min read", sampleReadingTime.calcReadingTime(), "RoundingMode.UP")
+            assertEquals("4 min read", sampleReadingTime.calcReadingTime(), "RoundingMode.UP")
         }
     }
 

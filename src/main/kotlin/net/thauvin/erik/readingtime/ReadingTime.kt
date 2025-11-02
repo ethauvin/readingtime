@@ -125,7 +125,7 @@ class ReadingTime @JvmOverloads constructor(
     fun calcReadingTimeInSec(): Double {
         if (readTime == INVALID) {
             readTime = if (!excludeImages) calcImgReadingTime().toDouble() else 0.0
-            readTime += (wordCount(text) / wpm) * 60.0
+            readTime += (wordCount(text).toDouble() / wpm.toDouble()) * 60.0
         }
 
         return readTime + extra
