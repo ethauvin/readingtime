@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("application")
-    id("com.github.ben-manes.versions") version "0.51.0"
-    kotlin("jvm") version "2.2.20"
+    id("com.github.ben-manes.versions") version "0.53.0"
+    kotlin("jvm") version "2.2.21"
 }
 
 repositories {
@@ -16,17 +16,8 @@ dependencies {
     implementation("net.thauvin.erik:readingtime:0.9.3-SNAPSHOT")
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-
 application {
     mainClass.set("com.example.ReadingTimeExampleKt")
-}
-
-kotlin {
-    compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
 }
 
 tasks {
