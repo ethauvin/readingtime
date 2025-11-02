@@ -19,7 +19,7 @@ public class ReadingTimeExampleBuild extends BaseProject {
 
         mainClass = "com.example.ReadingTimeExampleKt";
 
-        javaRelease = 11;
+        javaRelease = 17;
         downloadSources = true;
         autoDownloadPurge = true;
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL, CENTRAL_SNAPSHOTS);
