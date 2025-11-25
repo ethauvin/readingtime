@@ -137,8 +137,8 @@ class ReadingTime @JvmOverloads constructor(
      * `(reading time in sec / 60) + postfix`
      */
     fun calcReadingTime(): String {
-        val time = BigDecimal((calcReadingTimeInSec() / 60.0)).setScale(0, roundingMode)
-        return if (time.compareTo(BigDecimal.ONE) == 1) {
+        val time = BigDecimal.valueOf(calcReadingTimeInSec() / 60.0).setScale(0, roundingMode)
+        return if (time > BigDecimal.ONE) {
             "$time $plural".trim()
         } else {
             "$time $postfix".trim()
