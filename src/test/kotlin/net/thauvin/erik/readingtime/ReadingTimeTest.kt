@@ -76,7 +76,7 @@ class ReadingTimeTest {
             )
         }
 
-        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @ParameterizedTest
         @EmptySource
         @ValueSource(strings = [" ", "  "])
         fun emptyPlural(input: String) {
@@ -84,7 +84,7 @@ class ReadingTimeTest {
             assertEquals("2", ReadingTime(config.build()).calcReadingTime())
         }
 
-        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @ParameterizedTest
         @EmptySource
         @ValueSource(strings = [" ", "  "])
         fun emptyPostfix(input: String) {
@@ -92,7 +92,7 @@ class ReadingTimeTest {
             assertEquals("0", ReadingTime(config.build()).calcReadingTime())
         }
 
-        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @ParameterizedTest
         @EmptySource
         @ValueSource(strings = [" ", "  "])
         fun emptyText(input: String) {
@@ -293,7 +293,7 @@ class ReadingTimeTest {
             assertEquals(120.0, sampleReadingTime.calcReadingTimeInSec())
         }
 
-        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @ParameterizedTest
         @EmptySource
         @ValueSource(strings = [" ", "  "])
         fun withEmptyText(input: String) {
@@ -321,7 +321,7 @@ class ReadingTimeTest {
             assertEquals("3 min read", sampleReadingTime.calcReadingTime())
         }
 
-        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @ParameterizedTest
         @EmptySource
         @ValueSource(strings = [" ", "  "])
         fun emptyPlural(input: String) {
@@ -330,7 +330,7 @@ class ReadingTimeTest {
             assertEquals("2", sampleReadingTime.calcReadingTime())
         }
 
-        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @ParameterizedTest
         @EmptySource
         @ValueSource(strings = [" ", "  "])
         fun emptyPostfix(input: String) {
@@ -339,7 +339,7 @@ class ReadingTimeTest {
             assertEquals("0", sampleReadingTime.calcReadingTime())
         }
 
-        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @ParameterizedTest
         @EmptySource
         @ValueSource(strings = [" ", "  "])
         fun emptyText(input: String) {
@@ -395,7 +395,7 @@ class ReadingTimeTest {
             assertEquals(505, ReadingTime.wordCount(blogPost))
         }
 
-        @ParameterizedTest(name = "[{index}] ''{0}''")
+        @ParameterizedTest
         @EmptySource
         @ValueSource(strings = [" ", "  "])
         fun empty(input: String) {
