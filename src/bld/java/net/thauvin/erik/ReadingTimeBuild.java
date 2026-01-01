@@ -72,7 +72,7 @@ public class ReadingTimeBuild extends Project {
         var junit = version(6, 0, 1);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
-                .include(dependency("org.jsoup", "jsoup", version(1, 21, 2)));
+                .include(dependency("org.jsoup", "jsoup", version(1, 22, 1)));
         scope(test)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-test-junit5", kotlin))
                 .include(dependency("org.junit.jupiter", "junit-jupiter", junit))
