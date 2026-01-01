@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Source Code" pattern="file:*.kt||file:LICENSE.txt||file:*.tld||file:*.tag" />
+</component>
