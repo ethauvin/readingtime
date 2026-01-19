@@ -35,6 +35,7 @@ import rife.bld.Project;
 import rife.bld.extension.*;
 import rife.bld.extension.dokka.LoggingLevel;
 import rife.bld.extension.dokka.OutputFormat;
+import rife.bld.extension.tools.IOUtils;
 import rife.bld.operations.exceptions.ExitStatusException;
 import rife.bld.publish.PomBuilder;
 import rife.bld.publish.PublishDeveloper;
@@ -54,8 +55,8 @@ import static rife.bld.dependencies.Scope.compile;
 import static rife.bld.dependencies.Scope.test;
 
 public class ReadingTimeBuild extends Project {
-    static final String TEST_RESULTS_DIR = "build/test-results/test/";
     private static final String DETEKT_BASELINE = "config/detekt/baseline.xml";
+    final File testResultsDirectory = IOUtils.resolveFile(buildDirectory(), "test-results", "test");
 
     public ReadingTimeBuild() {
         pkg = "net.thauvin.erik";
@@ -122,7 +123,7 @@ public class ReadingTimeBuild extends Project {
     @Override
     public void test() throws Exception {
         var op = testOperation().fromProject(this);
-        op.testToolOptions().reportsDir(new File(TEST_RESULTS_DIR));
+        op.testToolOptions().reportsDir(testResultsDirectory);
         op.execute();
     }
 
@@ -190,7 +191,7 @@ public class ReadingTimeBuild extends Project {
     @BuildCommand(summary = "Generates JaCoCo Reports")
     public void jacoco() throws Exception {
         var op = new JacocoReportOperation().fromProject(this);
-        op.testToolOptions("--reports-dir=" + TEST_RESULTS_DIR);
+        op.testToolOptions("--reports-dir=" + testResultsDirectory.getAbsolutePath());
         op.execute();
     }
 
