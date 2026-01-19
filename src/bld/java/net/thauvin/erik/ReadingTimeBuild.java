@@ -55,6 +55,7 @@ import static rife.bld.dependencies.Scope.compile;
 import static rife.bld.dependencies.Scope.test;
 
 public class ReadingTimeBuild extends Project {
+
     private static final String DETEKT_BASELINE = "config/detekt/baseline.xml";
     final File testResultsDirectory = IOUtils.resolveFile(buildDirectory(), "test-results", "test");
 
@@ -70,7 +71,7 @@ public class ReadingTimeBuild extends Project {
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL);
 
         final var kotlin = version(2, 3, 0);
-        var junit = version(6, 0, 1);
+        var junit = version(6, 0, 2);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
                 .include(dependency("org.jsoup", "jsoup", version(1, 22, 1)));
@@ -145,12 +146,6 @@ public class ReadingTimeBuild extends Project {
         pomRoot();
     }
 
-    @BuildCommand(value = "pom-root", summary = "Generates the POM file in the root directory")
-    public void pomRoot() throws FileUtilsErrorException {
-        PomBuilder.generateInto(publishOperation().fromProject(this).info(), dependencies(),
-                new File("pom.xml"));
-    }
-
     @Override
     public void publishLocal() throws Exception {
         super.publishLocal();
@@ -193,6 +188,12 @@ public class ReadingTimeBuild extends Project {
         var op = new JacocoReportOperation().fromProject(this);
         op.testToolOptions("--reports-dir=" + testResultsDirectory.getAbsolutePath());
         op.execute();
+    }
+
+    @BuildCommand(value = "pom-root", summary = "Generates the POM file in the root directory")
+    public void pomRoot() throws FileUtilsErrorException {
+        PomBuilder.generateInto(publishOperation().fromProject(this).info(), dependencies(),
+                new File("pom.xml"));
     }
 
     @BuildCommand(summary = "Runs the JUnit reporter")
