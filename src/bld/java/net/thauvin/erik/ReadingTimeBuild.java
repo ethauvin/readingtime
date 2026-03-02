@@ -35,7 +35,7 @@ import rife.bld.Project;
 import rife.bld.extension.*;
 import rife.bld.extension.dokka.LoggingLevel;
 import rife.bld.extension.dokka.OutputFormat;
-import rife.bld.extension.tools.IOUtils;
+import rife.bld.extension.tools.IOTools;
 import rife.bld.operations.exceptions.ExitStatusException;
 import rife.bld.publish.PomBuilder;
 import rife.bld.publish.PublishDeveloper;
@@ -57,7 +57,7 @@ import static rife.bld.dependencies.Scope.test;
 public class ReadingTimeBuild extends Project {
 
     private static final String DETEKT_BASELINE = "config/detekt/baseline.xml";
-    final File testResultsDirectory = IOUtils.resolveFile(buildDirectory(), "test-results", "test");
+    final File testResultsDirectory = IOTools.resolveFile(buildDirectory(), "test-results", "test");
 
     public ReadingTimeBuild() {
         pkg = "net.thauvin.erik";
