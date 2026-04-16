@@ -38,7 +38,7 @@ import java.math.RoundingMode
  * Defines the input text, reading speed, suffixes, and optional adjustments
  * such as image exclusion, extra seconds, and rounding behavior.
  */
-class Config private constructor(builder: Builder) {
+class ReadingTimeConfig private constructor(builder: Builder) {
     val text: String = builder.text
     val wpm: Int = builder.wpm
     val suffix: String = builder.suffix
@@ -48,7 +48,7 @@ class Config private constructor(builder: Builder) {
     val roundingMode: RoundingMode = builder.roundingMode
 
     /**
-     * Builder for [Config].
+     * Builder for [ReadingTimeConfig].
      *
      * The only required value is the input text. All other fields have defaults.
      */
@@ -98,6 +98,6 @@ class Config private constructor(builder: Builder) {
         /**
          * Builds the immutable configuration.
          */
-        fun build(): Config = Config(this)
+        fun build(): ReadingTimeConfig = ReadingTimeConfig(this)
     }
 }

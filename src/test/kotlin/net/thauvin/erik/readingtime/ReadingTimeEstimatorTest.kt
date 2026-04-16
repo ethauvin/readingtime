@@ -45,7 +45,7 @@ class ReadingTimeEstimatorTest {
     inner class FromConfig {
         @Test
         fun createsEstimatorFromConfig() {
-            val config = Config.Builder("Hello world").build()
+            val config = ReadingTimeConfig.Builder("Hello world").build()
             val est = ReadingTimeEstimator.fromConfig(config)
             val result = est.readingTime()
             assertTrue(result.isNotEmpty())

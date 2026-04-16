@@ -67,8 +67,8 @@ class ReadingTimeTest {
 
     @Nested
     @DisplayName("Config Tests")
-    inner class ConfigTests {
-        private var config = Config.Builder(blogPost).pluralSuffix("mins read")
+    inner class ReadingTimeConfigTests {
+        private var config = ReadingTimeConfig.Builder(blogPost).pluralSuffix("mins read")
 
         @Test
         fun blogPost() {

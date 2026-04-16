@@ -44,7 +44,7 @@ class ReadingTimeEstimator private constructor(
          * Creates an estimator using the provided configuration.
          */
         @JvmStatic
-        fun fromConfig(config: Config): ReadingTimeEstimator {
+        fun fromConfig(config: ReadingTimeConfig): ReadingTimeEstimator {
             return ReadingTimeEstimator(ReadingTime(config))
         }
 

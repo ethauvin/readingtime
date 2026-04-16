@@ -104,8 +104,8 @@ ReadingTime.countImages(htmlText) // Returns the count of images. (HTML img tags
 A JSP tag is also available for easy incorporation into web applications:
 
 ```jsp
-<%@taglib uri="https://erik.thauvin.net/taglibs/readingtime" prefix="t"%>
-<t:readingtime
+<%@taglib uri="https://erik.thauvin.net/taglibs/readingtime" prefix="rt"%>
+<rt:readingtime
     wpm="275"
     prefix="min read"
     pluralPrefix="min read"
@@ -134,7 +134,7 @@ var readTime = estimator.readingTime(); // e.g. 3 min
 or using a configuration builder:
 
 ```java
-var config = new Config.Builder(htmlText)
+var config = new ReadingTimeConfig.Builder(htmlText)
         .wpm(250)
         .suffix("minute read")
         .pluralSuffix("minutes read")

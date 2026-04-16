@@ -49,7 +49,7 @@ class ReadingTime @JvmOverloads constructor(
     extraSeconds: Int = 0,
     roundingMode: RoundingMode = DEFAULT_ROUNDING_MODE
 ) {
-    constructor(config: Config) : this(
+    constructor(config: ReadingTimeConfig) : this(
         config.text,
         config.wpm,
         config.suffix,

@@ -4,13 +4,11 @@
   <CurrentIssues>
     <ID>LongParameterList:ReadingTime.kt$ReadingTime$( text: String, wpm: Int = DEFAULT_WPM, suffix: String = DEFAULT_SUFFIX, pluralSuffix: String = DEFAULT_PLURAL_SUFFIX, excludeImages: Boolean = false, extraSeconds: Int = 0, roundingMode: RoundingMode = DEFAULT_ROUNDING_MODE )</ID>
     <ID>LongParameterList:ReadingTimeEstimator.kt$ReadingTimeEstimator.Companion$( text: String, wpm: Int, suffix: String, pluralSuffix: String, excludeImages: Boolean, extraSeconds: Int, roundingMode: java.math.RoundingMode )</ID>
-    <ID>MagicNumber:Config.kt$Config.Builder$275</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$10</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$12</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$3</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$60.0</ID>
-    <ID>MagicNumber:ReadingTimeExampleBuild.kt$ReadingTimeExampleBuild$17</ID>
+    <ID>MagicNumber:ReadingTimeConfig.kt$ReadingTimeConfig.Builder$275</ID>
     <ID>NewLineAtEndOfFile:ReadingTime.kt$net.thauvin.erik.readingtime.ReadingTime.kt</ID>
-    <ID>WildcardImport:ReadingTimeExampleBuild.kt$import rife.bld.dependencies.Repository.*</ID>
   </CurrentIssues>
 </SmellBaseline>
