@@ -38,7 +38,7 @@ To use with [bld](https://rife2.com/bld), include the following dependency in yo
 repositories = List.of(MAVEN_CENTRAL, CENTRAL_SNAPSHOTS);
 
 scope(compile)
-    .include(dependency("net.thauvin.erik:readingtime:0.9.2"));
+    .include(dependency("net.thauvin.erik:readingtime:1.0.0-SNAPSHOT"));
 ```
 
 Be sure to use the [bld Kotlin extension](https://github.com/rife2/bld-kotlin) in your project.
@@ -57,7 +57,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.thauvin.erik:readingtime:0.9.2")
+    implementation("net.thauvin.erik:readingtime:1.0.0-SNAPSHOT")
 }
 ```
 
