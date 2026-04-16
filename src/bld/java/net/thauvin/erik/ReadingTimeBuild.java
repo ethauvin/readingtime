@@ -70,7 +70,7 @@ public class ReadingTimeBuild extends Project {
         downloadSources = true;
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL);
 
-        final var kotlin = version(2, 3, 10);
+        final var kotlin = version(2, 3, 20);
         var junit = version(6, 0, 3);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
@@ -117,7 +117,7 @@ public class ReadingTimeBuild extends Project {
     @Override
     public void compile() throws Exception {
         var op = new CompileKotlinOperation().fromProject(this);
-        op.compileOptions().languageVersion("1.9").verbose(true);
+        op.compileOptions().languageVersion("2.1").verbose(true);
         op.execute();
     }
 
