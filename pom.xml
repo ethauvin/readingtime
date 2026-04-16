@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.thauvin.erik</groupId>
   <artifactId>readingtime</artifactId>
-  <version>0.9.3-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <name>readingtime</name>
   <description>Estimated Reading Time for Blog Posts, Articles, etc.</description>
   <url>https://github.com/ethauvin/readingtime</url>

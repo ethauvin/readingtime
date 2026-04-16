@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.thauvin.erik:readingtime:0.9.3-SNAPSHOT")
+    implementation("net.thauvin.erik:readingtime:1.0.0-SNAPSHOT")
 }
 
 application {

@@ -21,11 +21,7 @@ class ReadingTimeExampleBuild : BaseProject() {
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL, CENTRAL_SNAPSHOTS)
 
         scope(compile)
-                .include(dependency("net.thauvin.erik", "readingtime", version(0, 9, 3, "SNAPSHOT")));
-    }
-
-    public static void main(String[] args) {
-        new ReadingTimeExampleBuild().start(args);
+            .include(dependency("net.thauvin.erik", "readingtime", version(1, 0, 0, "SNAPSHOT")))
     }
 
     @Override

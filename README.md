@@ -22,7 +22,7 @@ import net.thauvin.erik.readingtime.ReadingTime
 // ...
 
 val rt = ReadingTime(htmlText)
-println(rt.calcEstimatedReadTime()) // eg: 2 min read
+println(rt.calcEstimatedReadTime()) // e.g. 2 min read
 
 ```
 
@@ -71,10 +71,10 @@ The following properties are available:
 ReadingTime(
     text,
     wpm = 275,
-    postfix = "min read",
-    plural = "min read",
+    suffix = "min read",
+    pluralSuffix = "min read",
     excludeImages = false, 
-    extra = 0,
+    extraSeconds = 0,
     roundingMode = RoundingMode.HALF_EVEN
 )
 
@@ -84,19 +84,19 @@ ReadingTime(
 |:----------------|:------------------------------------------------------------------------------------------------------------------------|
 | `text`          | The text to be evaluated. (Required)                                                                                    |
 | `wpm`           | The words per minute reading average.                                                                                   |
-| `postfix`       | The value to be appended to the reading time.                                                                           |
-| `plural`        | The value to be appended if the reading time is more than 1 minute.                                                     |
+| `suffix`        | The value to be appended to the reading time.                                                                           |
+| `pluralSuffix`  | The value to be appended if the reading time is more than 1 minute.                                                     |
 | `excludeImages` | Images are excluded from the reading time when set.                                                                     |
-| `extra`         | Additional seconds to be added to the total reading time.                                                               |
+| `extraSeconds`  | Additional seconds to be added to the total reading time.                                                               |
 | `roundingMode`  | The [rounding mode](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/RoundingMode.html) to apply. |
 
 ## Functions
 
-A couple of useful functions are also available:
+A couple of useful static functions are also available:
 
 ```kotlin
-ReadingTime.wordCount(htmlText) // Returns the count of words. (HTML stripped)
-ReadingTime.imgCount(htmlText) // Returns the count of images. (HTML img tags)
+ReadingTime.countWords(htmlText) // Returns the count of words. (HTML stripped)
+ReadingTime.countImages(htmlText) // Returns the count of images. (HTML img tags)
 ```
 
 ## JSP
@@ -107,8 +107,8 @@ A JSP tag is also available for easy incorporation into web applications:
 <%@taglib uri="https://erik.thauvin.net/taglibs/readingtime" prefix="t"%>
 <t:readingtime
     wpm="275"
-    postfix="min read"
-    plural="min read"
+    prefix="min read"
+    pluralPrefix="min read"
     excludeImages="false"
     extra="0">some_text</t:readingtime>
 ```
@@ -117,24 +117,38 @@ None of the attributes are required.
 
 ## Java
 
-In addition to setters, a configuration builder is also available:
+An Java API surface is also available:
 
 ```java
-final ReadingTime rt = new ReadingTime(text);
-rt.setPostfix("minute to read");
-rt.setPlural("minutes to read");
-```
+var estimator = ReadingTimeEstimator.create(htmlText);
 
-or
+var readTime = estimator.readingTime();
+var seconds = estimator.readingTimeInSeconds();
+```
 
 ```java
-final Config config =
-        new Config.Builder(text)
-                .postfix("minute to read")
-                .plural("minutes to read")
-                .build();
-final ReadingTime rt = new ReadingTime(config);
+var estimator = ReadingTimeEstimator.create(text, "min");
+var readTime = estimator.readingTime(); // e.g. 3 min
 ```
+
+or using a configuration builder:
+
+```java
+var config = new Config.Builder(htmlText)
+        .wpm(250)
+        .suffix("minute read")
+        .pluralSuffix("minutes read")
+        .excludeImages(true)
+        .extraSeconds(5)
+        .roundingMode(RoundingMode.HALF_EVEN)
+        .build();
+
+var estimator = ReadingTimeEstimator.fromConfig(config);
+
+var readTime = estimator.readingTime();
+var minutes = estimator.readingTimeInMinutes();
+```
+
 
 ## Contributing
 
