@@ -33,75 +33,70 @@ package net.thauvin.erik.readingtime
 import java.math.RoundingMode
 
 /**
- * Configuration class for reading time calculations.
+ * Immutable configuration for computing reading time.
  *
- * @property text The text to be evaluated.
- * @property wpm The words per minute reading average.
- * @property postfix The text to append after the reading time.
- * @property plural The text to append after the reading time if plural.
- * @property excludeImages Whether to exclude images in the word count.
- * @property extra Additional time to add to the reading time.
- * @property roundingMode The rounding mode to apply to the reading time.
+ * Defines the input text, reading speed, suffixes, and optional adjustments
+ * such as image exclusion, extra seconds, and rounding behavior.
  */
 class Config private constructor(builder: Builder) {
-    val text = builder.text
-    val wpm = builder.wpm
-    val postfix = builder.postfix
-    val plural = builder.plural
-    val excludeImages = builder.excludeImages
-    val extra = builder.extra
-    val roundingMode = builder.roundingMode
+    val text: String = builder.text
+    val wpm: Int = builder.wpm
+    val suffix: String = builder.suffix
+    val pluralSuffix: String = builder.pluralSuffix
+    val excludeImages: Boolean = builder.excludeImages
+    val extraSeconds: Int = builder.extraSeconds
+    val roundingMode: RoundingMode = builder.roundingMode
 
     /**
-     * Configures the parameters.
+     * Builder for [Config].
      *
-     * @param text The text to be evaluated.
+     * The only required value is the input text. All other fields have defaults.
      */
     data class Builder(var text: String) {
         var wpm: Int = 275
-        var postfix: String = "min read"
-        var plural: String = "min read"
+        var suffix: String = "min read"
+        var pluralSuffix: String = "min read"
         var excludeImages: Boolean = false
-        var extra: Int = 0
+        var extraSeconds: Int = 0
         var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
 
         /**
-         * The text to be evaluated.
+         * Sets the input text to evaluate.
          */
         fun text(text: String): Builder = apply { this.text = text }
 
         /**
-         * The words per minute reading average.
+         * Sets the words‑per‑minute reading speed.
          */
         fun wpm(wpm: Int): Builder = apply { this.wpm = wpm }
 
         /**
-         * The value to be appended to the reading time.
+         * Sets the suffix appended to the reading time.
          */
-        fun postfix(postfix: String): Builder = apply { this.postfix = postfix }
+        fun suffix(suffix: String): Builder = apply { this.suffix = suffix }
 
         /**
-         * The value to be appended if the reading time is more than 1 minute.
+         * Sets the suffix used when the reading time is plural.
          */
-        fun plural(plural: String): Builder = apply { this.plural = plural }
+        fun pluralSuffix(pluralSuffix: String): Builder = apply { this.pluralSuffix = pluralSuffix }
 
         /**
-         * Images are excluded from the reading time when set.
+         * Excludes images from the reading time calculation when true.
          */
         fun excludeImages(excludeImages: Boolean): Builder = apply { this.excludeImages = excludeImages }
 
         /**
-         * Additional seconds to be added to the total reading time.
+         * Adds extra seconds to the computed reading time.
          */
-        fun extra(extra: Int): Builder = apply { this.extra = extra }
+        fun extraSeconds(extraSeconds: Int): Builder = apply { this.extraSeconds = extraSeconds }
 
         /**
-         * The [RoundingMode] to apply. Default is [RoundingMode.HALF_DOWN].
+         * Sets the rounding mode applied to the final reading time.
          */
         fun roundingMode(roundingMode: RoundingMode): Builder = apply { this.roundingMode = roundingMode }
 
         /**
-         * Builds the configuration.
+         * Builds the immutable configuration.
          */
         fun build(): Config = Config(this)
     }

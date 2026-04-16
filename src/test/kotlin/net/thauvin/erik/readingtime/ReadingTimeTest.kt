@@ -30,6 +30,7 @@
 
 package net.thauvin.erik.readingtime
 
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.params.ParameterizedTest
@@ -61,13 +62,13 @@ class ReadingTimeTest {
     }
 
     private fun calcReadingTime(text: String, wpm: Int): Double {
-        return (ReadingTime.wordCount(text).toDouble() / wpm.toDouble()) * 60.0
+        return (ReadingTime.countWords(text).toDouble() / wpm.toDouble()) * 60.0
     }
 
     @Nested
     @DisplayName("Config Tests")
     inner class ConfigTests {
-        private var config = Config.Builder(blogPost).plural("mins read")
+        private var config = Config.Builder(blogPost).pluralSuffix("mins read")
 
         @Test
         fun blogPost() {
@@ -80,7 +81,7 @@ class ReadingTimeTest {
         @EmptySource
         @ValueSource(strings = [" ", "  "])
         fun emptyPlural(input: String) {
-            config.text(mediumPost).plural(input)
+            config.text(mediumPost).pluralSuffix(input)
             assertEquals("2", ReadingTime(config.build()).calcReadingTime())
         }
 
@@ -88,7 +89,7 @@ class ReadingTimeTest {
         @EmptySource
         @ValueSource(strings = [" ", "  "])
         fun emptyPostfix(input: String) {
-            config.text("This is a test.").postfix(input)
+            config.text("This is a test.").suffix(input)
             assertEquals("0", ReadingTime(config.build()).calcReadingTime())
         }
 
@@ -97,54 +98,72 @@ class ReadingTimeTest {
         @ValueSource(strings = [" ", "  "])
         fun emptyText(input: String) {
             config.text(input)
-            assertEquals("0 min read", ReadingTime(config.build()).calcReadingTime())
+            assertEquals(
+                "0 ${ReadingTime.DEFAULT_SUFFIX}",
+                ReadingTime(config.build()).calcReadingTime()
+            )
         }
 
         @Test
         fun excludeImages() {
             config.excludeImages(true)
-            assertEquals("2 mins read", ReadingTime(config.build()).calcReadingTime())
+            assertEquals(
+                "2 mins read",
+                ReadingTime(config.build()).calcReadingTime()
+            )
         }
 
         @Test
-        fun extra() {
-            config.extra(60)
-            assertEquals("4 mins read", ReadingTime(config.build()).calcReadingTime())
+        fun extraSeconds() {
+            config.extraSeconds(60)
+            assertEquals(
+                "4 mins read",
+                ReadingTime(config.build()).calcReadingTime()
+            )
         }
 
         @Test
-        fun plural() {
-            config.plural("minutes read")
+        fun pluralSuffix() {
+            config.pluralSuffix("minutes read")
             assertEquals("3 minutes read", ReadingTime(config.build()).calcReadingTime())
         }
 
         @Test
-        fun postfix() {
-            config.text("This is a test.").postfix("minute read")
+        fun suffix() {
+            config.text("This is a test.").suffix("minute read")
             assertEquals("0 minute read", ReadingTime(config.build()).calcReadingTime())
         }
 
         @Test
         fun roundingMode() {
             config.text(blogPost).roundingMode(RoundingMode.UP)
-            assertEquals("4 mins read", ReadingTime(config.build()).calcReadingTime())
+            assertEquals(
+                "4 mins read",
+                ReadingTime(config.build()).calcReadingTime()
+            )
         }
 
         @Test
         fun with275Words() {
             config.text(textWith275Words)
-            assertEquals("1 min read", ReadingTime(config.build()).calcReadingTime())
+            assertEquals(
+                "1 ${ReadingTime.DEFAULT_SUFFIX}",
+                ReadingTime(config.build()).calcReadingTime()
+            )
         }
 
         @Test
         fun with550Words() {
             config.text("$textWith275Words $textWith275Words")
-            assertEquals("2 mins read", ReadingTime(config.build()).calcReadingTime())
+            assertEquals(
+                "2 mins read",
+                ReadingTime(config.build()).calcReadingTime()
+            )
         }
 
         @Test
         fun wpm() {
-            config.text(mediumPost).wpm(300).extra(0)
+            config.text(mediumPost).wpm(300).extraSeconds(0)
             assertEquals(
                 calcReadingTime(mediumPost, 300) + calcImgTime(3),
                 ReadingTime(config.build()).calcReadingTimeInSec()
@@ -157,29 +176,32 @@ class ReadingTimeTest {
     inner class ImageCountTests {
         @Test
         fun blogPost() {
-            assertEquals(11, ReadingTime.imgCount(blogPost))
+            assertEquals(11, ReadingTime.countImages(blogPost))
         }
 
         @Test
-        fun imgCount() {
-            assertEquals(1, ReadingTime.imgCount(sampleReadingTime.text))
+        fun countImages() {
+
+            assertEquals(1, ReadingTime.countImages(sampleReadingTime.text))
         }
 
         @Test
         fun mediumPost() {
-            assertEquals(3, ReadingTime.imgCount(mediumPost))
+            val imgCount = ReadingTime(mediumPost).imgCount()
+            assertEquals(3, imgCount)
+            assertEquals(imgCount, ReadingTime.countImages(mediumPost))
         }
 
         @Test
         fun with275WordsAndImage() {
-            assertEquals(1, ReadingTime.imgCount("$textWith275Words $sampleImgTag"))
+            assertEquals(1, ReadingTime.countImages("$textWith275Words $sampleImgTag"))
         }
 
         @Test
         fun with275WordsAnd2Images() {
             assertEquals(
                 2,
-                ReadingTime.imgCount("$textWith275Words $sampleImgTag $sampleImgTag"),
+                ReadingTime.countImages("$textWith275Words $sampleImgTag $sampleImgTag"),
                 "imgCount(275 + 2 images)"
             )
         }
@@ -210,7 +232,7 @@ class ReadingTimeTest {
         @Test
         fun equalsReadingTimeInSec() {
             sampleReadingTime.text = "$textWith275Words $textWith275Words"
-            sampleReadingTime.plural = ""
+            sampleReadingTime.pluralSuffix = ""
             assertEquals(
                 sampleReadingTime.calcReadingTime().toInt() * 60,
                 sampleReadingTime.calcReadingTimeInSec().toInt()
@@ -304,13 +326,74 @@ class ReadingTimeTest {
         @Test
         fun withExtra() {
             sampleReadingTime.text = textWith275Words
-            sampleReadingTime.extra = 60
+            sampleReadingTime.extraSeconds = 60
             assertEquals(
                 calcReadingTime(sampleReadingTime.text, sampleReadingTime.wpm) + 60L,
                 sampleReadingTime.calcReadingTimeInSec()
             )
         }
     }
+
+    @DisplayName("Reading Time In Min Tests")
+    class ReadingTimeInMinTests {
+        @Nested
+        @DisplayName("basic rounding")
+        inner class BasicRounding {
+            @Test
+            fun roundsToNearestMinute() {
+                val text = "word ".repeat(300)
+                val rt = ReadingTime(
+                    text,
+                    250,
+                    "min read",
+                    "min read",
+                    false,
+                    0,
+                    RoundingMode.HALF_EVEN
+                )
+                val min = rt.calcReadingTimeInMin()
+                assertTrue(min >= 1)
+            }
+        }
+
+        @Nested
+        @DisplayName("different rounding modes")
+        inner class RoundingModes {
+            @ParameterizedTest
+            @ValueSource(strings = ["HALF_UP", "HALF_DOWN", "HALF_EVEN"])
+            fun appliesRoundingMode(modeName: String) {
+                val mode = RoundingMode.valueOf(modeName)
+                val text = "word ".repeat(275)
+                val rt = ReadingTime(
+                    text,
+                    275,
+                    "min read",
+                    "min read",
+                    false,
+                    0,
+                    mode
+                )
+                val min = rt.calcReadingTimeInMin()
+                assertTrue(min >= 1)
+            }
+        }
+
+        @Nested
+        @DisplayName("plural vs singular consistency")
+        inner class Plurality {
+            @Test
+            fun returnsHigherValueForLongerText() {
+                val shortText = "word ".repeat(100)
+                val longText = "word ".repeat(800)
+                val rtShort = ReadingTime(shortText)
+                val rtLong = ReadingTime(longText)
+                val shortMin = rtShort.calcReadingTimeInMin()
+                val longMin = rtLong.calcReadingTimeInMin()
+                assertTrue(longMin > shortMin)
+            }
+        }
+    }
+
 
     @Nested
     @DisplayName("Reading Time Tests")
@@ -326,7 +409,7 @@ class ReadingTimeTest {
         @ValueSource(strings = [" ", "  "])
         fun emptyPlural(input: String) {
             sampleReadingTime.text = mediumPost
-            sampleReadingTime.plural = input
+            sampleReadingTime.pluralSuffix = input
             assertEquals("2", sampleReadingTime.calcReadingTime())
         }
 
@@ -335,7 +418,7 @@ class ReadingTimeTest {
         @ValueSource(strings = [" ", "  "])
         fun emptyPostfix(input: String) {
             sampleReadingTime.text = "This is a test."
-            sampleReadingTime.postfix = input
+            sampleReadingTime.suffix = input
             assertEquals("0", sampleReadingTime.calcReadingTime())
         }
 
@@ -344,14 +427,14 @@ class ReadingTimeTest {
         @ValueSource(strings = [" ", "  "])
         fun emptyText(input: String) {
             sampleReadingTime.text = input
-            sampleReadingTime.postfix = input
+            sampleReadingTime.suffix = input
             assertEquals("0", sampleReadingTime.calcReadingTime())
         }
 
         @Test
-        fun plural() {
+        fun pluralSuffix() {
             sampleReadingTime.text = blogPost
-            sampleReadingTime.plural = "mins read"
+            sampleReadingTime.pluralSuffix = "mins read"
             assertEquals("3 mins read", sampleReadingTime.calcReadingTime())
         }
 
@@ -364,7 +447,7 @@ class ReadingTimeTest {
         @Test
         fun with550Words() {
             sampleReadingTime.text = "$textWith275Words $textWith275Words"
-            sampleReadingTime.plural = "mins read"
+            sampleReadingTime.pluralSuffix = "mins read"
             assertEquals("2 mins read", sampleReadingTime.calcReadingTime())
         }
     }
@@ -392,44 +475,44 @@ class ReadingTimeTest {
     inner class WordCountTests {
         @Test
         fun blogPost() {
-            assertEquals(505, ReadingTime.wordCount(blogPost))
+            assertEquals(505, ReadingTime.countWords(blogPost))
+        }
+
+        @Test
+        fun countWords() {
+            assertEquals(3, ReadingTime.countWords("one two three"))
         }
 
         @ParameterizedTest
         @EmptySource
         @ValueSource(strings = [" ", "  "])
         fun empty(input: String) {
-            assertEquals(0, ReadingTime.wordCount(input))
+            assertEquals(0, ReadingTime.countWords(input))
         }
 
         @Test
         fun mediumPost() {
-            assertEquals(391, ReadingTime.wordCount(mediumPost))
+            assertEquals(391, ReadingTime.countWords(mediumPost))
         }
 
         @Test
         fun with275Words() {
-            assertEquals(275, ReadingTime.wordCount(textWith275Words))
+            assertEquals(275, ReadingTime.countWords(textWith275Words))
         }
 
         @Test
         fun with275WordsAndImage() {
-            assertEquals(275, ReadingTime.wordCount("$textWith275Words $sampleImgTag"))
+            assertEquals(275, ReadingTime.countWords("$textWith275Words $sampleImgTag"))
         }
 
         @Test
         fun withSampleText() {
-            assertEquals(7, ReadingTime.wordCount(sampleReadingTime.text))
+            assertEquals(7, ReadingTime.countWords(sampleReadingTime.text))
         }
 
         @Test
         fun withSpaces() {
-            assertEquals(2, ReadingTime.wordCount("    one    two    "))
-        }
-
-        @Test
-        fun wordCount() {
-            assertEquals(3, ReadingTime.wordCount("one two three"))
+            assertEquals(2, ReadingTime.countWords("    one    two    "))
         }
     }
 }

@@ -35,138 +35,162 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 /**
- * Calculates the reading time of the given [text].
+ * Computes the estimated reading time for a block of text.
  *
- * Based on [Medium's calculation](https://blog.medium.com/read-time-and-you-bc2048ab620c).
- *
- * @constructor Constructs a new [ReadingTime] object.
- *
- * @param text The text to be evaluated.
- * @param wpm The words per minute reading average.
- * @param postfix The value to be appended to the reading time.
- * @param plural The value to be appended if the reading time is more than 1 minute.
- * @param excludeImages Images are excluded from the reading time when set.
- * @param extra Additional seconds to be added to the total reading time.
- * @param roundingMode The [RoundingMode] to apply. Default is [RoundingMode.HALF_DOWN].
+ * The calculation follows Medium’s approach, combining word count,
+ * optional image time, and any additional seconds defined by the caller.
  */
 class ReadingTime @JvmOverloads constructor(
     text: String,
-    wpm: Int = 275,
-    var postfix: String = "min read",
-    var plural: String = "min read",
+    wpm: Int = DEFAULT_WPM,
+    suffix: String = DEFAULT_SUFFIX,
+    pluralSuffix: String = DEFAULT_PLURAL_SUFFIX,
     excludeImages: Boolean = false,
-    extra: Int = 0,
-    var roundingMode: RoundingMode = RoundingMode.HALF_EVEN
+    extraSeconds: Int = 0,
+    roundingMode: RoundingMode = DEFAULT_ROUNDING_MODE
 ) {
     constructor(config: Config) : this(
         config.text,
         config.wpm,
-        config.postfix,
-        config.plural,
+        config.suffix,
+        config.pluralSuffix,
         config.excludeImages,
-        config.extra,
+        config.extraSeconds,
         config.roundingMode
     )
 
     companion object {
+        /**
+         * Default reading speed in words per minute.
+         */
+        const val DEFAULT_WPM = 275
+
+        /**
+         * Default suffix.
+         */
+        const val DEFAULT_SUFFIX = "min read"
+
+        /**
+         * Default plural suffix.
+         */
+        const val DEFAULT_PLURAL_SUFFIX = "min read"
+
+        /**
+         * Default rounding mode.
+         */
+        val DEFAULT_ROUNDING_MODE: RoundingMode = RoundingMode.HALF_EVEN
+
         private const val INVALID: Double = -1.0
 
         /**
-         * Counts words.
-         *
-         * HTML tags are stripped.
+         * Counts the number of words in the given text.
+         * HTML tags are removed before counting.
          */
         @JvmStatic
-        fun wordCount(words: String): Int {
-            val s = Jsoup.parse(words).text().trim()
-            return if (s.isBlank()) 0 else s.split("\\s+".toRegex()).size
+        fun countWords(text: String): Int {
+            val stripped = Jsoup.parse(text).text().trim()
+            return if (stripped.isBlank()) 0 else stripped.split("\\s+".toRegex()).size
         }
 
         /**
          * Counts HTML img tags.
          */
         @JvmStatic
-        fun imgCount(html: String): Int {
-            return "<img ".toRegex(RegexOption.IGNORE_CASE).findAll(html).count()
+        fun countImages(html: String): Int {
+            return "<img\\b".toRegex(RegexOption.IGNORE_CASE).findAll(html).count()
         }
     }
 
-    private var readTime: Double = INVALID
+    private var cachedSeconds: Double = INVALID
 
     var text: String = text
         set(value) {
-            reset(value != text)
+            reset(value != field)
             field = value
         }
 
     var wpm: Int = wpm
         set(value) {
-            reset(value != wpm)
+            reset(value != field)
             field = value
         }
 
     var excludeImages: Boolean = excludeImages
         set(value) {
-            reset(value != excludeImages)
+            reset(value != field)
             field = value
         }
 
-    var extra: Int = extra
+    var extraSeconds: Int = extraSeconds
         set(value) {
-            reset(value != extra)
+            reset(value != field)
             field = value
         }
 
-    /**
-     * Calculates and returns the reading time in seconds.
-     *
-     * `((word count / wpm) * 60) + images + extra`
-     */
+    var suffix: String = suffix
+        set(value) {
+            reset(value != field)
+            field = value
+        }
+
+    var pluralSuffix: String = pluralSuffix
+        set(value) {
+            reset(value != field)
+            field = value
+        }
+
+    var roundingMode: RoundingMode = roundingMode
+        set(value) {
+            reset(value != field)
+            field = value
+        }
+
     fun calcReadingTimeInSec(): Double {
-        if (readTime == INVALID) {
-            readTime = if (!excludeImages) calcImgReadingTime().toDouble() else 0.0
-            readTime += (wordCount(text).toDouble() / wpm.toDouble()) * 60.0
-        }
-
-        return readTime + extra
-    }
-
-    /**
-     * Calculates and returns the reading time. (e.g. 1 min read)
-     *
-     * `(reading time in sec / 60) + postfix`
-     */
-    fun calcReadingTime(): String {
-        val time = BigDecimal.valueOf(calcReadingTimeInSec() / 60.0).setScale(0, roundingMode)
-        return if (time > BigDecimal.ONE) {
-            "$time $plural".trim()
-        } else {
-            "$time $postfix".trim()
-        }
-    }
-
-    /**
-     * 12 seconds for the first image, 11 for the second, and minus an additional second for each subsequent image.
-     * Any images after the tenth image are counted at 3 seconds.
-     */
-    private fun calcImgReadingTime(): Int {
-        var time = 0
-        val imgCount = imgCount(text)
-
-        var offset = 12
-        for (i in 1..imgCount) {
-            if (i > 10) {
-                time += 3
-            } else {
-                time += offset
-                offset--
+        if (cachedSeconds == INVALID) {
+            var total = 0.0
+            if (!excludeImages) {
+                total += calcImgReadingTime().toDouble()
             }
+            total += (countWords(text).toDouble() / wpm.toDouble()) * 60.0
+            cachedSeconds = total
+        }
+        return cachedSeconds + extraSeconds
+    }
+
+    fun calcReadingTimeInMin(): Int {
+        val minutes = BigDecimal.valueOf(calcReadingTimeInSec() / 60.0)
+            .setScale(0, roundingMode)
+        return minutes.toInt()
+    }
+
+    fun calcReadingTime(): String {
+        val minutes = calcReadingTimeInMin()
+        return if (minutes > 1) {
+            "$minutes $pluralSuffix".trim()
+        } else {
+            "$minutes $suffix".trim()
+        }
+    }
+
+    fun imgCount(): Int = countImages(text)
+
+    fun wordCount(): Int = countWords(text)
+
+    private fun calcImgReadingTime(): Int {
+        val count = countImages(text)
+        var time = 0
+        var offset = 12
+
+        for (i in 1..count) {
+            time += if (i > 10) 3 else offset--
         }
 
         return time
     }
 
-    private fun reset(isChanged: Boolean) {
-        if (isChanged) readTime = INVALID
+    private fun reset(changed: Boolean) {
+        if (changed) {
+            cachedSeconds = INVALID
+        }
     }
 }
