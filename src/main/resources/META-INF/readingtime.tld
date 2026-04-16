@@ -30,14 +30,18 @@
   -->
 
 <taglib xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        version="2.0"
-        xmlns="http://java.sun.com/xml/ns/j2ee"
-        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+        xmlns="https://jakarta.ee/xml/ns/jakartaee"
+        xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                            https://jakarta.ee/xml/ns/jakartaee/web-jsptaglibrary_3_1.xsd"
+        version="3.1">
+
     <tlib-version>1.0</tlib-version>
-    <short-name>ReadingTime</short-name>
+    <short-name>readingtime</short-name>
     <uri>https://erik.thauvin.net/taglibs/readingtime</uri>
+
     <tag-file>
         <name>readingtime</name>
         <path>/META-INF/tags/readingtime.tag</path>
     </tag-file>
+
 </taglib>

@@ -8,12 +8,11 @@ fun main(args: Array<String>) {
         with(File(args[0])) {
             if (exists() && canRead()) {
                 val rt = ReadingTime(readText())
-                rt.postfix = "minute to read"
-                rt.plural = "minutes to read"
+                rt.suffix = "minute to read"
+                rt.pluralSuffix = "minutes to read"
 
                 println(
-                    "It will take ${rt.calcReadingTime()} ${ReadingTime.wordCount(rt.text)} words and " +
-                            "${ReadingTime.imgCount(rt.text)} images at ${rt.wpm} words per minute."
+                    "It will take ${rt.calcReadingTime()} ${rt.wordCount()} words and ${rt.imgCount()} images."
                 )
             } else {
                 System.err.println("The file could not be read or found.")

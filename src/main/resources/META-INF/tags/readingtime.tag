@@ -1,3 +1,13 @@
+<%@ tag body-content="scriptless" import="net.thauvin.erik.readingtime.ReadingTime" %>
+<%@ tag import="java.lang.Boolean" %>
+<%@ tag import="java.lang.Integer" %>
+<%@ tag import="java.lang.String" %>
+<%@ attribute name="wpm" type="java.lang.Integer" required="false" rtexprvalue="true" %>
+<%@ attribute name="suffix" type="java.lang.String" required="false" rtexprvalue="true" %>
+<%@ attribute name="pluralSuffix" type="java.lang.String" required="false" rtexprvalue="true" %>
+<%@ attribute name="excludeImages" type="java.lang.Boolean" required="false" rtexprvalue="true" %>
+<%@ attribute name="extraSeconds" type="java.lang.Integer" required="false" rtexprvalue="true" %>
+<%@ attribute name="debug" type="java.lang.Boolean" required="false" rtexprvalue="true" %>
 <%--
   ~ Copyright (c) 2020-2026, Erik C. Thauvin (erik@thauvin.net)
   ~ All rights reserved.
@@ -27,38 +37,45 @@
   ~ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   ~ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   --%>
-<%@tag body-content="scriptless" import="net.thauvin.erik.readingtime.ReadingTime" trimDirectiveWhitespaces="true" %>
-<%@attribute name="debug" type="java.lang.Boolean" %>
-<%@attribute name="excludeImages" type="java.lang.Boolean" %>
-<%@attribute name="extra" type="java.lang.Integer" %>
-<%@attribute name="plural" %>
-<%@attribute name="postfix" %>
-<%@attribute name="wpm" type="java.lang.Integer" %>
 <jsp:doBody var="body" scope="page"/>
 <%
     final Boolean debug = (Boolean) getJspContext().getAttribute("debug");
     final Boolean excludeImages = (Boolean) getJspContext().getAttribute("excludeImages");
-    final Integer extra = (Integer) getJspContext().getAttribute("extra");
+    final Integer extraSeconds = (Integer) getJspContext().getAttribute("extraSeconds");
     final Integer wpm = (Integer) getJspContext().getAttribute("wpm");
     final String body = (String) getJspContext().getAttribute("body");
-    final String plural = (String) getJspContext().getAttribute("plural");
-    final String postfix = (String) getJspContext().getAttribute("postfix");
+    final String pluralSuffix = (String) getJspContext().getAttribute("pluralSuffix");
+    final String suffix = (String) getJspContext().getAttribute("suffix");
 
     if (body != null) {
         final ReadingTime rt = new ReadingTime(body);
-        if (excludeImages != null) rt.setExcludeImages(excludeImages);
-        if (extra != null) rt.setExtra(extra);
-        if (plural != null) rt.setPlural(plural);
-        if (postfix != null) rt.setPostfix(postfix);
-        if (wpm != null) rt.setWpm(wpm);
+        if (excludeImages != null) {
+            rt.setExcludeImages(excludeImages);
+        }
+        if (extraSeconds != null) {
+            rt.setExtraSeconds(extraSeconds);
+        }
+        if (pluralSuffix != null) {
+            rt.setPluralSuffix(pluralSuffix);
+        }
+        if (suffix != null) {
+            rt.setSuffix(suffix);
+        }
+        if (wpm != null) {
+            rt.setWpm(wpm);
+        }
+
         out.write(rt.calcReadingTime());
+
         if (debug != null && debug) {
-            out.write("<!--\n" + "body: " + body + "\n");
+            out.write("<!--\n");
+            out.write("body: " + body + "\n");
             out.write("wpm: " + wpm + " (" + rt.getWpm() + ")\n");
-            out.write("postfix: " + postfix + " (" + rt.getPostfix() + ")\n");
-            out.write("plural: " + plural + " (" + rt.getPlural() + ")\n");
+            out.write("suffix: " + suffix + " (" + rt.getSuffix() + ")\n");
+            out.write("pluralSuffix: " + pluralSuffix + " (" + rt.getPluralSuffix() + ")\n");
             out.write("excludeImages: " + excludeImages + " (" + rt.getExcludeImages() + ")\n");
-            out.write("extra: " + extra + " (" + rt.getExtra() + ")\n-->");
+            out.write("extraSeconds: " + extraSeconds + " (" + rt.getExtraSeconds() + ")\n");
+            out.write("-->");
         }
     }
 %>
