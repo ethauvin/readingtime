@@ -72,7 +72,7 @@ public class ReadingTimeBuild extends Project {
 
         final var kotlin = version(2, 3, 20);
         var junit = version(6, 0, 3);
-        var tomcat = version(10, 1, 20);
+        var tomcat = version(11, 0, 21);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
                 .include(dependency("org.jsoup", "jsoup", version(1, 22, 1)));
@@ -84,8 +84,8 @@ public class ReadingTimeBuild extends Project {
                 .include(dependency("org.mockito.kotlin", "mockito-kotlin", "6.3.0"))
                 .include(dependency("org.apache.tomcat.embed", "tomcat-embed-core", tomcat))
                 .include(dependency("org.apache.tomcat.embed", "tomcat-embed-jasper", tomcat))
-                .include(dependency("jakarta.servlet:jakarta.servlet-api:6.0.0"))
-                .include(dependency("jakarta.servlet.jsp:jakarta.servlet.jsp-api:3.1.0"));
+                .include(dependency("jakarta.servlet:jakarta.servlet-api:6.1.0"))
+                .include(dependency("jakarta.servlet.jsp:jakarta.servlet.jsp-api:4.0.0"));
 
         publishOperation()
                 .repository(version.isSnapshot() ? repository(CENTRAL_SNAPSHOTS.location())
