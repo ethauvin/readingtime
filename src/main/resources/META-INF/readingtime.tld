@@ -35,7 +35,7 @@
                             https://jakarta.ee/xml/ns/jakartaee/web-jsptaglibrary_3_1.xsd"
         version="3.1">
 
-    <tlib-version>1.0</tlib-version>
+    <tlib-version>1.1</tlib-version>
     <short-name>readingtime</short-name>
     <uri>https://erik.thauvin.net/taglibs/readingtime</uri>
 

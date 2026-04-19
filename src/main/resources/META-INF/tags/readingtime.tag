@@ -1,7 +1,4 @@
 <%@ tag body-content="scriptless" import="net.thauvin.erik.readingtime.ReadingTime" %>
-<%@ tag import="java.lang.Boolean" %>
-<%@ tag import="java.lang.Integer" %>
-<%@ tag import="java.lang.String" %>
 <%@ attribute name="wpm" type="java.lang.Integer" required="false" rtexprvalue="true" %>
 <%@ attribute name="suffix" type="java.lang.String" required="false" rtexprvalue="true" %>
 <%@ attribute name="pluralSuffix" type="java.lang.String" required="false" rtexprvalue="true" %>
