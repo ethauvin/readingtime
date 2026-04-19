@@ -41,18 +41,6 @@ import java.math.RoundingMode
 
 class ReadingTimeEstimatorTest {
     @Nested
-    @DisplayName("fromConfig()")
-    inner class FromConfig {
-        @Test
-        fun createsEstimatorFromConfig() {
-            val config = ReadingTimeConfig.Builder("Hello world").build()
-            val est = ReadingTimeEstimator.fromConfig(config)
-            val result = est.readingTime()
-            assertTrue(result.isNotEmpty())
-        }
-    }
-
-    @Nested
     @DisplayName("create()")
     inner class Create {
         @Nested
@@ -164,6 +152,45 @@ class ReadingTimeEstimatorTest {
             )
             val result = est.readingTime()
             assertTrue(result.contains("minute"))
+        }
+
+    }
+
+    @Nested
+    @DisplayName("DSL")
+    inner class Dsl {
+        @Test
+        fun createsEstimatorWithDsl() {
+            val est = readingTimeEstimator {
+                text("Hello world")
+                wpm(200)
+                suffix("min read")
+            }
+            val result = est.readingTime()
+            assertTrue(result.endsWith("min read"))
+            assertEquals(2, est.wordCount())
+        }
+        @Test
+        fun appliesPluralSuffixWithDsl() {
+            val est = readingTimeEstimator {
+                text("word ".repeat(600))
+                suffixes("minute read", "minutes read")
+            }
+            val result = est.readingTime()
+            assertTrue(result.endsWith("minutes read"))
+        }
+
+    }
+
+    @Nested
+    @DisplayName("fromConfig()")
+    inner class FromConfig {
+        @Test
+        fun createsEstimatorFromConfig() {
+            val config = ReadingTimeConfig.Builder("Hello world").build()
+            val est = ReadingTimeEstimator.fromConfig(config)
+            val result = est.readingTime()
+            assertTrue(result.isNotEmpty())
         }
     }
 
