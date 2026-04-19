@@ -14,7 +14,8 @@ public class ReadingTimeSample {
             final Path text = Path.of(args[0]);
             try {
                 var rt = ReadingTimeEstimator.create(Files.readString(text), "minute to read", "minutes to read");
-                System.out.println("It will take " + rt.readingTime() + ' ' + rt.wordCount() + " words.");
+                System.out.println("It will take " + rt.readingTime() + ' ' + rt.wordCount() + " words and "
+                        + rt.imgCount() + " images.");
             } catch (IOException e) {
                 System.err.println("The file could not be read or found.");
             }
