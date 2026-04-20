@@ -30,6 +30,16 @@
 
 package net.thauvin.erik.readingtime
 
+import java.math.RoundingMode
+
+/**
+ * Java‑friendly wrapper around [ReadingTime].
+ *
+ * Provides a stable API for computing reading time, word count, and image count
+ * without exposing Kotlin‑specific details or configuration types to Java.
+ *
+ * Instances are created via the factory methods in [companion object].
+ */
 class ReadingTimeEstimator internal constructor(delegate: ReadingTime) {
     private val delegate = ReadingTime(
         delegate.text,
@@ -42,21 +52,34 @@ class ReadingTimeEstimator internal constructor(delegate: ReadingTime) {
     )
 
     companion object {
+        /**
+         * Creates a [ReadingTimeEstimator] from the given [ReadingTimeConfig].
+         */
         @JvmStatic
         fun fromConfig(config: ReadingTimeConfig): ReadingTimeEstimator {
             return ReadingTimeEstimator(ReadingTime(config))
         }
 
+        /**
+         * Creates a [ReadingTimeEstimator] using default configuration values.
+         */
         @JvmStatic
         fun create(text: String): ReadingTimeEstimator {
             return ReadingTimeEstimator(ReadingTime(text))
         }
 
+        /**
+         * Creates a [ReadingTimeEstimator] with the specified words‑per‑minute value.
+         */
         @JvmStatic
         fun create(text: String, wpm: Int): ReadingTimeEstimator {
             return ReadingTimeEstimator(ReadingTime(text, wpm))
         }
 
+        /**
+         * Creates a [ReadingTimeEstimator] using the same suffix for both singular
+         * and plural forms.
+         */
         @JvmStatic
         fun create(text: String, suffix: String): ReadingTimeEstimator {
             return ReadingTimeEstimator(
@@ -64,6 +87,10 @@ class ReadingTimeEstimator internal constructor(delegate: ReadingTime) {
             )
         }
 
+        /**
+         * Creates a [ReadingTimeEstimator] with the specified words‑per‑minute value
+         * and a shared suffix for both singular and plural forms.
+         */
         @JvmStatic
         fun create(text: String, wpm: Int, suffix: String): ReadingTimeEstimator {
             return ReadingTimeEstimator(
@@ -71,6 +98,9 @@ class ReadingTimeEstimator internal constructor(delegate: ReadingTime) {
             )
         }
 
+        /**
+         * Creates a [ReadingTimeEstimator] with distinct singular and plural suffixes.
+         */
         @JvmStatic
         fun create(text: String, suffix: String, pluralSuffix: String): ReadingTimeEstimator {
             return ReadingTimeEstimator(
@@ -78,6 +108,10 @@ class ReadingTimeEstimator internal constructor(delegate: ReadingTime) {
             )
         }
 
+        /**
+         * Creates a [ReadingTimeEstimator] with the specified words‑per‑minute value
+         * and distinct singular and plural suffixes.
+         */
         @JvmStatic
         fun create(text: String, wpm: Int, suffix: String, pluralSuffix: String): ReadingTimeEstimator {
             return ReadingTimeEstimator(
@@ -85,6 +119,10 @@ class ReadingTimeEstimator internal constructor(delegate: ReadingTime) {
             )
         }
 
+        /**
+         * Creates a fully configured [ReadingTimeEstimator] using all available
+         * reading‑time parameters.
+         */
         @JvmStatic
         fun create(
             text: String,
@@ -93,7 +131,7 @@ class ReadingTimeEstimator internal constructor(delegate: ReadingTime) {
             pluralSuffix: String,
             excludeImages: Boolean,
             extraSeconds: Int,
-            roundingMode: java.math.RoundingMode
+            roundingMode: RoundingMode
         ): ReadingTimeEstimator {
             return ReadingTimeEstimator(
                 ReadingTime(
@@ -109,26 +147,47 @@ class ReadingTimeEstimator internal constructor(delegate: ReadingTime) {
         }
     }
 
+    /**
+     * Returns the estimated reading time in whole minutes.
+     *
+     * This is the Java‑friendly entry point for minute‑based calculations.
+     */
     @JvmName("readingTimeInMinutes")
     fun readingTimeInMinutes(): Int {
         return delegate.calcReadingTimeInMin()
     }
 
+    /**
+     * Returns the estimated reading time in seconds.
+     *
+     * Provides a more precise duration than the minute‑based calculation.
+     */
     @JvmName("readingTimeInSeconds")
     fun readingTimeInSeconds(): Double {
         return delegate.calcReadingTimeInSec()
     }
 
+    /**
+     * Returns the formatted reading‑time string using the configured suffixes.
+     *
+     * This is the primary Java‑friendly method for producing human‑readable output.
+     */
     @JvmName("readingTime")
     fun readingTime(): String {
         return delegate.calcReadingTime()
     }
 
+    /**
+     * Returns the number of words detected in the configured text.
+     */
     @JvmName("wordCount")
     fun wordCount(): Int {
         return delegate.wordCount()
     }
 
+    /**
+     * Returns the number of images detected in the configured text.
+     */
     @JvmName("imgCount")
     fun imgCount(): Int {
         return delegate.imgCount()
@@ -138,6 +197,13 @@ class ReadingTimeEstimator internal constructor(delegate: ReadingTime) {
 @DslMarker
 annotation class ReadingTimeEstimatorDslMarker
 
+/**
+ * Scope for configuring a [ReadingTimeEstimator] using the Kotlin DSL.
+ *
+ * Provides a minimal set of configuration functions for setting text,
+ * reading speed, suffixes, image handling, and rounding behavior.
+ * Only the public DSL surface is exposed; implementation details remain internal.
+ */
 @ReadingTimeEstimatorDslMarker
 interface ReadingTimeEstimatorScope {
     fun text(value: String)
@@ -147,7 +213,7 @@ interface ReadingTimeEstimatorScope {
     fun suffixes(singular: String, plural: String)
     fun excludeImages(value: Boolean)
     fun extraSeconds(value: Int)
-    fun roundingMode(value: java.math.RoundingMode)
+    fun roundingMode(value: RoundingMode)
 }
 
 internal class ReadingTimeEstimatorDsl : ReadingTimeEstimatorScope {
@@ -157,7 +223,7 @@ internal class ReadingTimeEstimatorDsl : ReadingTimeEstimatorScope {
     private var _pluralSuffix: String = ReadingTime.DEFAULT_PLURAL_SUFFIX
     private var _excludeImages: Boolean = false
     private var _extraSeconds: Int = 0
-    private var _roundingMode: java.math.RoundingMode = ReadingTime.DEFAULT_ROUNDING_MODE
+    private var _roundingMode: RoundingMode = ReadingTime.DEFAULT_ROUNDING_MODE
 
     override fun text(value: String) {
         _text = value
@@ -189,12 +255,12 @@ internal class ReadingTimeEstimatorDsl : ReadingTimeEstimatorScope {
         _extraSeconds = value
     }
 
-    override fun roundingMode(value: java.math.RoundingMode) {
+    override fun roundingMode(value: RoundingMode) {
         _roundingMode = value
     }
 
-    fun build(): ReadingTimeEstimator {
-        return ReadingTimeEstimator(
+    fun build(): ReadingTimeEstimator =
+        ReadingTimeEstimator(
             ReadingTime(
                 _text,
                 _wpm,
@@ -205,8 +271,8 @@ internal class ReadingTimeEstimatorDsl : ReadingTimeEstimatorScope {
                 _roundingMode
             )
         )
-    }
 }
+
 
 /**
  * Creates a [ReadingTimeEstimator] using a Kotlin DSL.

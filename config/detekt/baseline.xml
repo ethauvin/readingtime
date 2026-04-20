@@ -3,7 +3,7 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>LongParameterList:ReadingTime.kt$ReadingTime$( text: String, wpm: Int = DEFAULT_WPM, suffix: String = DEFAULT_SUFFIX, pluralSuffix: String = DEFAULT_PLURAL_SUFFIX, excludeImages: Boolean = false, extraSeconds: Int = 0, roundingMode: RoundingMode = DEFAULT_ROUNDING_MODE )</ID>
-    <ID>LongParameterList:ReadingTimeEstimator.kt$ReadingTimeEstimator.Companion$( text: String, wpm: Int, suffix: String, pluralSuffix: String, excludeImages: Boolean, extraSeconds: Int, roundingMode: java.math.RoundingMode )</ID>
+    <ID>LongParameterList:ReadingTimeEstimator.kt$ReadingTimeEstimator.Companion$( text: String, wpm: Int, suffix: String, pluralSuffix: String, excludeImages: Boolean, extraSeconds: Int, roundingMode: RoundingMode )</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$10</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$12</ID>
     <ID>MagicNumber:ReadingTime.kt$ReadingTime$3</ID>

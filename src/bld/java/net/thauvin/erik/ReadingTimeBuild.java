@@ -35,6 +35,7 @@ import rife.bld.Project;
 import rife.bld.extension.*;
 import rife.bld.extension.dokka.LoggingLevel;
 import rife.bld.extension.dokka.OutputFormat;
+import rife.bld.extension.dokka.SourceSet;
 import rife.bld.extension.tools.IOTools;
 import rife.bld.operations.exceptions.ExitStatusException;
 import rife.bld.publish.PomBuilder;
@@ -57,6 +58,7 @@ import static rife.bld.dependencies.Scope.test;
 public class ReadingTimeBuild extends Project {
 
     private static final String DETEKT_BASELINE = "config/detekt/baseline.xml";
+    final File srcMainKotlin = new File(srcMainDirectory(), "kotlin");
     final File testResultsDirectory = IOTools.resolveFile(buildDirectory(), "test-results", "test");
 
     public ReadingTimeBuild() {
@@ -194,6 +196,28 @@ public class ReadingTimeBuild extends Project {
         var op = new JacocoReportOperation().fromProject(this);
         op.testToolOptions("--reports-dir=" + testResultsDirectory.getAbsolutePath());
         op.execute();
+    }
+
+    @BuildCommand(summary = "Generates GitHub Pages")
+    public void pages() throws ExitStatusException, IOException, InterruptedException {
+        new DokkaOperation()
+                .fromProject(this)
+                .loggingLevel(LoggingLevel.INFO)
+                .moduleName("ReadingTime")
+                .moduleVersion(version.toString())
+                .outputDir(new File(buildDirectory(), "pages"))
+                .outputFormat(OutputFormat.HTML)
+                .sourceSet(
+                        new SourceSet()
+                                .src(srcMainKotlin)
+                                .classpath(compileClasspathJars())
+                                .classpath(providedClasspathJars())
+                                .srcLink(srcMainKotlin, "https://github.com/ethauvin/" + name
+                                        + "/tree/master/src/main/kotlin/", "#L")
+                                .includes("config/dokka/packages.md")
+                                .jdkVersion(javaRelease)
+                )
+                .execute();
     }
 
     @BuildCommand(value = "pom-root", summary = "Generates the POM file in the root directory")

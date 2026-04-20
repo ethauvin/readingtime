@@ -90,6 +90,23 @@ ReadingTime(
 | `extraSeconds`  | Additional seconds to be added to the total reading time.                                                               |
 | `roundingMode`  | The [rounding mode](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/RoundingMode.html) to apply. |
 
+## DSL
+
+A Kotlin DSL is also available:
+
+```kotlin
+val est = readingTimeEstimator {
+    text("This is a DSL example.")
+    wpm(220)
+    suffix("min")
+    pluralSuffix("mins")
+    excludeImages(true)estimator
+    extraSeconds(5)
+}
+
+val readTime = est.readingTime() // e.g. 3 mins
+```
+
 ## Functions
 
 A couple of useful static functions are also available:
@@ -120,37 +137,47 @@ None of the attributes are required.
 An Java API surface is also available:
 
 ```java
-var estimator = ReadingTimeEstimator.create(htmlText);
+var est = ReadingTimeEstimator.create(
+        ReadingTimeConfig.Builder(htmlTxt)
+                .wpm(220)
+                .suffix("min")
+                .pluralSuffix("mins")
+                .excludeImages(true)
+                .extraSeconds(5)
+                .build()
+);
 
-var readTime = estimator.readingTime();
-var seconds = estimator.readingTimeInSeconds();
+var readTime = est.readingTime(); // e.g. 3 mins
+var seconds = est.readingTimeInSeconds(); 
 ```
-
 ```java
-var estimator = ReadingTimeEstimator.create(text, "min");
-var readTime = estimator.readingTime(); // e.g. 3 min
+var est = ReadingTimeEstimator.create(text, "min", "mins");
+var est = estimator.readingTime(); // e.g. 3 mins
 ```
 
 or using a configuration builder:
 
 ```java
-var config = new ReadingTimeConfig.Builder(htmlText)
+var cfg = new ReadingTimeConfig.Builder(htmlText)
         .wpm(250)
-        .suffix("minute read")
-        .pluralSuffix("minutes read")
+        .suffix("min")
+        .pluralSuffix("mins")
         .excludeImages(true)
         .extraSeconds(5)
         .roundingMode(RoundingMode.HALF_EVEN)
         .build();
 
-var estimator = ReadingTimeEstimator.fromConfig(config);
+var est = ReadingTimeEstimator.fromConfig(cfg);
 
-var readTime = estimator.readingTime();
-var minutes = estimator.readingTimeInMinutes();
+var readTime = est.readingTime();
+var minutes = est.readingTimeInMinutes();
 ```
-
 
 ## Contributing
 
 See [CONTIBUTING.md](https://github.com/ethauvin/readingtime?tab=contributing-ov-file#readme) for information about
 contributing to this project.
+
+## More…
+
+If all else fails, there's always more [Documentation](https://ethauvin.github.io/readingtime/).
