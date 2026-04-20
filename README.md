@@ -116,20 +116,6 @@ ReadingTime.countWords(htmlText) // Returns the count of words. (HTML stripped)
 ReadingTime.countImages(htmlText) // Returns the count of images. (HTML img tags)
 ```
 
-## JSP
-
-A JSP tag is also available for easy incorporation into web applications:
-
-```jsp
-<%@taglib uri="https://erik.thauvin.net/taglibs/readingtime" prefix="rt"%>
-<rt:readingtime
-    wpm="275"
-    prefix="min read"
-    pluralPrefix="min read"
-    excludeImages="false"
-    extra="0">some_text</t:readingtime>
-```
-
 None of the attributes are required.
 
 ## Java
@@ -171,6 +157,20 @@ var est = ReadingTimeEstimator.fromConfig(cfg);
 
 var readTime = est.readingTime();
 var minutes = est.readingTimeInMinutes();
+```
+
+## JSP
+
+A JSP tag is also available for easy incorporation into web applications:
+
+```jsp
+<%@taglib uri="https://erik.thauvin.net/taglibs/readingtime" prefix="rt"%>
+<rt:readingtime
+    wpm="275"
+    prefix="min read"
+    pluralPrefix="min read"
+    excludeImages="false"
+    extra="0">some_text</t:readingtime>
 ```
 
 ## Contributing
