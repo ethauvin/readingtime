@@ -74,7 +74,7 @@ public class ReadingTimeBuild extends Project {
 
         final var kotlin = version(2, 4, 10);
         var junit = version(6, 1, 2);
-        var tomcat = version(11, 0, 21);
+        var tomcat = version(11, 0, 24);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
                 .include(dependency("org.jsoup", "jsoup", version(1, 22, 1)));
