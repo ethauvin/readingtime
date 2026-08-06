@@ -73,7 +73,7 @@ public class ReadingTimeBuild extends Project {
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL);
 
         final var kotlin = version(2, 4, 10);
-        var junit = version(6, 0, 3);
+        var junit = version(6, 1, 2);
         var tomcat = version(11, 0, 21);
         scope(compile)
                 .include(dependency("org.jetbrains.kotlin", "kotlin-stdlib", kotlin))
