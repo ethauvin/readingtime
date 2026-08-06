@@ -72,7 +72,7 @@ public class ReadingTimeBuild extends Project {
         downloadSources = true;
         repositories = List.of(MAVEN_LOCAL, MAVEN_CENTRAL);
 
-        final var kotlin = version(2, 3, 20);
+        final var kotlin = version(2, 4, 10);
         var junit = version(6, 0, 3);
         var tomcat = version(11, 0, 21);
         scope(compile)
