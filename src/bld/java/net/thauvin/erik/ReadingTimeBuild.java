@@ -125,7 +125,7 @@ public class ReadingTimeBuild extends Project {
     @Override
     public void compile() throws Exception {
         var op = new CompileKotlinOperation().fromProject(this);
-        op.compileOptions().languageVersion("2.1").verbose(true);
+        op.compileOptions().languageVersion("2.2").verbose(true);
         op.execute();
     }
 
