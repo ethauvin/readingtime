@@ -21,7 +21,7 @@ concurrency:
 
 env:
   JDK_VERSION: "21"
-  KOTLIN_VERSION: "2.4.10"
+  KOTLIN_VERSION: "2.4.20"
 
 jobs:
   # Single deploy job since we're just deploying
