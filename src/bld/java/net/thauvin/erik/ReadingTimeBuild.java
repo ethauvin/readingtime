@@ -211,7 +211,6 @@ public class ReadingTimeBuild extends Project {
                         new SourceSet()
                                 .src(srcMainKotlin)
                                 .classpath(compileClasspathJars())
-                                .classpath(providedClasspathJars())
                                 .srcLink(srcMainKotlin, "https://github.com/ethauvin/" + name
                                         + "/tree/master/src/main/kotlin/", "#L")
                                 .includes("config/dokka/packages.md")
